@@ -15,5 +15,9 @@ class Log {
     public function all(){
         return $this->conn->query("SELECT * FROM logs ORDER BY created_at DESC");
     }
+
+     public function clear(){
+        return $this->conn->query("DELETE FROM logs");
+    }
 }
 ?>

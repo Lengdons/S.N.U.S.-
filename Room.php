@@ -8,5 +8,19 @@ class Room {
         $stmt->bind_param("s",$name);
         $stmt->execute();
     }
+    public function exists($name){
+    $stmt = $this->conn->prepare("SELECT id FROM rooms WHERE name=?");
+    $stmt->bind_param("s", $name);
+    $stmt->execute();
+    return $stmt->get_result()->num_rows > 0;
+    }
+
+    public function delete($id){
+    $stmt = $this->conn->prepare("DELETE FROM rooms WHERE id=?");
+    $stmt->bind_param("i", $id);
+    return $stmt->execute();
 }
+}
+
 ?>
+

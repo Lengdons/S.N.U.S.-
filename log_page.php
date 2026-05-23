@@ -13,6 +13,17 @@ if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin'){
 }
 
 $result = $log->all();
+
+if(isset($_POST['clear_logs'])){
+    if($_SESSION['role'] !== 'admin'){
+        die("No permission");
+    }
+
+    $log->clear();
+
+    header("Location: log_page.php");
+    exit;
+}
 ?>
 
 <link rel="stylesheet" href="style.css">
@@ -22,6 +33,9 @@ $result = $log->all();
 <div style="margin-bottom: 15px;">
     <a href="main.php" class="nav-btn">Rooms</a>
 </div>
+<form method="POST" onsubmit="return confirm('Delete ALL logs?');">
+    <button name="clear_logs" class="danger-btn">Clear Logs</button>
+</form>
 
 
 <?php while($l = $result->fetch_assoc()): ?>
