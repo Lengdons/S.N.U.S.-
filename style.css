@@ -61,8 +61,18 @@ hr {
     border-top: 1px solid #eee;
 }
 
-.room{display:inline-block;width:120px;height:120px;background:#3498db;margin:10px;color:white;text-align:center;line-height:120px;cursor:pointer;border-radius:10px;}
-.popup{display:none;position:fixed;top:30%;left:40%;background:white;padding:20px;border:1px solid black;}
+.room {
+    display:inline-block;
+    width:120px;
+    height:120px;
+    background:#3498db;
+    margin:10px;
+    color:white;
+    text-align:center;
+    line-height:120px;
+    cursor:pointer;
+    border-radius:10px;
+}
 
 .logout {
     display:inline-block;
@@ -98,18 +108,114 @@ hr {
 }
 
 .overlay {
-    display:none;
-    position:fixed;
-    top:0; left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.6);
-    justify-content:center;
-    align-items:center;
+    display: none; /* default hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0,0,0,0.6);
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 999;
 }
 
 .popup {
-    background:white;
-    padding:20px;
-    border-radius:10px;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    min-width: 300px;
+
+    position: relative;
+    z-index: 1000;
+}
+
+#requirements {
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.invalid {
+    color: red;
+}
+
+.valid {
+    color: green;
+}
+
+button:disabled {
+    background: gray;
+    cursor: not-allowed;
+}
+
+
+
+.layout {
+    display: flex;
+    height: 100vh;
+}
+
+/* LEFT SIDE */
+.sidebar {
+    width: 250px;
+    background: #2c3e50;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    margin-bottom: 20px;
+}
+
+.sidebar .nav-btn {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.sidebar .logout {
+    background: #e74c3c;
+}
+
+/* RIGHT SIDE */
+.content {
+    flex: 1;
+    padding: 50px;
+    background: #ecf0f1;
+}
+
+/* ROOMS GRID */
+.rooms {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* ROOM BOX */
+.room {
+    width: 120px;
+    height: 120px;
+    background: #3498db;
+    margin: 10px;
+    color: white;
+    text-align: center;
+    line-height: 120px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.sidebar {
+    position: fixed;
+    height: 100%;
+}
+
+.content {
+    margin-left: 250px;
 }

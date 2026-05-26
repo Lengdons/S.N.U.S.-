@@ -28,6 +28,7 @@ if(isset($_POST['register'])){
 <html lang="en">
 <head>
     <link rel="stylesheet" href="style.css">
+    <script src="srcipt.js"></script>
     <meta charset="UTF-8">
     <title>Register</title>
 </head>
@@ -36,10 +37,18 @@ if(isset($_POST['register'])){
 <form method="POST">
     <h4>Register</h4>
 
-    <input type="email" name="email" placeholder="email" required>
-    <input type="password" name="password" placeholder="Password" required>
+    <input type="email" id="email" name="email" placeholder="Email" required>
 
-    <button name="register">Create account</button>
+    <input type="password" id="password" name="password" placeholder="Password" required>
+
+    <div id="requirements">
+        <p id="len" class="invalid">• At least 8 characters</p>
+        <p id="upper" class="invalid">• One uppercase letter</p>
+        <p id="num" class="invalid">• One number</p>
+        <p id="sym" class="invalid">• One special character</p>
+    </div>
+
+    <button id="registerBtn" name="register" disabled>Create account</button>
     <a href="index.php">back</a>
 
     <p><?php echo $msg; ?></p>
