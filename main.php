@@ -33,7 +33,7 @@ $userData = $stmt->get_result()->fetch_assoc();
 $_SESSION['name'] = $userData['name'];
 $_SESSION['surname'] = $userData['surname'];
 
-$needsProfile = !($userData['name']) || !($userData['surname']);
+$needsProfile = empty($userData['name']) || empty($userData['surname']);
 
 // SAVE PROFILE
 if(isset($_POST['save_profile'])){
@@ -44,6 +44,8 @@ if(isset($_POST['save_profile'])){
         $stmt = $db->conn->prepare("UPDATE users SET name=?, surname=? WHERE id=?");
         $stmt->bind_param("ssi", $name, $surname, $_SESSION['user_id']);
         $stmt->execute();
+
+        $log->add($name." ".$surname." has joined the system");
 
         header("Location: main.php");
         exit;
@@ -82,19 +84,102 @@ if(isset($_POST['delete_room'])){
     exit;
 }
 
-// BOOK ROOM
-if(isset($_POST['book'])){
-    $start = $_POST['start'];
-    $end = $_POST['end'];
 
-    if($booking->isAvailable($_POST['room_id'], $start, $end)){
-        $booking->book($_SESSION['user_id'], $_POST['room_id'], $start, $end);
-        header("Location: main.php");
-        exit;
-    } else {
-        $msg = "Room unavailable";
+
+function getBookedSlots($db, $room_id, $date){
+    $booked = [];
+
+    $stmt = $db->conn->prepare("
+        SELECT start_time, end_time
+        FROM bookings
+        WHERE room_id = ?
+        AND DATE(start_time) = ?
+    ");
+
+    $stmt->bind_param("is", $room_id, $date);
+    $stmt->execute();
+    $res = $stmt->get_result();
+
+    while($row = $res->fetch_assoc()){
+        $start = strtotime($row['start_time']);
+        $end = strtotime($row['end_time']);
+
+        while($start < $end){
+            $booked[] = date("H:i", $start);
+            $start = strtotime("+30 minutes", $start);
+        }
+    }
+
+    return $booked;
+}
+
+if(isset($_POST['book'])){
+
+    $date = $_POST['date'];
+    $start_time = $_POST['start_time'];
+    $end_time = $_POST['end_time'];
+
+    $start = $date . " " . $start_time . ":00";
+    $end   = $date . " " . $end_time . ":00";
+
+    // basic validation
+    if(strtotime($start) >= strtotime($end)){
+        $msg = "End time must be after start time";
+    }
+    elseif(strtotime($start) < time()){
+        $msg = "Cannot book past time";
+    }
+    else {
+        // check availability for whole range
+        if($booking->isAvailable($_POST['room_id'], $start, $end)){
+            $booking->book($_SESSION['user_id'], $_POST['room_id'], $start, $end);
+            
+            // get user name
+            $userName = $_SESSION['name'] . " " . $_SESSION['surname'];
+
+            // get room name
+            $stmt = $db->conn->prepare("SELECT name FROM rooms WHERE id=?");
+            $stmt->bind_param("i", $_POST['room_id']);
+            $stmt->execute();
+            $roomData = $stmt->get_result()->fetch_assoc();
+            $roomName = $roomData['name'];
+
+            // log message
+            $log->add($userName . " booked " . $roomName . " from " . $start . " - " . $end);
+
+            $msg = "Room booked successfully";
+        } else {
+            $msg = "Room is already booked in that time range";
+        }
     }
 }
+
+
+$booked = [];
+
+$date = date('Y-m-d');
+
+$stmt = $db->conn->prepare("
+    SELECT start_time, end_time
+    FROM bookings
+    WHERE room_id = ?
+    AND DATE(start_time) = ?
+");
+
+$stmt->bind_param("is", $r['id'], $date);
+$stmt->execute();
+$res = $stmt->get_result();
+
+while($row = $res->fetch_assoc()){
+    $start = strtotime($row['start_time']);
+    $end = strtotime($row['end_time']);
+
+    while($start < $end){
+        $booked[] = date("H:i", $start);
+        $start = strtotime("+30 minutes", $start);
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -110,21 +195,63 @@ if(isset($_POST['book'])){
     <div class="popup" onclick="event.stopPropagation()">
 
         <form method="POST">
+
             <input type="hidden" name="room_id" id="room_id">
 
-            <label>Start:</label>
-            <input type="datetime-local" name="start" required>
+            <label>Start time:</label>
+            <select name="start_time" required>
+            <?php
+            for ($h = 6; $h <= 22; $h++) {
+                foreach (["00", "30"] as $m) {
 
-            <label>End:</label>
-            <input type="datetime-local" name="end" required>
+                    $t = sprintf("%02d:%s", $h, $m);
+
+                    $disabled = in_array($t, $booked)
+                        ? "disabled style='color:#aaa;background:#eee;'"
+                        : "";
+
+                    echo "<option value='$t' $disabled>
+                            $t" . (in_array($t, $booked) ? " (taken)" : "") . "
+                        </option>";
+                }
+            }
+            ?>
+            </select>
+
+            <label>End time:</label>
+            <select name="end_time" required>
+            <?php
+            for ($h = 6; $h <= 22; $h++) {
+                foreach (["00", "30"] as $m) {
+
+                    $t = sprintf("%02d:%s", $h, $m);
+
+                    $disabled = in_array($t, $booked)
+                        ? "disabled style='color:#aaa;background:#eee;'"
+                        : "";
+
+                    echo "<option value='$t' $disabled>
+                            $t" . (in_array($t, $booked) ? " (taken)" : "") . "
+                        </option>";
+                }
+            }
+            ?>
+            </select>
+
+            <input type="hidden" name="date" value="<?php echo date('Y-m-d'); ?>">
 
             <button name="book">Book</button>
+
         </form>
 
         <?php if($_SESSION['role'] === 'admin'): ?>
         <form method="POST" style="margin-top:10px;">
             <input type="hidden" name="delete_room_id" id="delete_room_id">
-            <button name="delete_room" style="background:red;color:white;">Delete Room</button>
+            <button name="delete_room"
+                    onclick="return confirm('Delete this room?')"
+                    style="background:red;color:white;">
+                Delete Room
+            </button>
         </form>
         <?php endif; ?>
 
@@ -133,17 +260,18 @@ if(isset($_POST['book'])){
 
 <!-- PROFILE POPUP (FORCED) -->
 <?php if($needsProfile): ?>
-<div class="overlay">
+<div id="profileOverlay" class="overlay">
     <div class="popup">
         <h3>Complete your profile</h3>
         <form method="POST">
             <input name="name" placeholder="Name" required>
             <input name="surname" placeholder="Surname" required>
-            <button name="save_profile">Save</button>
+            <button name="save_profile" disabled>Save</button>
         </form>
     </div>
 </div>
 <?php endif; ?>
+<div id="app" data-needs-profile="<?php echo $needsProfile ? '1' : '0'; ?>"></div>
 
 <div class="layout">
 
@@ -173,10 +301,14 @@ if(isset($_POST['book'])){
 
         <div class="rooms">
             <?php 
+            $date = date('Y-m-d');
             $result = $room->getAll();
+
             while($r = $result->fetch_assoc()):
+                $booked = getBookedSlots($db, $r['id'], $date);
             ?>
-                <div class="room" onclick="openPopup(<?php echo $r['id']; ?>)">
+                <div class="room"
+                    onclick='openPopup(<?php echo $r["id"]; ?>, <?php echo json_encode($booked); ?>)'>
                     <?php echo $r['name']; ?>
                 </div>
             <?php endwhile; ?>

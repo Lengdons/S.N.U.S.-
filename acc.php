@@ -28,7 +28,7 @@ if(isset($_POST['register'])){
 <html lang="en">
 <head>
     <link rel="stylesheet" href="style.css">
-    <script src="srcipt.js"></script>
+    <script src="script.js"></script>
     <meta charset="UTF-8">
     <title>Register</title>
 </head>

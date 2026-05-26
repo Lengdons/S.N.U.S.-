@@ -1,14 +1,44 @@
-function openPopup(id){
+let currentBooked = [];
+
+function openPopup(id, booked){
+    console.log(currentBooked);
     document.getElementById("room_id").value = id;
+    currentBooked = booked || [];
 
     const del = document.getElementById("delete_room_id");
     if(del) del.value = id;
 
     document.getElementById("overlay").style.display = "flex";
+
+    updateSlots();
 }
 
 function closePopup(){
     document.getElementById("overlay").style.display = "none";
+}
+
+
+function updateSlots(){
+    const selects = document.querySelectorAll("select[name='start_time'], select[name='end_time']");
+
+    selects.forEach(select => {
+        [...select.options].forEach(opt => {
+
+            const val = String(opt.value).trim();
+            const booked = currentBooked.map(v => String(v).trim());
+
+            if(booked.includes(val)){
+                opt.disabled = true;
+                opt.style.background = "#ddd";
+                opt.style.color = "#888";
+            } else {
+                opt.disabled = false;
+                opt.style.background = "";
+                opt.style.color = "";
+            }
+
+        });
+    });
 }
 
 
@@ -26,9 +56,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+function confirmDelete(){
+    return confirm("Are you sure you want to delete this room?");
+}
 
 
-
+document.addEventListener("DOMContentLoaded", () => {
 const email = document.getElementById("email");
 const password = document.getElementById("password");
 const btn = document.getElementById("registerBtn");
@@ -61,3 +94,44 @@ function validate() {
 // run on input
 email.addEventListener("input", validate);
 password.addEventListener("input", validate);
+})
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const app = document.getElementById("app");
+
+    const needsProfile = app?.dataset.needsProfile === "1";
+
+    if (needsProfile) {
+        const overlay = document.getElementById("profileOverlay");
+        if (overlay) {
+            overlay.style.display = "flex";
+        }
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const profileOverlay = document.getElementById("profileOverlay");
+
+    if (!profileOverlay) return;
+
+    const nameInput = profileOverlay.querySelector("input[name='name']");
+    const surnameInput = profileOverlay.querySelector("input[name='surname']");
+    const saveBtn = profileOverlay.querySelector("button[name='save_profile']");
+
+    if (!nameInput || !surnameInput || !saveBtn) return;
+
+    function validateProfile() {
+        const valid =
+            nameInput.value.trim() !== "" &&
+            surnameInput.value.trim() !== "";
+
+        saveBtn.disabled = !valid;
+    }
+
+    nameInput.addEventListener("input", validateProfile);
+    surnameInput.addEventListener("input", validateProfile);
+
+    // run once on load (important)
+    validateProfile();
+});
