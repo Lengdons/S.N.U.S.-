@@ -67,7 +67,7 @@ if(isset($_POST['add_room'])){
     } else {
         $room->add($name);
 
-        $log->add("Admin added room: ". $name);
+        $log->add($_SESSION['name']." added room: ". $name);
         header("Location: main.php");
         exit;
     }
@@ -113,43 +113,64 @@ function getBookedSlots($db, $room_id, $date){
     return $booked;
 }
 
-if(isset($_POST['book'])){
+if (isset($_POST['book'])) {
 
-    $date = $_POST['date'];
-    $start_time = $_POST['start_time'];
-    $end_time = $_POST['end_time'];
+    if ($needsProfile) {
+        $msg = "Complete your profile first.";
+    } else {
 
-    $start = $date . " " . $start_time . ":00";
-    $end   = $date . " " . $end_time . ":00";
+        $bookUserId = $_SESSION['user_id'];
 
-    // basic validation
-    if(strtotime($start) >= strtotime($end)){
-        $msg = "End time must be after start time";
-    }
-    elseif(strtotime($start) < time()){
-        $msg = "Cannot book past time";
-    }
-    else {
-        // check availability for whole range
-        if($booking->isAvailable($_POST['room_id'], $start, $end)){
-            $booking->book($_SESSION['user_id'], $_POST['room_id'], $start, $end);
-            
-            // get user name
-            $userName = $_SESSION['name'] . " " . $_SESSION['surname'];
+        if ($_SESSION['role'] === 'admin') {
+            $bookUserId = $_POST['book_user_id'] ?? null;
+            if (!$bookUserId) {
+                $msg = "Select a user";
+                return;
+            }
+        }
 
-            // get room name
-            $stmt = $db->conn->prepare("SELECT name FROM rooms WHERE id=?");
-            $stmt->bind_param("i", $_POST['room_id']);
-            $stmt->execute();
-            $roomData = $stmt->get_result()->fetch_assoc();
-            $roomName = $roomData['name'];
+        $start_date = $_POST['start_date'];
+        $end_date   = $_POST['end_date'];
 
-            // log message
-            $log->add($userName . " booked " . $roomName . " from " . $start . " - " . $end);
+        $start_time = $_POST['start_time'];
+        $end_time   = $_POST['end_time'];
 
-            $msg = "Room booked successfully";
-        } else {
-            $msg = "Room is already booked in that time range";
+        $start = $start_date . " " . $start_time . ":00";
+        $end   = $end_date . " " . $end_time . ":00";
+
+        if (strtotime($start) >= strtotime($end)) {
+            $msg = "End time must be after start time";
+        }
+        elseif (strtotime($start) < time()) {
+            $msg = "Cannot book past time";
+        }
+        else {
+
+            if ($booking->isAvailable($_POST['room_id'], $start, $end)) {
+
+                $booking->book($bookUserId, $_POST['room_id'], $start, $end);
+
+                $stmt = $db->conn->prepare("SELECT name,surname FROM users WHERE id=?");
+                $stmt->bind_param("i", $bookUserId);
+                $stmt->execute();
+                $u = $stmt->get_result()->fetch_assoc();
+
+                $stmt = $db->conn->prepare("SELECT name FROM rooms WHERE id=?");
+                $stmt->bind_param("i", $_POST['room_id']);
+                $stmt->execute();
+                $roomData = $stmt->get_result()->fetch_assoc();
+
+                $log->add(
+                    $u['name']." ".$u['surname'].
+                    " booked ".$roomData['name'].
+                    " from ".$start." - ".$end
+                );
+
+                $msg = "Room booked successfully";
+
+            } else {
+                $msg = "Room already booked in that range";
+            }
         }
     }
 }
@@ -180,6 +201,25 @@ while($row = $res->fetch_assoc()){
     }
 }
 
+if (isset($_POST['create_user'])) {
+
+    if ($_SESSION['role'] !== 'admin') {
+        die("No permission");
+    }
+
+    $email = $_POST['new_email'];
+    $password = $_POST['new_password'];
+
+    $result = $user->register($email, $password);
+
+    if ($result === true) {
+        $log->add("Admin created user: " . $email);
+        $msg = "User created successfully";
+    } else {
+        $msg = $result;
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -197,6 +237,35 @@ while($row = $res->fetch_assoc()){
         <form method="POST">
 
             <input type="hidden" name="room_id" id="room_id">
+
+            <?php if($_SESSION['role'] === 'admin'): ?>
+
+            <label>Book for user:</label>
+            <select name="book_user_id" required>
+
+            <?php
+                $users = $db->conn->query("
+                    SELECT id,name,surname,email
+                    FROM users
+                    ORDER BY name ASC
+                ");
+
+                while($u = $users->fetch_assoc()):
+                ?>
+
+                    <option value="<?php echo $u['id']; ?>">
+                        <?php
+                        echo $u['name'] . " " .
+                            $u['surname'] .
+                            " (" . $u['email'] . ")";
+                        ?>
+                    </option>
+
+                <?php endwhile; ?>
+
+            </select>
+
+            <?php endif; ?>
 
             <label>Start time:</label>
             <select name="start_time" required>
@@ -238,7 +307,17 @@ while($row = $res->fetch_assoc()){
             ?>
             </select>
 
-            <input type="hidden" name="date" value="<?php echo date('Y-m-d'); ?>">
+            <label>Start date:</label>
+            <input type="date"
+                name="start_date"
+                value="<?php echo date('Y-m-d'); ?>"
+                required>
+
+            <label>End date:</label>
+            <input type="date"
+                name="end_date"
+                value="<?php echo date('Y-m-d'); ?>"
+                required>
 
             <button name="book">Book</button>
 
@@ -254,6 +333,21 @@ while($row = $res->fetch_assoc()){
             </button>
         </form>
         <?php endif; ?>
+
+    </div>
+</div>
+
+<div id="createUserOverlay" class="overlay" onclick="closeCreateUserPopup()">
+    <div class="popup" onclick="event.stopPropagation()">
+
+        <form method="POST">
+            <h3>Create User</h3>
+
+            <input type="email" name="new_email" placeholder="Email" required>
+            <input type="password" name="new_password" placeholder="Password" required>
+
+            <button name="create_user">Create</button>
+        </form>
 
     </div>
 </div>
@@ -277,7 +371,7 @@ while($row = $res->fetch_assoc()){
 
     <!-- LEFT SIDE -->
     <div class="sidebar">
-        <h2>Hello, <?php echo $_SESSION['name'] ?: $_SESSION['user']; ?></h2>
+        <h2>Sveiks, <?php echo $_SESSION['name'] ?: $_SESSION['user']; ?></h2>
 
         <?php if($_SESSION['role'] === 'admin'): ?>
             <a href="log_page.php" class="nav-btn">Logs</a>
@@ -289,6 +383,7 @@ while($row = $res->fetch_assoc()){
         <form method="POST">
             <input id="room_name" name="room_name" placeholder="New room">
             <button id="add_btn" name="add_room" disabled>Add Room</button>
+            <button type="button" onclick="openCreateUserPopup()">Create Account</button>
         </form>
         <?php endif; ?>
     </div>
@@ -307,8 +402,11 @@ while($row = $res->fetch_assoc()){
             while($r = $result->fetch_assoc()):
                 $booked = getBookedSlots($db, $r['id'], $date);
             ?>
-                <div class="room"
-                    onclick='openPopup(<?php echo $r["id"]; ?>, <?php echo json_encode($booked); ?>)'>
+                <div class="room <?php echo $needsProfile ? 'locked' : ''; ?>"
+                    <?php if(!$needsProfile): ?>
+                        onclick='openPopup(<?php echo $r["id"]; ?>, <?php echo json_encode($booked); ?>)'
+                    <?php endif; ?>
+                >
                     <?php echo $r['name']; ?>
                 </div>
             <?php endwhile; ?>

@@ -122,6 +122,8 @@ hr {
     align-items: center;
 
     z-index: 999;
+
+    backdrop-filter: blur(3px);
 }
 
 .popup {
@@ -218,4 +220,32 @@ button:disabled {
 
 .content {
     margin-left: 250px;
+}
+
+.password-wrapper{
+    position:relative;
+    width:100%;
+}
+
+.password-bubble{
+    display:none;
+    position:absolute;
+    top:105%;
+    left:0;
+
+    background:white;
+    border:1px solid #ccc;
+    border-radius:10px;
+
+    padding:10px;
+    width:250px;
+
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+
+    z-index:100;
+}
+
+.password-bubble p{
+    margin:5px 0;
+    font-size:14px;
 }

@@ -4,6 +4,7 @@ class User {
     public function __construct($db){ $this->conn=$db->conn; }
 
     public function register($email,$pass){
+
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
         return "Invalid email";
     }
@@ -12,13 +13,33 @@ class User {
         return "Password must be 8+ chars, include uppercase, number, symbol";
     }
 
+    // check duplicate email
+    $check = $this->conn->prepare("
+        SELECT id
+        FROM users
+        WHERE email=?
+    ");
+
+    $check->bind_param("s", $email);
+    $check->execute();
+
+    $result = $check->get_result();
+
+    if($result->num_rows > 0){
+        return "Email already exists";
+    }
+
     $pass = md5($pass);
 
-    $stmt = $this->conn->prepare("INSERT INTO users(email,password,role) VALUES(?,?,'user')");
+    $stmt = $this->conn->prepare("
+        INSERT INTO users(email,password,role)
+        VALUES(?,?,'user')
+    ");
+
     $stmt->bind_param("ss",$email,$pass);
 
-    return $stmt->execute() ? true : "User exists";
-    }
+    return $stmt->execute() ? true : "Registration failed";
+}
 
     public function login($u,$p){
         $p=md5($p);

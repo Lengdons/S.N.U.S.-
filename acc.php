@@ -41,11 +41,15 @@ if(isset($_POST['register'])){
 
     <input type="password" id="password" name="password" placeholder="Password" required>
 
-    <div id="requirements">
+    <div class="password-wrapper">
+
+    <div id="passwordBubble" class="password-bubble">
         <p id="len" class="invalid">• At least 8 characters</p>
         <p id="upper" class="invalid">• One uppercase letter</p>
         <p id="num" class="invalid">• One number</p>
         <p id="sym" class="invalid">• One special character</p>
+    </div>
+
     </div>
 
     <button id="registerBtn" name="register" disabled>Create account</button>

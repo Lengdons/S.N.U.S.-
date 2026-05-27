@@ -62,47 +62,67 @@ function confirmDelete(){
 
 
 document.addEventListener("DOMContentLoaded", () => {
-const email = document.getElementById("email");
-const password = document.getElementById("password");
-const btn = document.getElementById("registerBtn");
 
-// requirement elements
-const len = document.getElementById("len");
-const upper = document.getElementById("upper");
-const num = document.getElementById("num");
-const sym = document.getElementById("sym");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const btn = document.getElementById("registerBtn");
 
-function validate() {
-    const pass = password.value;
+    // stop if not on register page
+    if(!email || !password || !btn) return;
 
-    const hasLength = pass.length >= 8;
-    const hasUpper = /[A-Z]/.test(pass);
-    const hasNumber = /\d/.test(pass);
-    const hasSymbol = /[\W_]/.test(pass);
-    const validEmail = email.value.includes("@");
+    // requirement elements
+    const len = document.getElementById("len");
+    const upper = document.getElementById("upper");
+    const num = document.getElementById("num");
+    const sym = document.getElementById("sym");
 
-    // update UI
-    len.className = hasLength ? "valid" : "invalid";
-    upper.className = hasUpper ? "valid" : "invalid";
-    num.className = hasNumber ? "valid" : "invalid";
-    sym.className = hasSymbol ? "valid" : "invalid";
+    const bubble = document.getElementById("passwordBubble");
 
-    // enable button only if ALL valid
-    btn.disabled = !(hasLength && hasUpper && hasNumber && hasSymbol && validEmail);
-}
+    password.addEventListener("focus", () => {
+        bubble.style.display = "block";
+    });
 
-// run on input
-email.addEventListener("input", validate);
-password.addEventListener("input", validate);
-})
+    password.addEventListener("blur", () => {
+        setTimeout(() => {
+            bubble.style.display = "none";
+        }, 200);
+    });
+
+    function validate() {
+
+        const pass = password.value;
+
+        const hasLength = pass.length >= 8;
+        const hasUpper = /[A-Z]/.test(pass);
+        const hasNumber = /\d/.test(pass);
+        const hasSymbol = /[\W_]/.test(pass);
+        const validEmail = email.value.includes("@");
+
+        len.className = hasLength ? "valid" : "invalid";
+        upper.className = hasUpper ? "valid" : "invalid";
+        num.className = hasNumber ? "valid" : "invalid";
+        sym.className = hasSymbol ? "valid" : "invalid";
+
+        btn.disabled = !(hasLength && hasUpper && hasNumber && hasSymbol && validEmail);
+    }
+
+    email.addEventListener("input", validate);
+    password.addEventListener("input", validate);
+
+});
 
 
 document.addEventListener("DOMContentLoaded", () => {
     const app = document.getElementById("app");
-
     const needsProfile = app?.dataset.needsProfile === "1";
 
     if (needsProfile) {
+
+         // disable page scrolling
+        document.body.style.overflow = "hidden";
+
+        window.profileLocked = needsProfile;
+
         const overlay = document.getElementById("profileOverlay");
         if (overlay) {
             overlay.style.display = "flex";
@@ -135,3 +155,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // run once on load (important)
     validateProfile();
 });
+
+function openCreateUserPopup(){
+    document.getElementById("createUserOverlay").style.display = "flex";
+}
+
+function closeCreateUserPopup(){
+    document.getElementById("createUserOverlay").style.display = "none";
+}
