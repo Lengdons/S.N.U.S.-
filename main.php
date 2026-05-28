@@ -59,6 +59,7 @@ if(isset($_POST['add_room'])){
     if($_SESSION['role'] !== 'admin') die("No permission");
 
     $name = trim($_POST['room_name']);
+    $name = ucwords(strtolower($name));
 
     if($name === ""){
         $msg = "Room name cannot be empty";
@@ -67,7 +68,7 @@ if(isset($_POST['add_room'])){
     } else {
         $room->add($name);
 
-        $log->add($_SESSION['name']." added room: ". $name);
+        $log->add($_SESSION['name']." ".$_SESSION['surname']." added room: ". $name);
         header("Location: main.php");
         exit;
     }
@@ -79,7 +80,7 @@ if(isset($_POST['delete_room'])){
 
     $room->delete($_POST['delete_room_id']);
 
-    $log->add("Admin removed room: ". $name);
+    $log->add($_SESSION['name']." ".$_SESSION['surname']." removed room: ". $name);
     header("Location: main.php");
     exit;
 }
@@ -160,11 +161,22 @@ if (isset($_POST['book'])) {
                 $stmt->execute();
                 $roomData = $stmt->get_result()->fetch_assoc();
 
-                $log->add(
-                    $u['name']." ".$u['surname'].
-                    " booked ".$roomData['name'].
-                    " from ".$start." - ".$end
-                );
+                $actor = $_SESSION['name'] . " " . $_SESSION['surname'];
+
+                if ($_SESSION['role'] === 'admin' && $bookUserId != $_SESSION['user_id']) {
+                    $log->add(
+                        $actor .
+                        " booked " . $roomData['name'] .
+                        " for user " . $u['name'] . " " . $u['surname'] .
+                        " from " . $start . " - " . $end
+                    );
+                } else {
+                    $log->add(
+                        $u['name'] . " " . $u['surname'] .
+                        " booked " . $roomData['name'] .
+                        " from " . $start . " - " . $end
+                    );
+                }
 
                 $msg = "Room booked successfully";
 
@@ -178,24 +190,36 @@ if (isset($_POST['book'])) {
 
 $booked = [];
 
-$date = date('Y-m-d');
+$date = $_POST['start_date'] ?? date('Y-m-d');
 
 $stmt = $db->conn->prepare("
     SELECT start_time, end_time
     FROM bookings
     WHERE room_id = ?
-    AND DATE(start_time) = ?
+    AND (
+        DATE(start_time) = ?
+        OR DATE(end_time) = ?
+    )
 ");
 
-$stmt->bind_param("is", $r['id'], $date);
+$stmt->bind_param("iss", $r['id'], $date, $date);
 $stmt->execute();
 $res = $stmt->get_result();
 
-while($row = $res->fetch_assoc()){
-    $start = strtotime($row['start_time']);
-    $end = strtotime($row['end_time']);
+while ($row = $res->fetch_assoc()) {
 
-    while($start < $end){
+    $start = strtotime($row['start_time']);
+    $end   = strtotime($row['end_time']);
+
+    $dayStart = strtotime($date . " 00:00:00");
+    $dayEnd   = strtotime($date . " 23:59:59");
+
+    // skip if booking is not on this day
+    if ($end < $dayStart || $start > $dayEnd) {
+        continue;
+    }
+
+    while ($start < $end) {
         $booked[] = date("H:i", $start);
         $start = strtotime("+30 minutes", $start);
     }
@@ -407,7 +431,7 @@ if (isset($_POST['create_user'])) {
 
         <div class="rooms">
             <?php 
-            $date = date('Y-m-d');
+            $date = $_POST['selected_date'] ?? date('Y-m-d');
             $result = $room->getAll();
 
             while($r = $result->fetch_assoc()):
