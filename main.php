@@ -213,7 +213,7 @@ if (isset($_POST['create_user'])) {
     $result = $user->register($email, $password);
 
     if ($result === true) {
-        $log->add("Admin created user: " . $email);
+        $log->add($_SESSION['name']." created user: " . $email);
         $msg = "User created successfully";
     } else {
         $msg = $result;
@@ -307,17 +307,27 @@ if (isset($_POST['create_user'])) {
             ?>
             </select>
 
-            <label>Start date:</label>
-            <input type="date"
-                name="start_date"
-                value="<?php echo date('Y-m-d'); ?>"
-                required>
+            <?php if($_SESSION['role'] === 'admin'): ?>
 
-            <label>End date:</label>
-            <input type="date"
-                name="end_date"
-                value="<?php echo date('Y-m-d'); ?>"
-                required>
+                <label>Start date:</label>
+                <input type="date"
+                    name="start_date"
+                    value="<?php echo date('Y-m-d'); ?>"
+                    required>
+
+                <label>End date:</label>
+                <input type="date"
+                    name="end_date"
+                    value="<?php echo date('Y-m-d'); ?>"
+                    required>
+
+            <?php else: ?>
+
+                <!-- users still send today's date automatically -->
+                <input type="hidden" name="start_date" value="<?php echo date('Y-m-d'); ?>">
+                <input type="hidden" name="end_date" value="<?php echo date('Y-m-d'); ?>">
+
+            <?php endif; ?>
 
             <button name="book">Book</button>
 
@@ -375,6 +385,7 @@ if (isset($_POST['create_user'])) {
 
         <?php if($_SESSION['role'] === 'admin'): ?>
             <a href="log_page.php" class="nav-btn">Logs</a>
+            <a href="accounts_page.php" class="nav-btn">Accounts</a>
         <?php endif; ?>
 
         <a href="login/logout.php" class="nav-btn logout">Logout</a>
@@ -383,7 +394,7 @@ if (isset($_POST['create_user'])) {
         <form method="POST">
             <input id="room_name" name="room_name" placeholder="New room">
             <button id="add_btn" name="add_room" disabled>Add Room</button>
-            <button type="button" onclick="openCreateUserPopup()">Create Account</button>
+            <button type="button" onclick="openCreateUserPopup()">Create Temp Account</button>
         </form>
         <?php endif; ?>
     </div>

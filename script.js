@@ -163,3 +163,11 @@ function openCreateUserPopup(){
 function closeCreateUserPopup(){
     document.getElementById("createUserOverlay").style.display = "none";
 }
+
+function toggleRow(row){
+    const input = row.querySelector("input[name='log_ids[]']");
+
+    const selected = row.classList.toggle("selected");
+
+    input.disabled = !selected;
+}

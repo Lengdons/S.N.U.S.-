@@ -249,3 +249,21 @@ button:disabled {
     margin:5px 0;
     font-size:14px;
 }
+
+.logs-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.logs-table th, .logs-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.logs-table tr {
+    cursor: pointer;
+}
+
+.logs-table tr.selected {
+    background: #ffe08a;
+}
