@@ -1,0 +1,126 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #edebeb; 
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    color: #1b1818;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+}
+
+header {
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 4.5rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+}
+
+header p {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.control-box {
+    background-color: #fefefe;
+    border: 3px solid #020202;
+    padding: 12px 30px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    min-width: 180px;
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+}
+
+.top-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.right-controls {
+    display: flex;
+    gap: 20px;
+    cursor: pointer;
+}
+
+
+.date-box {
+    min-width: 200px;
+}
+
+.info-bar {
+    background-color: #cceeff;
+    border: 2px solid #33b5e5;
+    padding: 1px;
+    text-align: center;
+    margin-bottom: 40px;
+    border-radius: 10px;
+}
+
+.records-list {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.record-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.data-box {
+    background-color: #fff;
+    border: 3px solid #666;
+    padding: 10px;
+    border-radius: 10px;
+    flex: 1;
+    text-align: center;
+    font-weight: normal;
+}
+
+.status-ind {
+    width: 100px;
+    height: 60px; 
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 30px;
+    border: 3px solid;
+}
+
+.status-txt {
+    display: block;
+    text-align: center;
+    font-size: 0.9rem;
+    line-height: 1.2;
+}
+
+.green {
+    background-color: #74fe82;
+    border-color: #1591fd;
+}
+
+.red {
+    background-color: #1bcef7;
+    border-color: #1591fd;
+}
