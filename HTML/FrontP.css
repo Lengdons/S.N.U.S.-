@@ -5,9 +5,16 @@
     padding: 0;
     font-family: Arial, sans-serif;
 }
+.logo img{
+    width: 400px;
+    height: auto;
+    margin-bottom: -20px;
+    
+    margin-left: calc(-48vw + 50%);
+}
 
 body {
-    background-color: #edebeb; 
+    background-color: #ffffff; 
     padding: 30px;
     display: flex;
     justify-content: center;
@@ -30,27 +37,39 @@ header h1 {
     margin-bottom: 5px;
 }
 
-header p {
+.info-bar p {
+    display:flex;
     font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+    color: #ffffff;
+}
+
+.info-bar {
+    background-color: #8a8a8a;
+    border: 0px solid #33b5e5;
+    text-align: center;
+    margin-bottom: 40px;
+    width: 100vw; 
+    margin-left: calc(-50vw + 50%);
+    padding: 0px 40px;
+   
 }
 
 .control-box {
     background-color: #fefefe;
     border: 3px solid #020202;
     padding: 12px 30px;
-    border-radius: 10px;
     text-align: center;
     cursor: pointer;
     min-width: 180px;
-    box-shadow: 2px 2px 0px rgba(0,0,0,0.05);
 }
 
 .top-controls {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
+    margin-left: calc(-48vw + 50%);
 }
 
 .right-controls {
@@ -64,22 +83,14 @@ header p {
     min-width: 200px;
 }
 
-.info-bar {
-    background-color: #cceeff;
-    border: 2px solid #33b5e5;
-    padding: 1px;
-    text-align: center;
-    margin-bottom: 40px;
-    border-radius: 10px;
-}
 
 .records-list {
-    display: flex;
+    display:calc(-50vw + 50%);
     flex-direction: column;
     gap: 30px;
 }
 
-.record-row {
+.datu-rinda {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -89,35 +100,36 @@ header p {
 .data-box {
     background-color: #fff;
     border: 3px solid #666;
+    flex: 1 ;
     padding: 10px;
     border-radius: 10px;
-    flex: 1;
+    
     text-align: center;
     font-weight: normal;
 }
 
 .status-ind {
     width: 100px;
-    height: 60px; 
-    padding: 10px;
+     
+    padding: 5px;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 30px;
+    margin: 0 10px;
     border: 3px solid;
 }
 
 .status-txt {
-    display: block;
     text-align: center;
     font-size: 0.9rem;
+    font-weight: bold;
     line-height: 1.2;
 }
 
 .green {
-    background-color: #74fe82;
-    border-color: #1591fd;
+    background-color: #dffee2;
+    border-color: #fdd615;
 }
 
 .red {

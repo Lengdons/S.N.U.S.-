@@ -8,56 +8,31 @@
 </head>
 <body>
     <div class="container">
+       
         <header>
-            <h1>S.N.U.S</h1>
-            <p>SAŅEMŠANAS & NODOŠANAS UZSKAITES SISTĒMA</p>
+            <div class = "logo">
+            <img src="SNUS_logo.png" alt="logotips">
+        </div>
+            
         </header>
-
-        <div class="top-controls">
-            <div class="control-box date-box">Datums</div>
-            <div class="right-controls">
-                <div class="control-box">Filtrs</div>
-                <div class="control-box">Pierakstīties</div>
-            </div>
+        <div class="info-bar">
+            <p>SAŅEMŠANAS & NODOŠANAS UZSKAITES SISTĒMA</p>
+            <div class="top-controls">
+                <div class="control-box date-box">Datums</div>
+                <div class="right-controls">
+                    <div class="control-box">Filtrs</div>
+                    <div class="control-box">Pierakstīties</div>
+                </div>
         </div>
 
-        <div class="info-bar">
+        
             Pirmdiena
         </div>
+<!--   Kabinets/Liet./Take./bool/Return js  -->
+        <div id="datu-kaste" class="records-list"></div>
 
-        <div class="records-list">
-            
-            <div class="record-row">
-                <div class="data-box">Kabinets</div>
-                <div class="data-box">Lietotājs</div>
-                <div class="data-box">Paņēma: </div>
-                <div class="status-ind green">
-                    <span class="status-txt">Pieejams</span>
-                </div>
-                <div class="data-box">Nodeva: </div>
-            </div>
+        <script src="html_lengdons.js"></script>
 
-            <div class="record-row">
-                <div class="data-box">Kabinets</div>
-                <div class="data-box">Lietotājs</div>
-                <div class="data-box">Paņēma 8:30</div>
-                <div class="status-ind red">
-                    <span class="status-txt">Aizņemts</span>
-                </div>
-                <div class="data-box">Nodeva: 00:00</div>
-            </div>
-
-            <div class="record-row">
-                <div class="data-box">Kabinets</div>
-                <div class="data-box">Lietotājs</div>
-                <div class="data-box">Paņēma: </div>
-                <div class="status-ind green">
-                    <span class="status-txt">Pieejams</span>
-                </div>
-                <div class="data-box">Nodeva: </div>
-            </div>
-
-        </div>
     </div>
 </body>
 </html>
