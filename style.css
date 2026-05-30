@@ -114,10 +114,8 @@ hr {
     left: 0;
     width: 100%;
     height: 100%;
-
     background: rgba(0,0,0,0.6);
 
-    display: none;
     justify-content: center;
     align-items: center;
 
@@ -158,7 +156,14 @@ button:disabled {
 
 .layout {
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
+}
+
+/* RIGHT SIDE */
+.content {
+    flex: 1;
+    padding: 50px;
+    background: #ecf0f1;
 }
 
 /* LEFT SIDE */
@@ -187,39 +192,12 @@ button:disabled {
     background: #e74c3c;
 }
 
-/* RIGHT SIDE */
-.content {
-    flex: 1;
-    padding: 50px;
-    background: #ecf0f1;
-}
+
 
 /* ROOMS GRID */
 .rooms {
     display: flex;
     flex-wrap: wrap;
-}
-
-/* ROOM BOX */
-.room {
-    width: 120px;
-    height: 120px;
-    background: #3498db;
-    margin: 10px;
-    color: white;
-    text-align: center;
-    line-height: 120px;
-    cursor: pointer;
-    border-radius: 10px;
-}
-
-.sidebar {
-    position: fixed;
-    height: 100%;
-}
-
-.content {
-    margin-left: 250px;
 }
 
 .password-wrapper{

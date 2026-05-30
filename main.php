@@ -87,33 +87,6 @@ if(isset($_POST['delete_room'])){
 
 
 
-function getBookedSlots($db, $room_id, $date){
-    $booked = [];
-
-    $stmt = $db->conn->prepare("
-        SELECT start_time, end_time
-        FROM bookings
-        WHERE room_id = ?
-        AND DATE(start_time) = ?
-    ");
-
-    $stmt->bind_param("is", $room_id, $date);
-    $stmt->execute();
-    $res = $stmt->get_result();
-
-    while($row = $res->fetch_assoc()){
-        $start = strtotime($row['start_time']);
-        $end = strtotime($row['end_time']);
-
-        while($start < $end){
-            $booked[] = date("H:i", $start);
-            $start = strtotime("+30 minutes", $start);
-        }
-    }
-
-    return $booked;
-}
-
 if (isset($_POST['book'])) {
 
     if ($needsProfile) {
@@ -188,41 +161,31 @@ if (isset($_POST['book'])) {
 }
 
 
-$booked = [];
+function getBookedSlots($db, $room_id, $date){
+    $booked = [];
 
-$date = $_POST['start_date'] ?? date('Y-m-d');
+    $stmt = $db->conn->prepare("
+        SELECT start_time, end_time
+        FROM bookings
+        WHERE room_id = ?
+        AND DATE(start_time) = ?
+    ");
 
-$stmt = $db->conn->prepare("
-    SELECT start_time, end_time
-    FROM bookings
-    WHERE room_id = ?
-    AND (
-        DATE(start_time) = ?
-        OR DATE(end_time) = ?
-    )
-");
+    $stmt->bind_param("is", $room_id, $date);
+    $stmt->execute();
+    $res = $stmt->get_result();
 
-$stmt->bind_param("iss", $r['id'], $date, $date);
-$stmt->execute();
-$res = $stmt->get_result();
+    while($row = $res->fetch_assoc()){
+        $start = strtotime($row['start_time']);
+        $end = strtotime($row['end_time']);
 
-while ($row = $res->fetch_assoc()) {
-
-    $start = strtotime($row['start_time']);
-    $end   = strtotime($row['end_time']);
-
-    $dayStart = strtotime($date . " 00:00:00");
-    $dayEnd   = strtotime($date . " 23:59:59");
-
-    // skip if booking is not on this day
-    if ($end < $dayStart || $start > $dayEnd) {
-        continue;
+        while($start < $end){
+            $booked[] = date("H:i", $start);
+            $start = strtotime("+30 minutes", $start);
+        }
     }
 
-    while ($start < $end) {
-        $booked[] = date("H:i", $start);
-        $start = strtotime("+30 minutes", $start);
-    }
+    return $booked;
 }
 
 if (isset($_POST['create_user'])) {
@@ -299,13 +262,7 @@ if (isset($_POST['create_user'])) {
 
                     $t = sprintf("%02d:%s", $h, $m);
 
-                    $disabled = in_array($t, $booked)
-                        ? "disabled style='color:#aaa;background:#eee;'"
-                        : "";
-
-                    echo "<option value='$t' $disabled>
-                            $t" . (in_array($t, $booked) ? " (taken)" : "") . "
-                        </option>";
+                    echo "<option value='$t'>$t</option>";
                 }
             }
             ?>
@@ -319,13 +276,7 @@ if (isset($_POST['create_user'])) {
 
                     $t = sprintf("%02d:%s", $h, $m);
 
-                    $disabled = in_array($t, $booked)
-                        ? "disabled style='color:#aaa;background:#eee;'"
-                        : "";
-
-                    echo "<option value='$t' $disabled>
-                            $t" . (in_array($t, $booked) ? " (taken)" : "") . "
-                        </option>";
+                    echo "<option value='$t'>$t</option>";
                 }
             }
             ?>
