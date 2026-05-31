@@ -7,12 +7,15 @@ if(!isset($_SESSION['user'])){
 }
 
 require 'mysql/DATABASE.php';
+
+$db = new Database();
+
 require 'Room.php';
 require 'Booking.php';
 require 'Log.php';
 require 'User.php';
+require 'auth_check.php';
 
-$db = new Database();
 $room = new Room($db);
 $booking = new Booking($db);
 $log = new Log($db);

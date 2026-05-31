@@ -41,12 +41,7 @@ class User {
 }
 
     public function login($u,$p){
-        $stmt = $this->conn->prepare("
-            SELECT * 
-            FROM users 
-            WHERE email = ?
-            LIMIT 1
-        ");
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
 
         $stmt->bind_param("s", $u);
         $stmt->execute();
@@ -63,9 +58,24 @@ class User {
             return false;
         }
 
-        // optional: check if account is inactive
-        if (isset($row['is_active']) && $row['is_active'] == 0) {
-            return "ACCOUNT_DISABLED";
+         // optional: check if account is inactive
+        if((int)$row['is_active'] === 0){
+        return "INACTIVE";
+        }
+
+        // 3. check expiry
+        if(!empty($row['expires_at']) && strtotime($row['expires_at']) < time()){
+
+        // auto-disable expired account
+        $up = $this->conn->prepare("
+            UPDATE users 
+            SET is_active = 0 
+            WHERE id = ?
+        ");
+        $up->bind_param("i", $row['id']);
+        $up->execute();
+
+        return "EXPIRED";
         }
 
         // login success

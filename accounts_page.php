@@ -12,7 +12,7 @@ if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin'){
 
 // DELETE USER
 if(isset($_POST['delete_user_id'])){
-    $stmt = $db->conn->prepare("DELETE FROM users WHERE id = ?");
+    $stmt = $db->conn->prepare("UPDATE users SET is_active = 0 WHERE id = ?");
     $stmt->bind_param("i", $_POST['delete_user_id']);
     $stmt->execute();
 

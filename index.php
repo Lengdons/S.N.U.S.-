@@ -35,12 +35,20 @@ if (isset($_POST['register'])) {
 HANDLE LOGIN
 -------------------------
 */
+
 if (isset($_POST['login'])) {
-    if ($user->login($_POST['username'], $_POST['password'])) {
+
+    $result = $user->login($_POST['username'], $_POST['password']);
+
+    if ($result === true) {
         header("Location: main.php");
         exit;
+    }
+
+    if ($result === "INACTIVE" || $result === "EXPIRED") {
+        $msg = "Account no longer active";
     } else {
-        $msg = "Invalid login.";
+        $msg = "Invalid login";
     }
 }
 ?>
