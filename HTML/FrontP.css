@@ -2,95 +2,101 @@
 * {
     box-sizing: border-box;
     margin: 0;
-    padding: 0;
     font-family: Arial, sans-serif;
 }
+/* LOGOTIPS --------------------------------------------------------------------------------------------*/
+
 .logo img{
-    width: 400px;
+    width: 250px;
     height: auto;
-    margin-bottom: -20px;
+    margin-top: 20px;
+ 
     
-    margin-left: calc(-48vw + 50%);
 }
 
 body {
     background-color: #ffffff; 
-    padding: 30px;
+    padding:0 0 300px;
     display: flex;
     justify-content: center;
     color: #1b1818;
 }
 
-.container {
-    width: 100%;
-    max-width: 1200px;
-}
 
-header {
-    margin-bottom: 30px;
-}
-
-header h1 {
-    font-size: 4.5rem;
-    font-weight: bold;
-    letter-spacing: 2px;
-    margin-bottom: 5px;
-}
-
-.info-bar p {
-    display:flex;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #ffffff;
-}
+/* NAVIGĀCIJAS bar's --------------------------------------------------------------------------------------*/
 
 .info-bar {
-    background-color: #8a8a8a;
-    border: 0px solid #33b5e5;
-    text-align: center;
-    margin-bottom: 40px;
-    width: 100vw; 
+    background-color: #282A35; 
+    color: white;
+    width: 100vw;
     margin-left: calc(-50vw + 50%);
-    padding: 0px 40px;
-   
-}
-
-.control-box {
-    background-color: #fefefe;
-    border: 3px solid #020202;
-    padding: 12px 30px;
-    text-align: center;
-    cursor: pointer;
-    min-width: 180px;
-}
-
-.top-controls {
     display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 40px; 
+    height: 80px; 
+}
+
+.nav-nosaukums p {
+    margin-top: 20px;
+    padding: 10px;
+    letter-spacing: 5px;
+    font-size: calc(0.01vw + 0.01vh + 1.5vmin);
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    height: 100%; 
+}
+
+.nav-item {
+    padding: 0 50px;
+    height: 100%; 
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s; 
+}
+.nav-item.date{
+    display: flex;
+    margin-inline: auto;
     justify-content: space-between;
-    margin-bottom: 20px;
-    margin-left: calc(-48vw + 50%);
 }
 
-.right-controls {
+.nav-item:hover {
+    background-color: #000000;
+}
+
+    .nav-item.btn-login {
+        background-color: #04AA6D;
+        margin-left: 15px; 
+        height: 45px; 
+        border-radius: 25px; 
+    }
+
+.nav-item.btn-login:hover {
+    background-color: #059862;
+}
+/* ------------------------------SEARCH BAR's-------------------------------------------------------------------------- */
+
+.search-bar{
+
+    background-color: #282A35;
+    width: 100vw;
+    margin-inline: calc(-50vw + 50%);
+    color: #ffffff;
     display: flex;
-    gap: 20px;
-    cursor: pointer;
+    padding-left: 40px;
+
 }
 
 
-.date-box {
-    min-width: 200px;
-}
-
-
-.records-list {
-    display:calc(-50vw + 50%);
-    flex-direction: column;
-    gap: 30px;
-}
+/* BODYYYYYY ----------------------------------------------------------------------------------------------*/
 
 .datu-rinda {
+    padding: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -124,15 +130,15 @@ header h1 {
     text-align: center;
     font-size: 0.9rem;
     font-weight: bold;
-    line-height: 1.2;
+    color: #ffffff;
 }
 
 .green {
-    background-color: #dffee2;
-    border-color: #fdd615;
+    background-color: #63a56a;
+    border-width: 0cap;
+    border-radius: 25px;
 }
 
 .red {
-    background-color: #1bcef7;
-    border-color: #1591fd;
+    background-color: #d64652;
 }
