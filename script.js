@@ -171,3 +171,20 @@ function toggleRow(row, inputName){
 
     input.disabled = !selected;
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const input = document.querySelector("input[name='duration_days']");
+
+    if (!input) return;
+
+    input.addEventListener("input", () => {
+        let val = parseInt(input.value);
+
+        if (isNaN(val)) return;
+
+        if (val > 365) val = 365;
+        if (val < 1) val = 1;
+
+        input.value = val;
+    });
+});

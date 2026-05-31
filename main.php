@@ -240,7 +240,14 @@ if (isset($_POST['create_user'])) {
     $email = $_POST['new_email'];
     $password = $_POST['new_password'];
 
-    $result = $user->register($email, $password);
+    $durationDays = (int) $_POST['duration_days']; // e.g. 7, 30, etc.
+
+    if ($durationDays > 365) $durationDays = 365;
+    if ($durationDays < 1) $durationDays = 1;
+
+    $expiresAt = date('Y-m-d H:i:s', strtotime("+$durationDays days"));
+
+    $result = $user->register($email, $password, $expiresAt);
 
     if ($result === true) {
         $log->add($_SESSION['name']." created user: " . $email);
@@ -373,6 +380,8 @@ if (isset($_POST['create_user'])) {
 
             <input type="email" name="new_email" placeholder="Email" required>
             <input type="password" name="new_password" placeholder="Password" required>
+            <label>Account duration (days)</label>
+            <input type="number" name="duration_days" value="7" min="1" max="365" oninput="this.value = Math.min(365, Math.max(1, this.value))">
 
             <button name="create_user">Create</button>
         </form>
