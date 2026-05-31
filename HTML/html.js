@@ -32,3 +32,25 @@ for (let i = 0; i < 15; i++) {
     }
 
 document.getElementById("datu-kaste").innerHTML = html;
+
+// meklet
+const copy = document.getElementById("datu-kaste");
+copy.innerHTML = html;
+
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener("input", () => {
+
+    const search = searchInput.value.toLowerCase();
+
+    document.querySelectorAll(".datu-rinda").forEach(rinda => {
+
+        if (rinda.textContent.toLowerCase().includes(search)) {
+            rinda.style.display = "";
+        } else {
+            rinda.style.display = "none";
+        }
+
+    });
+
+});
