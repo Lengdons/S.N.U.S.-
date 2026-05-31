@@ -1,14 +1,14 @@
 <?php
 session_start();
 
-require_once 'mysql/database.php';
-require_once 'log.php';
+require_once '../mysql/database.php';
+require_once '../classes/log.php';
 
 $db = new database();
 $log = new log($db);
 
 if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin'){
-    header("Location: index.php");
+    header("Location: ../index.php");
     exit;
 }
 
@@ -42,13 +42,13 @@ if(isset($_POST['delete_selected']) && !empty($_POST['log_ids'])){
 }
 ?>
 
-<link rel="stylesheet" href="style.css">
-<script src="script.js"></script>
+<link rel="stylesheet" href="../style.css">
+<script src="../script.js"></script>
 
 <h2>System Logs</h2>
 
 <div>
-    <a href="main.php" class="nav-btn">Rooms</a>
+    <a href="../home/main.php" class="nav-btn">Rooms</a>
 </div>
 
 <form method="POST">
@@ -65,7 +65,7 @@ if(isset($_POST['delete_selected']) && !empty($_POST['log_ids'])){
         </button>
     </div>
 
-    <a href="export_logs.php" class="nav-btn">
+    <a href="../export/export_logs.php" class="nav-btn">
     Download Logs CSV
     </a>
   

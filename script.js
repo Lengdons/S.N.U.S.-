@@ -10,12 +10,28 @@ function openPopup(id){
 
     document.getElementById("overlay").style.display = "flex";
 
-    loadBookings(); //currentBooked
 
     const del = document.getElementById("delete_room_id");
     if(del) del.value = id;
 
-    updateSlots();
+    loadBookings().then(() => {
+        updateSlots(); //currentBooked
+        setDefaultEndTime();
+    });
+
+    const startSelect = document.querySelector('select[name="start_time"]');
+    const endSelect = document.querySelector('select[name="end_time"]');
+
+    if (startSelect && endSelect) {
+
+        const startIndex = startSelect.selectedIndex;
+
+        // default: +1 slot (30 min)
+        const endIndex = Math.min(startIndex + 1, endSelect.options.length - 1);
+
+        endSelect.selectedIndex = endIndex;
+    }
+    
 }
 
 function loadBookings(){
@@ -23,15 +39,29 @@ function loadBookings(){
     const roomId = document.getElementById("room_id").value;
     const date = document.getElementById("start_date").value;
 
-    fetch(`get_booked_slots.php?room_id=${currentRoomId}&date=${date}`)
+    return fetch(`../get_booked_slots.php?room_id=${currentRoomId}&date=${document.getElementById("start_date").value}`)
         .then(response => response.json())
         .then(data => {
             
 
             currentBooked = data;
-            console.log(currentBooked)
+            //console.log(currentBooked)
             updateSlots();
     });
+}
+
+function setDefaultEndTime(){
+
+    const startSelect = document.querySelector("select[name='start_time']");
+    const endSelect = document.querySelector("select[name='end_time']");
+
+    if (!startSelect || !endSelect) return;
+
+    const startIndex = startSelect.selectedIndex;
+
+    const endIndex = Math.min(startIndex + 1, endSelect.options.length - 1);
+
+    endSelect.selectedIndex = endIndex;
 }
 
 function closePopup(){
@@ -51,10 +81,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
             endDate.value = startDate.value;
 
-            loadBookings();
+           loadBookings().then(() => {
+                updateSlots();
+                setDefaultEndTime();
+           });
         });
     }
 })
+
+document.addEventListener("DOMContentLoaded", () => {
+    const startSelect = document.querySelector("select[name='start_time']");
+    const endSelect = document.querySelector("select[name='end_time']");
+
+    if (!startSelect || !endSelect) return;
+
+    startSelect.addEventListener("change", () => {
+        const startValue = startSelect.value;
+
+        const [h, m] = startValue.split(":").map(Number);
+
+        let date = new Date();
+        date.setHours(h);
+        date.setMinutes(m + 30);
+
+        let newH = String(date.getHours()).padStart(2, "0");
+        let newM = String(date.getMinutes()).padStart(2, "0");
+
+        const newEnd = `${newH}:${newM}`;
+
+        // set if exists in dropdown
+        const exists = [...endSelect.options].some(o => o.value === newEnd);
+
+        if (exists) {
+            endSelect.value = newEnd;
+        }else{
+            setDefaultEndTime();
+        }
+    });
+});
 
 function updateSlots(){
     const selects = document.querySelectorAll("select[name='start_time'], select[name='end_time']");
@@ -63,6 +127,9 @@ function updateSlots(){
     const now = new Date();
     const currentMinutes = now.getHours()*60+now.getMinutes();
 
+    const startSelect = document.querySelector("select[name='start_time']");
+    const startValue = startSelect?.value;
+
     selects.forEach(select => {
         [...select.options].forEach(opt => {
 
@@ -70,14 +137,25 @@ function updateSlots(){
 
             let disabled = false;
 
+            const [h,m] = val.split(':');
+            const optionMinutes = parseInt(h)*60+parseInt(m);
+
+            if(select.name === "start_time"){
             if(currentBooked.includes(val)){
                 disabled = true;
+                }
+            }
+
+            if(select.name === "end_time" && startValue){
+                const [sh, sm] = startValue.split(":");
+                const startMinutes = parseInt(sh)*60 + parseInt(sm);
+
+                if(optionMinutes <= startMinutes){
+                    disabled = true;
+                }
             }
 
             if(selectedDate === today){
-                const [h,m] = val.split(':');
-                const optionMinutes = parseInt(h)*60+parseInt(m);
-
                 if(currentMinutes>optionMinutes+15){
                     disabled = true;
                 }
@@ -96,9 +174,12 @@ function updateSlots(){
 
         });
 
-        selectFirstAvailable(select);
+        if (select.name === "start_time") {
+            selectFirstAvailable(select);
+        }
 
     });
+    setDefaultEndTime();
 }
 
 function selectFirstAvailable(select){

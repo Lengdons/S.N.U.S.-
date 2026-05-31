@@ -1,5 +1,6 @@
 <?php
 class User {
+    
     private $conn;
     public function __construct($db){ $this->conn=$db->conn; }
 
@@ -34,6 +35,8 @@ class User {
     return $stmt->execute() ? true : "Registration failed";
 }
 
+
+
     public function login($u,$p){
         $stmt = $this->conn->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
 
@@ -52,7 +55,7 @@ class User {
             return false;
         }
 
-         // optional: check if account is inactive
+         // checks if account is inactive
         if((int)$row['is_active'] === 0){
         return "INACTIVE";
         }

@@ -1,14 +1,14 @@
 <?php
 session_start();
 
-require_once 'mysql/database.php';
-require_once 'log.php';
+require_once '../mysql/database.php';
+require_once '../classes/log.php';
 
 $db = new database();
 $log = new log($db);
 
 if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin'){
-    header("Location: index.php");
+    header("Location: ../index.php");
     exit;
 }
 
@@ -37,12 +37,12 @@ $result = $db->conn->query("
 ");
 ?>
 
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../style.css">
 
 <h2>Accounts</h2>
 
 <div>
-    <a href="main.php" class="nav-btn">Rooms</a>
+    <a href="../home/main.php" class="nav-btn">Rooms</a>
 </div>
 
 <table class="logs-table">

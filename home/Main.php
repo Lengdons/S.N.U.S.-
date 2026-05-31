@@ -2,19 +2,19 @@
 session_start();
 
 if(!isset($_SESSION['user'])){
-    header("Location: index.php");
+    header("Location: ../index.php");
     exit;
 }
 
-require 'mysql/database.php';
+require '../mysql/database.php';
 
 $db = new database();
 
-require 'room.php';
-require 'booking.php';
-require 'log.php';
-require 'user.php';
-require 'auth_check.php';
+require '../classes/room.php';
+require '../classes/booking.php';
+require '../classes/log.php';
+require '../classes/user.php';
+require '../login/auth_check.php';
 
 $room = new room($db);
 $booking = new booking($db);
@@ -23,9 +23,8 @@ $user = new user($db);
 
 $msg = "";
 
-/* ======================
-   HANDLE ACTIONS (TOP ONLY)
-====================== */
+date_default_timezone_set('Europe/Riga');
+
 
 // LOAD USER DATA
 $stmt = $db->conn->prepare("SELECT name,surname FROM users WHERE id=?");
@@ -102,6 +101,16 @@ if (isset($_POST['book'])) {
         $msg = "Complete your profile first.";
     } else {
 
+        $start_date = $_POST['start_date'] ?? null;
+        $end_date   = $_POST['end_date'] ?? null;
+
+        $start_time = $_POST['start_time'] ?? null;
+        $end_time   = $_POST['end_time'] ?? null;
+
+        if (!$start_date || !$end_date || !$start_time || !$end_time) {
+            $msg = "Invalid time selection";
+        } else {
+
         $bookUserId = $_SESSION['user_id'];
 
         if ($_SESSION['role'] === 'admin') {
@@ -112,19 +121,15 @@ if (isset($_POST['book'])) {
             }
         }
 
-        $start_date = $_POST['start_date'];
-        $end_date   = $_POST['end_date'];
-
-        $start_time = $_POST['start_time'];
-        $end_time   = $_POST['end_time'];
-
+        if (!$msg) {
+        
         $start = $start_date . " " . $start_time . ":00";
         $end   = $end_date . " " . $end_time . ":00";
 
         if (strtotime($start) >= strtotime($end)) {
             $msg = "End time must be after start time";
         }
-        elseif (strtotime($start) < time()) {
+        elseif (strtotime($start) < time()-15*60) {
             $msg = "Cannot book past time";
         }
         else {
@@ -166,6 +171,8 @@ if (isset($_POST['book'])) {
                 $msg = "Room already booked in that range";
             }
         }
+    }
+}
     }
 }
 
@@ -275,7 +282,7 @@ if(isset($_POST['delete_my_account'])){
     session_unset();
     session_destroy();
     
-    header("Location: index.php");
+    header("Location: ../index.php");
     exit;
 }
 
@@ -284,8 +291,8 @@ if(isset($_POST['delete_my_account'])){
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../script.js"></script>
 </head>
 <body>
 
@@ -329,7 +336,7 @@ if(isset($_POST['delete_my_account'])){
             <label>Start time:</label>
             <select name="start_time" required>
             <?php
-            for ($h = 0; $h <= 23; $h++) {
+            for ($h = 6; $h <= 21; $h++) {
                 foreach (["00", "30"] as $m) {
 
                     $t = sprintf("%02d:%s", $h, $m);
@@ -343,7 +350,7 @@ if(isset($_POST['delete_my_account'])){
             <label>End time:</label>
             <select name="end_time" required>
             <?php
-            for ($h = 0; $h <= 23; $h++) {
+            for ($h = 6; $h <= 22; $h++) {
                 foreach (["00", "30"] as $m) {
 
                     $t = sprintf("%02d:%s", $h, $m);
@@ -364,8 +371,8 @@ if(isset($_POST['delete_my_account'])){
             <?php else: ?>
 
                 <!-- regular users automatically send date by default -->
-                <input type="hidden" name="start_date" value="<?php echo date('Y-m-d'); ?>">
-                <input type="hidden" name="end_date" value="<?php echo date('Y-m-d'); ?>">
+                <input type="hidden" id="start_date" name="start_date" value="<?php echo date('Y-m-d'); ?>">
+                <input type="hidden" id="end_date" name="end_date" value="<?php echo date('Y-m-d'); ?>">
 
             <?php endif; ?>
 
@@ -425,9 +432,9 @@ if(isset($_POST['delete_my_account'])){
         <h2>Sveiks, <?php echo $_SESSION['name'] ?: $_SESSION['user']; ?></h2>
 
         <?php if($_SESSION['role'] === 'admin'): ?>
-            <a href="log_page.php" class="nav-btn">Logs</a>
-            <a href="accounts_page.php" class="nav-btn">Accounts</a>
-            <a href="bookings_page.php" class="nav-btn">Bookings</a>
+            <a href="../admin/log_page.php" class="nav-btn">Logs</a>
+            <a href="../admin/accounts_page.php" class="nav-btn">Accounts</a>
+            <a href="../admin/bookings_page.php" class="nav-btn">Bookings</a>
         <?php endif; ?>
 
         <?php if($_SESSION['role'] === 'admin'): ?>
@@ -437,7 +444,7 @@ if(isset($_POST['delete_my_account'])){
             <button type="button" onclick="openCreateUserPopup()">Create Temp Account</button>
         </form>
         <?php endif; ?>
-                <a href="login/logout.php" class="nav-btn logout">Logout</a>
+                <a href="../login/logout.php" class="nav-btn logout">Logout</a>
         <form method="POST" onsubmit="return confirm('Are you sure you want to deactivate your account?');">
             <button name="delete_my_account"
                     class="danger-btn">

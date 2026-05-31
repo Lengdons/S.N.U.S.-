@@ -2,7 +2,7 @@
 session_start();
 
 require_once '../mysql/database.php';
-require_once '../user.php';
+require_once '../classes/user.php';
 
 $db = new Database();
 $user = new User($db);

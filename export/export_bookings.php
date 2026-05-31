@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'mysql/database.php';
+require_once '../mysql/database.php';
 
 if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin'){
     die("No permission");

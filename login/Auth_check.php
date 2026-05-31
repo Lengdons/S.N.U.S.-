@@ -20,7 +20,7 @@ if (
     $expired
 ) {
 
-    // optional: auto-disable expired account
+    // auto-disable expired account
     if ($expired) {
         $up = $db->conn->prepare("
             UPDATE users
@@ -34,7 +34,7 @@ if (
     session_unset();
     session_destroy();
 
-    header("Location: index.php?msg=inactive");
+    header("Location: ../index.php?msg=inactive");
     exit;
 }
 ?>

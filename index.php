@@ -2,23 +2,21 @@
 session_start();
 
 if(isset($_SESSION['user'])){
-    header("Location: main.php");
+    header("Location: home/main.php");
     exit;
 }
 
 require_once 'mysql/database.php';
-require_once 'user.php';
+require_once 'classes/user.php';
 
 $db = new database();
 $user = new user($db);
 
 $msg = "";
 
-/*
--------------------------
-HANDLE REGISTER
--------------------------
-*/
+
+// REGISTER
+
 if (isset($_POST['register'])) {
     $u = $_POST['username'];
     $p = $_POST['password'];
@@ -30,18 +28,14 @@ if (isset($_POST['register'])) {
     }
 }
 
-/*
--------------------------
-HANDLE LOGIN
--------------------------
-*/
+// LOGIN
 
 if (isset($_POST['login'])) {
 
     $result = $user->login($_POST['username'], $_POST['password']);
 
     if ($result === true) {
-        header("Location: main.php");
+        header("Location: home/main.php");
         exit;
     }
 

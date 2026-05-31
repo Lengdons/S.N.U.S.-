@@ -2,11 +2,16 @@
 
 session_start();
 
-require 'mysql/database.php';
-require 'booking.php';
+require '../mysql/database.php';
+require '../classes/booking.php';
 
 $db = new database();
 $booking = new booking($db);
+
+if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin'){
+    header("Location: ../index.php");
+    exit;
+}
 
 if(isset($_POST['delete_selected']) && !empty($_POST['booking_ids'])){
 
@@ -54,13 +59,13 @@ ORDER BY bookings.id DESC
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="style.css">
-        <script src="script.js"></script>
+        <link rel="stylesheet" href="../style.css">
+        <script src="../script.js"></script>
     </head>
 <body>
 
 <div>
-    <a href="main.php" class="nav-btn">Rooms</a>
+    <a href="../home/main.php" class="nav-btn">Rooms</a>
 </div>
 
 <tr>
@@ -78,7 +83,7 @@ ORDER BY bookings.id DESC
         Delete Selected
     </button>
     
-    <a href="export_bookings.php" class="nav-btn">
+    <a href="../export/export_bookings.php" class="nav-btn">
     Download Bookings CSV
     </a>
 
