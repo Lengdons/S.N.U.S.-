@@ -20,9 +20,9 @@
             </div>
     
             <div class="nav-menu">
-                    <div class="nav-item date">Datums</div>
-                    <div class="nav-item">Filtrs</div>
-                   <div class="nav-item btn-login">Pierakstīties</div> 
+                    <div id= "btn-kalendars" class="nav-item date">Kalendārs</div>
+                    <div id = "btn-filtrs" class="nav-item">Filtrs</div>
+                   <div id = "btn-login" class="nav-item btn-login">Pierakstīties</div> 
             </div>
         </div>
             
@@ -46,5 +46,24 @@
         <script src="html_lengdons.js"></script>
 
     </div>
+    <!-- MODAL popup logs------------------------FILTRAM----------->
+
+     <div id="filtrs-modal" class="modal-parklajums">
+        
+        <div class="filtrs-modal-content">
+            <h2>Filtra Iestatījumi</h2>
+            <p>Izvēlies filtrus: </p>
+            <div class = "filtra-kaste">
+                <div class = "pieejamiba" > Pieejamība </div>
+                <button id = "btn-filtrs-pieejams" class = "filtrs-pieejams"> Pieejams </button>   <!-- Filtra poga "Pieejams"-->
+                <button id = "btn-filtrs-aiznemts" class = "filtrs-aiznemts"> Aizņemts </button>   <!-- Filtra poga "Aizņemts"-->
+                <div class = kabinets > Kabineta Numurs </div>
+                <button id = "btn-filtrs-kabinets"class = "btn-kab-search">      </button>
+            </div>
+            <button id="close-modal" class="btn-close"> &#10005 </button>      <!--Aizvēršanas poga-->
+        </div>
+        
+    </div>
+
 </body>
 </html>

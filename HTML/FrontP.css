@@ -206,3 +206,63 @@ body {
 .red {
     background-color: #d64652;
 }
+
+/* ----Pārklējums---FILTRS-------------------------------------------------*/
+.modal-parklajums {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4); 
+    backdrop-filter: blur(4px); 
+    
+    display: flex;      /*<-------   Paslēpts  ----------------------------*/
+    justify-content: center;
+    align-items: center;
+    
+    z-index: 1000; 
+}
+
+.filtrs-modal-content {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    height: 30%;
+    max-height: 400px;
+    min-height: 300px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    color: #222;
+}
+
+.filtrs-modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+.filtra-kaste{
+
+}
+.pieejamiba{
+    
+}
+.filtrs-pieejams{
+
+}
+.filtrs-aiznemts{
+
+}
+.kabinets{
+
+}
+
+
+
+
+
+/* jjavascrpita */
+.modal-parklajums.show-modal {
+    display: flex; 
+}
