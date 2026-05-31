@@ -62,16 +62,29 @@ hr {
 }
 
 .room {
-    display:inline-block;
     width:120px;
     height:120px;
     background:#3498db;
     margin:10px;
     color:white;
-    text-align:center;
-    line-height:120px;
     cursor:pointer;
     border-radius:10px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+    line-height:1.4;
+}
+
+.busy {
+    font-size:12px;
+}
+
+.free {
+    font-size:12px;
 }
 
 .logout {

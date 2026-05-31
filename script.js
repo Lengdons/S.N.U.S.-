@@ -164,8 +164,8 @@ function closeCreateUserPopup(){
     document.getElementById("createUserOverlay").style.display = "none";
 }
 
-function toggleRow(row){
-    const input = row.querySelector("input[name='log_ids[]']");
+function toggleRow(row, inputName){
+    const input = row.querySelector(`input[name='${inputName}']`);
 
     const selected = row.classList.toggle("selected");
 

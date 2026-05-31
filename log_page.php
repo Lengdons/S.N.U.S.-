@@ -75,7 +75,7 @@ if(isset($_POST['delete_selected']) && !empty($_POST['log_ids'])){
 
         <tbody>
         <?php while($l = $result->fetch_assoc()): ?>
-            <tr onclick="toggleRow(this)" data-id="<?php echo $l['id']; ?>">
+            <tr onclick="toggleRow(this, 'log_ids[]')" data-id="<?php echo $l['id']; ?>">
                 <td>
                     <?php echo htmlspecialchars($l['action']); ?>
                     <input type="hidden" name="log_ids[]" value="<?php echo $l['id']; ?>" disabled>

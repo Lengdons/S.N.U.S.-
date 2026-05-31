@@ -15,5 +15,17 @@ class Booking {
         $stmt->bind_param("iiss",$user,$room,$start,$end);
         $stmt->execute();
     }
+    public function delete($id){
+
+    $stmt = $this->conn->prepare("
+        DELETE FROM bookings
+        WHERE id = ?
+    ");
+
+    $stmt->bind_param("i", $id);
+
+    return $stmt->execute();
+}
+
 }
 ?>

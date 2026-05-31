@@ -164,14 +164,21 @@ if (isset($_POST['book'])) {
 function getBookedSlots($db, $room_id, $date){
     $booked = [];
 
+    $dayStart = strtotime($date . " 00:00:00");
+    $dayEnd   = strtotime($date . " 23:59:59");
+
     $stmt = $db->conn->prepare("
         SELECT start_time, end_time
         FROM bookings
         WHERE room_id = ?
-        AND DATE(start_time) = ?
+        AND start_time <= ?
+        AND end_time >= ?
     ");
 
-    $stmt->bind_param("is", $room_id, $date);
+    $endDateTime   = date('Y-m-d H:i:s', $dayEnd);
+    $startDateTime = date('Y-m-d H:i:s', $dayStart);
+
+    $stmt->bind_param("iss", $room_id, $endDateTime, $startDateTime);
     $stmt->execute();
     $res = $stmt->get_result();
 
@@ -179,13 +186,49 @@ function getBookedSlots($db, $room_id, $date){
         $start = strtotime($row['start_time']);
         $end = strtotime($row['end_time']);
 
+        $start = max($start, $dayStart);
+        $end   = min($end, $dayEnd);
+
         while($start < $end){
             $booked[] = date("H:i", $start);
             $start = strtotime("+30 minutes", $start);
         }
     }
 
-    return $booked;
+    return array_unique($booked);
+}
+
+function getRoomStatus($db, $room_id){
+
+    $now = date('Y-m-d H:i:s');
+
+    $stmt = $db->conn->prepare("
+        SELECT end_time
+        FROM bookings
+        WHERE room_id = ?
+        AND start_time <= ?
+        AND end_time > ?
+        ORDER BY end_time ASC
+        LIMIT 1
+    ");
+
+    $stmt->bind_param("iss", $room_id, $now, $now);
+    $stmt->execute();
+
+    $res = $stmt->get_result();
+
+    if($row = $res->fetch_assoc()){
+
+        return [
+            'occupied' => true,
+            'until' => $row['end_time']
+        ];
+    }
+
+    return [
+        'occupied' => false,
+        'until' => null
+    ];
 }
 
 if (isset($_POST['create_user'])) {
@@ -257,7 +300,7 @@ if (isset($_POST['create_user'])) {
             <label>Start time:</label>
             <select name="start_time" required>
             <?php
-            for ($h = 6; $h <= 22; $h++) {
+            for ($h = 0; $h <= 23; $h++) {
                 foreach (["00", "30"] as $m) {
 
                     $t = sprintf("%02d:%s", $h, $m);
@@ -271,7 +314,7 @@ if (isset($_POST['create_user'])) {
             <label>End time:</label>
             <select name="end_time" required>
             <?php
-            for ($h = 6; $h <= 22; $h++) {
+            for ($h = 0; $h <= 23; $h++) {
                 foreach (["00", "30"] as $m) {
 
                     $t = sprintf("%02d:%s", $h, $m);
@@ -361,6 +404,7 @@ if (isset($_POST['create_user'])) {
         <?php if($_SESSION['role'] === 'admin'): ?>
             <a href="log_page.php" class="nav-btn">Logs</a>
             <a href="accounts_page.php" class="nav-btn">Accounts</a>
+            <a href="bookings_page.php" class="nav-btn">Bookings</a>
         <?php endif; ?>
 
         <a href="login/logout.php" class="nav-btn logout">Logout</a>
@@ -387,13 +431,26 @@ if (isset($_POST['create_user'])) {
 
             while($r = $result->fetch_assoc()):
                 $booked = getBookedSlots($db, $r['id'], $date);
+                $status = getRoomStatus($db, $r['id']);
             ?>
                 <div class="room <?php echo $needsProfile ? 'locked' : ''; ?>"
                     <?php if(!$needsProfile): ?>
                         onclick='openPopup(<?php echo $r["id"]; ?>, <?php echo json_encode($booked); ?>)'
                     <?php endif; ?>
                 >
+
                     <?php echo $r['name']; ?>
+
+                    <?php if($status['occupied']): ?>
+                        <span class="busy">
+                            Occupied until
+                            <?php echo date('H:i', strtotime($status['until'])); ?>
+                        </span>
+                    <?php else: ?>
+                        <span class="free">
+                            Available
+                        </span>
+                    <?php endif; ?>
                 </div>
             <?php endwhile; ?>
         </div>
