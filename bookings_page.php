@@ -2,11 +2,11 @@
 
 session_start();
 
-require 'mysql/DATABASE.php';
-require 'Booking.php';
+require 'mysql/database.php';
+require 'booking.php';
 
-$db = new Database();
-$booking = new Booking($db);
+$db = new database();
+$booking = new booking($db);
 
 if(isset($_POST['delete_selected']) && !empty($_POST['booking_ids'])){
 
@@ -46,7 +46,7 @@ SELECT
 FROM bookings
 JOIN rooms ON rooms.id = bookings.room_id
 JOIN users ON users.id = bookings.user_id
-ORDER BY bookings.start_time DESC
+ORDER BY bookings.id DESC
 ");
 
 ?>
@@ -77,6 +77,10 @@ ORDER BY bookings.start_time DESC
     <button name="delete_selected" class="danger-btn">
         Delete Selected
     </button>
+    
+    <a href="export_bookings.php" class="nav-btn">
+    Download Bookings CSV
+    </a>
 
     <table class="logs-table">
 

@@ -1,34 +1,91 @@
+let currentRoomId = null;
 let currentBooked = [];
 
-function openPopup(id, booked){
-    console.log(currentBooked);
+function openPopup(id){
+    //console.log(currentBooked);
+
+    currentRoomId = id;
+
     document.getElementById("room_id").value = id;
-    currentBooked = booked || [];
+
+    document.getElementById("overlay").style.display = "flex";
+
+    loadBookings(); //currentBooked
 
     const del = document.getElementById("delete_room_id");
     if(del) del.value = id;
 
-    document.getElementById("overlay").style.display = "flex";
-
     updateSlots();
+}
+
+function loadBookings(){
+
+    const roomId = document.getElementById("room_id").value;
+    const date = document.getElementById("start_date").value;
+
+    fetch(`get_booked_slots.php?room_id=${currentRoomId}&date=${date}`)
+        .then(response => response.json())
+        .then(data => {
+            
+
+            currentBooked = data;
+            console.log(currentBooked)
+            updateSlots();
+    });
 }
 
 function closePopup(){
     document.getElementById("overlay").style.display = "none";
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+
+    const startDate = document.getElementById("start_date");
+    const endDate = document.getElementById("end_date");
+
+    if(startDate && endDate){
+        startDate.addEventListener("change", () => {
+            if(endDate.value < startDate.value){
+            endDate.value = startDate.value;
+            }
+
+            endDate.value = startDate.value;
+
+            loadBookings();
+        });
+    }
+})
 
 function updateSlots(){
     const selects = document.querySelectorAll("select[name='start_time'], select[name='end_time']");
+    const selectedDate = document.getElementById("start_date")?.value;
+    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    const currentMinutes = now.getHours()*60+now.getMinutes();
 
     selects.forEach(select => {
         [...select.options].forEach(opt => {
 
             const val = String(opt.value).trim();
-            const booked = currentBooked.map(v => String(v).trim());
 
-            if(booked.includes(val)){
-                opt.disabled = true;
+            let disabled = false;
+
+            if(currentBooked.includes(val)){
+                disabled = true;
+            }
+
+            if(selectedDate === today){
+                const [h,m] = val.split(':');
+                const optionMinutes = parseInt(h)*60+parseInt(m);
+
+                if(currentMinutes>optionMinutes+15){
+                    disabled = true;
+                }
+            }
+
+            opt.disabled = disabled;
+
+            if(disabled){
                 opt.style.background = "#ddd";
                 opt.style.color = "#888";
             } else {
@@ -38,7 +95,22 @@ function updateSlots(){
             }
 
         });
+
+        selectFirstAvailable(select);
+
     });
+}
+
+function selectFirstAvailable(select){
+
+    for(const option of select.options){
+
+        if(!option.disabled){
+
+            select.value = option.value;
+            return;
+        }
+    }
 }
 
 

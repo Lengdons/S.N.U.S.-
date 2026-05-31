@@ -6,11 +6,11 @@ if(isset($_SESSION['user'])){
     exit;
 }
 
-require_once 'mysql/Database.php';
-require_once 'User.php';
+require_once 'mysql/database.php';
+require_once 'user.php';
 
-$db = new Database();
-$user = new User($db);
+$db = new database();
+$user = new user($db);
 
 $msg = "";
 
@@ -75,7 +75,7 @@ if (isset($_POST['login'])) {
         <input type="password" name="password" placeholder="Password" required>
         <button name="login">Login</button>
     </form>
-        <a href="acc.php">Don't have an account?<a>
+        <a href="login/register.php">Don't have an account?<a>
 
     <hr>
 

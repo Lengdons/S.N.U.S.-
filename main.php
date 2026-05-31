@@ -6,20 +6,20 @@ if(!isset($_SESSION['user'])){
     exit;
 }
 
-require 'mysql/DATABASE.php';
+require 'mysql/database.php';
 
-$db = new Database();
+$db = new database();
 
-require 'Room.php';
-require 'Booking.php';
-require 'Log.php';
-require 'User.php';
+require 'room.php';
+require 'booking.php';
+require 'log.php';
+require 'user.php';
 require 'auth_check.php';
 
-$room = new Room($db);
-$booking = new Booking($db);
-$log = new Log($db);
-$user = new User($db);
+$room = new room($db);
+$booking = new booking($db);
+$log = new log($db);
+$user = new user($db);
 
 $msg = "";
 
@@ -81,9 +81,15 @@ if(isset($_POST['add_room'])){
 if(isset($_POST['delete_room'])){
     if($_SESSION['role'] !== 'admin') die("No permission");
 
+    $stmt = $db->conn->prepare("SELECT name FROM rooms WHERE id = ?");
+    $stmt->bind_param("i", $_POST['delete_room_id']);
+    $stmt->execute();
+
+    $roomData = $stmt->get_result()->fetch_assoc();
+
     $room->delete($_POST['delete_room_id']);
 
-    $log->add($_SESSION['name']." ".$_SESSION['surname']." removed room: ". $name);
+    $log->add($_SESSION['name']." ".$_SESSION['surname']." removed room: ". $roomData['name']);
     header("Location: main.php");
     exit;
 }
@@ -205,10 +211,8 @@ function getRoomStatus($db, $room_id){
 
     $now = date('Y-m-d H:i:s');
 
-    $stmt = $db->conn->prepare("
-        SELECT end_time
-        FROM bookings
-        WHERE room_id = ?
+    $stmt = $db->conn->prepare(" SELECT bookings.end_time, users.name, users.surname 
+        FROM bookings JOIN users on users.id = bookings.user_id WHERE room_id = ?
         AND start_time <= ?
         AND end_time > ?
         ORDER BY end_time ASC
@@ -222,16 +226,10 @@ function getRoomStatus($db, $room_id){
 
     if($row = $res->fetch_assoc()){
 
-        return [
-            'occupied' => true,
-            'until' => $row['end_time']
-        ];
+        return ['occupied' => true, 'until' => $row['end_time'], 'user' => $row['name'].' '.$row['surname']];
     }
 
-    return [
-        'occupied' => false,
-        'until' => null
-    ];
+    return ['occupied' => false, 'until' => null, 'user' => null];
 }
 
 if (isset($_POST['create_user'])) {
@@ -258,6 +256,27 @@ if (isset($_POST['create_user'])) {
     } else {
         $msg = $result;
     }
+}
+
+//delete ur account
+if(isset($_POST['delete_my_account'])){
+
+    $stmt = $db->conn->prepare("
+        UPDATE users
+        SET is_active = 0
+        WHERE id = ?
+    ");
+
+    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->execute();
+
+    $log->add($_SESSION['name']." ".$_SESSION['surname']." is no longer amongus");
+
+    session_unset();
+    session_destroy();
+    
+    header("Location: index.php");
+    exit;
 }
 
 ?>
@@ -338,20 +357,13 @@ if (isset($_POST['create_user'])) {
             <?php if($_SESSION['role'] === 'admin'): ?>
 
                 <label>Start date:</label>
-                <input type="date"
-                    name="start_date"
-                    value="<?php echo date('Y-m-d'); ?>"
-                    required>
+                <input type="date" id="start_date" name="start_date" value="<?php echo date('Y-m-d'); ?>" required>
 
                 <label>End date:</label>
-                <input type="date"
-                    name="end_date"
-                    value="<?php echo date('Y-m-d'); ?>"
-                    required>
-
+                <input type="date" id="end_date" name="end_date" value="<?php echo date('Y-m-d'); ?>" required>
             <?php else: ?>
 
-                <!-- users still send today's date automatically -->
+                <!-- regular users automatically send date by default -->
                 <input type="hidden" name="start_date" value="<?php echo date('Y-m-d'); ?>">
                 <input type="hidden" name="end_date" value="<?php echo date('Y-m-d'); ?>">
 
@@ -362,11 +374,10 @@ if (isset($_POST['create_user'])) {
         </form>
 
         <?php if($_SESSION['role'] === 'admin'): ?>
-        <form method="POST" style="margin-top:10px;">
+        <form method="POST">
             <input type="hidden" name="delete_room_id" id="delete_room_id">
             <button name="delete_room"
-                    onclick="return confirm('Delete this room?')"
-                    style="background:red;color:white;">
+                    onclick="return confirm('Delete this room?')">
                 Delete Room
             </button>
         </form>
@@ -419,8 +430,6 @@ if (isset($_POST['create_user'])) {
             <a href="bookings_page.php" class="nav-btn">Bookings</a>
         <?php endif; ?>
 
-        <a href="login/logout.php" class="nav-btn logout">Logout</a>
-
         <?php if($_SESSION['role'] === 'admin'): ?>
         <form method="POST">
             <input id="room_name" name="room_name" placeholder="New room">
@@ -428,6 +437,15 @@ if (isset($_POST['create_user'])) {
             <button type="button" onclick="openCreateUserPopup()">Create Temp Account</button>
         </form>
         <?php endif; ?>
+                <a href="login/logout.php" class="nav-btn logout">Logout</a>
+        <form method="POST" onsubmit="return confirm('Are you sure you want to deactivate your account?');">
+            <button name="delete_my_account"
+                    class="danger-btn">
+                Delete My Account
+            </button>
+
+        </form>
+        
     </div>
 
     <!-- RIGHT SIDE -->
@@ -438,16 +456,14 @@ if (isset($_POST['create_user'])) {
 
         <div class="rooms">
             <?php 
-            $date = $_POST['selected_date'] ?? date('Y-m-d');
             $result = $room->getAll();
 
             while($r = $result->fetch_assoc()):
-                $booked = getBookedSlots($db, $r['id'], $date);
                 $status = getRoomStatus($db, $r['id']);
             ?>
                 <div class="room <?php echo $needsProfile ? 'locked' : ''; ?>"
                     <?php if(!$needsProfile): ?>
-                        onclick='openPopup(<?php echo $r["id"]; ?>, <?php echo json_encode($booked); ?>)'
+                        onclick='openPopup(<?php echo $r["id"]; ?>)'
                     <?php endif; ?>
                 >
 
@@ -455,7 +471,9 @@ if (isset($_POST['create_user'])) {
 
                     <?php if($status['occupied']): ?>
                         <span class="busy">
-                            Occupied until
+                            Occupied by
+                            <?php echo htmlspecialchars($status['user']); ?>
+                            Until
                             <?php echo date('H:i', strtotime($status['until'])); ?>
                         </span>
                     <?php else: ?>

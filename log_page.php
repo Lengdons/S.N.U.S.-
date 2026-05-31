@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-require_once 'mysql/Database.php';
-require_once 'Log.php';
+require_once 'mysql/database.php';
+require_once 'log.php';
 
-$db = new Database();
-$log = new Log($db);
+$db = new database();
+$log = new log($db);
 
 if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin'){
     header("Location: index.php");
@@ -47,13 +47,13 @@ if(isset($_POST['delete_selected']) && !empty($_POST['log_ids'])){
 
 <h2>System Logs</h2>
 
-<div style="margin-bottom: 15px;">
+<div>
     <a href="main.php" class="nav-btn">Rooms</a>
 </div>
 
 <form method="POST">
 
-    <div style="margin-bottom: 15px;">
+    <div>
 
         <button name="delete_selected" class="danger-btn">
             Delete selected
@@ -64,6 +64,11 @@ if(isset($_POST['delete_selected']) && !empty($_POST['log_ids'])){
             Clear ALL
         </button>
     </div>
+
+    <a href="export_logs.php" class="nav-btn">
+    Download Logs CSV
+    </a>
+  
 
     <table class="logs-table">
         <thead>
@@ -87,7 +92,3 @@ if(isset($_POST['delete_selected']) && !empty($_POST['log_ids'])){
     </table>
 
 </form>
-
-<?php while($l = $result->fetch_assoc()): ?>
-    <?php echo $l['action']; ?> - <?php echo $l['created_at']; ?><br>
-<?php endwhile; ?>

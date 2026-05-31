@@ -3,7 +3,7 @@ class User {
     private $conn;
     public function __construct($db){ $this->conn=$db->conn; }
 
-    public function register($email,$pass,$days=null){
+    public function register($email,$pass,$expiresAt=null){
 
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
         return "Invalid email";
@@ -23,12 +23,6 @@ class User {
     }
 
     $pass = password_hash($pass, PASSWORD_BCRYPT);
-
-    $expiresAt = null;
-
-    if($days !== null){
-        $expiresAt = date('Y-m-d H:i:s', strtotime("+$days days"));
-    }
 
     $stmt = $this->conn->prepare("
         INSERT INTO users(email,password,role, expires_at, is_active)
