@@ -136,3 +136,7 @@ header h1 {
     background-color: #1bcef7;
     border-color: #1591fd;
 }
+
+.day-header{
+    font-weight: bold;
+}

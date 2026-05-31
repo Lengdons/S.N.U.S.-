@@ -1,6 +1,4 @@
 
-const copy = document.getElementById('datu-kaste');
-
 const numberOfTimes = 5; 
 
 let PieejamsRindas = '';
