@@ -3,7 +3,7 @@ const datumi = document.querySelector(".date")
 
 datumi.textContent= sodien.getDate()+"."+(sodien.getMonth()+1)+"."+sodien.getFullYear();
 
-const dienas=["Svētdiena","Pirmdiena","Otrdiena","Trešdiena","Ceturtdiena","Piektdiena","Sestdiena"];
+const dienas=["Pirmdiena","Otrdiena","Trešdiena","Ceturtdiena","Piektdiena"];
 let html="";
 
 const d = Number(document.body.dataset.day);
@@ -14,6 +14,29 @@ const dienaDiv = document.querySelector(".diena");
 
 dienaDiv.textContent =
     `${dienas[datums.getDay()]} (${datums.getDate()}.${datums.getMonth()+1}.${datums.getFullYear()})`;
+
+// funkcija kas lauj bultinam iet uz prieku atpakalu 
+const lapas = [
+    "FrontP.html",
+    "FrontP2.html",
+    "FrontP3.html",
+    "FrontP4.html",
+    "FrontP5.html"
+];
+
+const currentDay = Number(document.body.dataset.day);
+
+document.querySelector(".next")?.addEventListener("click", () => {
+    if (currentDay < 4) {
+        window.location.href = lapas[currentDay + 1];
+    }
+});
+
+document.querySelector(".prev")?.addEventListener("click", () => {
+    if (currentDay > 0) {
+        window.location.href = lapas[currentDay - 1];
+    }
+});
 
 for (let i = 0; i < 15; i++) {
     
