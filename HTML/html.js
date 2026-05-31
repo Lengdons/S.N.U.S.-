@@ -1,22 +1,21 @@
 const sodien = new Date();
-const datumi = document.querySelector(".date-box")
+const datumi = document.querySelector(".date")
 
 datumi.textContent= sodien.getDate()+"."+(sodien.getMonth()+1)+"."+sodien.getFullYear();
 
 const dienas=["Svētdiena","Pirmdiena","Otrdiena","Trešdiena","Ceturtdiena","Piektdiena","Sestdiena"];
 let html="";
 
-for(let d = 0;d<7;d++){
-    let datums = new Date(sodien);
-    datums.setDate(sodien.getDate()+d);
+const d = Number(document.body.dataset.day);
+let datums = new Date(sodien);
+datums.setDate(sodien.getDate()+d);
 
-    html+=`
-        <div class="day-header">
-            ${dienas[datums.getDay()]}
-            (${datums.getDate()}.${datums.getMonth()+1}.${datums.getFullYear()})
-        </div>
-        `;
-    for (let i = 0; i < 15; i++) {
+const dienaDiv = document.querySelector(".diena");
+
+dienaDiv.textContent =
+    `${dienas[datums.getDay()]} (${datums.getDate()}.${datums.getMonth()+1}.${datums.getFullYear()})`;
+
+for (let i = 0; i < 15; i++) {
     
     html += `
         <div class="datu-rinda">
@@ -31,6 +30,5 @@ for(let d = 0;d<7;d++){
         </div>
     `;
     }
-}
-const copy = document.getElementById("datu-kaste");
-copy.innerHTML = html;
+
+document.getElementById("datu-kaste").innerHTML = html;
