@@ -20,8 +20,6 @@ body, html{
 }
 .logo img:hover{
     cursor: pointer;
-    background-color: #000000;
-    transition: background-color 0.2s;
 }
 
 body {
@@ -101,7 +99,7 @@ body {
     margin-inline: calc(-50vw + 50%);
     color: #ffffff;
     display: flex;
-    height: 30px;
+    height: 35px;
     justify-content: space-between;
     align-items: center;
     padding-left: 40px;    
@@ -127,12 +125,33 @@ body {
     background-color: rgb(214, 214, 214);
     cursor: pointer;
 }
-.diena{
+
+.diena-bar{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    margin-right:calc(48vw);
     margin-left: auto;
+    
+
+} 
+        .diena{ 
     font-weight: bold;
     letter-spacing: 1px;
     text-transform: uppercase;
-    margin-right:calc(50vw);
+    }
+
+        .BnF{
+    padding: 1px 5px;
+    border-radius: 50px;
+    background-color: #04AA6D;
+    color: #ffffff;
+}
+.BnF:hover{
+    cursor:pointer;
+    background-color: #059862;
 }
 
 
