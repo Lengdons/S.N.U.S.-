@@ -31,6 +31,10 @@ function renderDay() {
     document.querySelector(".diena").textContent =
         `${dienas[currentDay]} (${datums.getDate()}.${datums.getMonth()+1}.${datums.getFullYear()})`;
 
+
+    document.querySelector(".date").textContent =
+        `${sodien.getDate()}.${sodien.getMonth() + 1}.${sodien.getFullYear()}`;
+
     let html = "";
 
     for (let i = 0; i < 15; i++) {
