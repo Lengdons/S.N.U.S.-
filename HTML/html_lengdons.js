@@ -40,7 +40,7 @@ for (let i = 0; i < A_kabinetuSkaits; i++) {
     `;
 }
 
-
+// selecto filtra opcijas: Pieejams / Aiznemts ---------------------------------------------------
 copy.innerHTML = PieejamsRindas + AiznemtsRindas;
 
 const btnPieejams = document.getElementById('btn-filtrs-pieejams');
@@ -58,3 +58,24 @@ btnAiznemts.addEventListener('click', () => {
 
     btnPieejams.classList.remove('filtrs-selected');
 });
+// -----------------------------------------------------------------------------------------------
+
+// Atver un aizver filtra lodziņu \/ \/ \/ \/ \/
+const filtrsBtn = document.getElementById('btn-filtrs');
+const filtrsModal = document.getElementById('filtrs-modal');
+const closeBtn = document.getElementById('btn-close-modal');
+
+filtrsBtn.addEventListener('click', () => {
+    filtrsModal.classList.add('show-modal');
+});
+
+closeBtn.addEventListener('click', () => {
+    filtrsModal.classList.remove('show-modal');
+});
+
+filtrsModal.addEventListener('click', (event) => {
+    if (event.target === filtrsModal) {
+        filtrsModal.classList.remove('show-modal');
+    }
+});
+//                ^^^^^^^^ Filtra logam

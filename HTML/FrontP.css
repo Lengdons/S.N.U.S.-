@@ -206,9 +206,11 @@ body {
 
 .red {
     background-color: #d64652;
+    border-width: 0cap;
+    border-radius: 25px;
 }
 
-/* ----Pārklējums---FILTRS-------------------------------------------------*/
+/* ----Pārklējums---FILTRS------------------------------------------------------------------------------------------------------ */
 .modal-parklajums {
     position: fixed; 
     top: 0;
@@ -218,7 +220,7 @@ body {
     background-color: rgba(0, 0, 0, 0.4); 
     backdrop-filter: blur(4px); 
     
-    display: flex;      /*<-------   Paslēpts  ----------------------------*/
+    display:none;      /*<-------   PARĀDĪT / PASLĒPT (flex / none)------------------------------------------------------------------------------- */
     justify-content: center;
     align-items: center;
     
@@ -373,8 +375,9 @@ cursor: pointer;
 background-color: #9d9d9d;
 }
 
-
+/* ------------------------------Jāuzraksta JS kas kontrolē Filtra modal'u-------------------------------------------------------------------------- */
 /* jjavascrpita */
 .modal-parklajums.show-modal {
     display: flex; 
 }
+/* -------------------------------------------------------------------------------------------------------- */
