@@ -1,7 +1,7 @@
 
 const copy = document.getElementById('datu-kaste');
 
-const P_kabinetuSkaits = 5; 
+const P_kabinetuSkaits = 50; 
 const A_kabinetuSkaits = 3;
 
 let PieejamsRindas = '';
