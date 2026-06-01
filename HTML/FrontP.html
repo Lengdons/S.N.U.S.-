@@ -43,7 +43,7 @@
 <!--   Kabinets/Liet./Take./bool/Return js  -->
         <div id="datu-kaste" class="records-list"></div>
 
-        <script src="html_lengdons.js"></script>
+        
 
     </div>
     <!-- MODAL popup logs------------------------FILTRAM----------->
@@ -51,19 +51,25 @@
      <div id="filtrs-modal" class="modal-parklajums">
         
         <div class="filtrs-modal-content">
+            <button id="btn-close-modal" class="filtrs-close"> &#10005 </button>      <!--Aizvēršanas poga-->
             <h2>Filtra Iestatījumi</h2>
             <p>Izvēlies filtrus: </p>
             <div class = "filtra-kaste">
                 <div class = "pieejamiba" > Pieejamība </div>
+                <div class = "pieejamiba-row">
                 <button id = "btn-filtrs-pieejams" class = "filtrs-pieejams"> Pieejams </button>   <!-- Filtra poga "Pieejams"-->
                 <button id = "btn-filtrs-aiznemts" class = "filtrs-aiznemts"> Aizņemts </button>   <!-- Filtra poga "Aizņemts"-->
+                </div>
                 <div class = kabinets > Kabineta Numurs </div>
-                <button id = "btn-filtrs-kabinets"class = "btn-kab-search">      </button>
+                <button id = "btn-filtrs-kabinets"class = "btn-kab-search"> ...  </button>
             </div>
-            <button id="close-modal" class="btn-close"> &#10005 </button>      <!--Aizvēršanas poga-->
+            <button id="btn-filtrs-apply" class="filtrs-apply"> Pielietot filtrus </button>      <!--Pielietot filtrus poga-->
+        </div>
         </div>
         
     </div>
+
+<script src="html_lengdons.js"></script>
 
 </body>
 </html>

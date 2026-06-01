@@ -46,13 +46,14 @@ body {
 }
 
 .nav-nosaukums p {
-    margin-top: 20px;
+    margin-top: 10px;
     margin-left: calc(2vw);
     margin-right:calc(26vw);
     margin-bottom: 10px;
-    padding: 10px;
+    padding: 0;
     letter-spacing: 5px;
     font-size: calc(0.01vw + 0.01vh + 1.5vmin);
+   
 }
 
 .nav-menu {
@@ -237,29 +238,140 @@ body {
     text-align: center;
     color: #222;
 }
-
+.filtrs-close{
+    position: fixed;
+    margin-left: 190px;
+    margin-top: -15px;
+}
 .filtrs-modal-content h2 {
     margin-top: 0;
     margin-bottom: 20px;
 }
 .filtra-kaste{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 40px 100px;
+    border-radius: 25px;
+    background-color: #e8e8e8;
 
 }
 .pieejamiba{
+     border-bottom:solid #030b08;
+     border-width: 1px;
+width: 370px;
+display: flex;
+align-self: center;
+margin-top: -20px;
+padding-bottom: 5px;
+
     
 }
-.filtrs-pieejams{
+.pieejamiba-row{
+    width:max-content;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    gap: 70px;
+    padding: 20px;
+    height: 25px;
+    border-radius: 25px; 
+   
+}
+.filtrs-pieejams{
+   background-color:#04AA6D;
+    color: #ffffff;
+    width: 100px;
+    height: 35px;
+     text-transform: uppercase;
+     border-radius: 25px;
+     border:0;
+     letter-spacing: 1px;
+}
+.filtrs-pieejams:hover{
+    background-color: #059862;
+    cursor: pointer;
 }
 .filtrs-aiznemts{
-
+    background-color:#d43636;
+    color: #ffffff;
+    width: 100px;
+    height: 35px;
+     text-transform: uppercase;
+     border-radius: 25px;
+     border:0;
+     letter-spacing: 1px;
+}
+.filtrs-aiznemts:hover{
+    cursor: pointer;
+    background-color: #ac343e;
+}
+.filtrs-selected{
+    outline: 3px solid #00c7fe;
+    outline-offset: 1px;
 }
 .kabinets{
+     border-bottom:solid #030b08;
+     border-width: 1px;
+width: 370px;
+display: flex;
+align-self: center;
+padding-bottom: 5px;
+}
+.btn-kab-search{
+    background-color: #fff;
+    width:340px;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    height: 25px;
+
+    border-radius: 25px; 
+    border-color: #666;
+    border-width:1px;
+    border-color: #334e55;
+}
+.btn-kab-search:hover{
+    cursor: pointer;
+    background-color: #dadada;
+}
+.filtrs-apply{
+    background-color:#b9b9b9;
+    color: #ffffff;
+    margin-left: -250px;
+    margin-top: 10px;
+    width: 150px;
+    height: 35px;
+     border-radius: 25px;
+     border:0;
+     letter-spacing: 1px;
+}
+.filtrs-apply:hover{
+    cursor: pointer;
+    background-color: #9d9d9d;
+}
+.filtrs-close{
+    background-color: #ffffff;
+    color: #000000;
+    width: 25px;
+    height: 25px;
+     border-radius: 25px;
+     border:0;
+     font-size: large;
+     font-weight: bold;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
 
 }
-
-
-
+.filtrs-close:hover{
+cursor: pointer;
+background-color: #9d9d9d;
+}
 
 
 /* jjavascrpita */

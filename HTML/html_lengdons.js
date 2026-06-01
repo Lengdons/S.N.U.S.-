@@ -42,3 +42,19 @@ for (let i = 0; i < A_kabinetuSkaits; i++) {
 
 
 copy.innerHTML = PieejamsRindas + AiznemtsRindas;
+
+const btnPieejams = document.getElementById('btn-filtrs-pieejams');
+const btnAiznemts = document.getElementById('btn-filtrs-aiznemts');
+
+btnPieejams.addEventListener('click', () => {
+
+    btnPieejams.classList.add('filtrs-selected');
+
+    btnAiznemts.classList.remove('filtrs-selected');
+});
+btnAiznemts.addEventListener('click', () => {
+
+    btnAiznemts.classList.add('filtrs-selected');
+
+    btnPieejams.classList.remove('filtrs-selected');
+});
