@@ -110,17 +110,7 @@ $isLoggedIn = isset($_SESSION['user']) ? 'true' : 'false';
     </div>
 
 <script src="html_lengdons.js"></script>
-<script>
-    // A quick script to read the PHP Gatekeeper and hide the modal if logged in!
-    const isLoggedIn = document.body.getAttribute('data-logged-in');
-    const loginModal = document.getElementById('login-modal');
-    
-    if (isLoggedIn === 'true') {
-        loginModal.style.display = 'none'; // Hide modal, show website
-    } else {
-        loginModal.style.display = 'flex'; // Show modal, block website
-    }
-</script>
+<script src="html.js"></script>
 
 </body>
 </html>
