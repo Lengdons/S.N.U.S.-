@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color:#282A35;
+    background-color:#1a2238;
     margin: 0;
 }
 
@@ -37,7 +37,7 @@
 
 .registreties-kaste h2 {
     margin-bottom: 35px;
-    color: #030202;
+    color: #1a2238;
     font-family: 'Times New Roman', Times, serif;
     font-size: 2.5rem; 
 }

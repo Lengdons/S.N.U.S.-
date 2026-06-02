@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.N.U.S. - Administratora Žurnāls</title>
+    <link rel="stylesheet" href="Admin.css">
+</head>
+<body class="admin-body">
+
+    <div class="admin-panelis">
+        <div class="panelis-logo">
+            <img src="SNUS_logo_green.png" alt="S.N.U.S. Logo">
+        </div>
+        
+        <nav class="panelis-nav">
+            <button class="admin-nav-btn active" data-target="s-kabineti">Kabineta Pārvaldība</button>
+            <button class="admin-nav-btn" data-target="sistemas-lietotaji">Lietotāji</button>
+            <button class="admin-nav-btn" data-target="sistemas-vesture">Vēsture</button>
+        </nav>
+
+        <div class="panelis-footer">
+            <a href="FrontP.php" class="btn-atgriezties">Atgriezties Galvenajā Lapā</a>
+        </div>
+    </div>
+
+    <div class="admin-saturs">
+
+        <div id="s-kabineti" class="admin-zurnals active">
+            <h2>Kabineta Pārvaldība</h2>
+            
+            <div class="admin-lapa">
+                <h3>Pievienot Jaunu Kabinetu</h3>
+                <div class="pievienot-kaste">
+                    <input type="text" id="jauns-kabinets-nosaukums" class="admin-input" placeholder="Kabineta nosaukums...">
+                    <button id="btn-pievienot-kab" class="btn-zals">Pievienot</button>
+                </div>
+            </div>
+
+            <div class="admin-lapa">
+                <h3>Esošie Kabineti</h3>
+                <div id="kabinetu-saraksts" class="admin-list">
+                    <!---šitos var izolēt JS scriptā------------------------------------>
+                    <div class="list-item">
+                        <span>Kabinets Nr: 1</span>
+                        <button class="btn-sarkans">Dzēst</button>
+                    </div>
+                    <div class="list-item">
+                        <span>Kabinets Nr: 2</span>
+                        <button class="btn-sarkans">Dzēst</button>
+                    </div>
+                    <!--------------------------------tikai nemaini nosaukumu------"btn-sarkans"---------------------------------->
+                </div>
+            </div>
+        </div>
+
+            <!------------------------------------------------------------------------------------------------------------------SAGLABĀT LIETOTĀJU-->
+        <div id="sistemas-lietotaji" class="admin-zurnals">
+            <h2>Lietotāju Pārvaldība</h2>
+            
+            <div class="admin-lapa">
+                <h3>Izveidot Īslaicīgo Profilu</h3>
+                <div class="pievienot-kaste">
+                    <input type="name" id="jauns-vards" class="admin-input" placeholder="Vārds">
+                    <input type="surname" id="jauns-uzvards" class="admin-input" placeholder="Uzvārds">
+                    <input type="email" id="jauns-epasts" class="admin-input" placeholder="E-pasts">
+                    <input type="password" id="jauna-parole" class="admin-input" placeholder="Parole">
+                    <input type="number" id="dienu-skaits" class="admin-input" placeholder="Dienu skaits" min="1" max="365">
+                    <button id="btn-pievienot-liet" class="btn-zals">Izveidot</button>
+                </div>
+            </div>
+        </div>
+        <!-------------------------------------------------------------------------------------------------------------------------------------------->
+
+        <div id="sistemas-vesture" class="admin-zurnals">
+            <h2>Sistēmas Vēsture</h2>
+            
+            <div class="admin-lapa">
+                <table class="vesture-table">
+                    <thead>
+                        <tr>
+                            <!--   th = table HEADER   ---- šis nemainās, ja vien nevajag kaut ko man pielikt vai atņemt  -->
+                            <th>Laiks</th>
+                            <th>Lietotājs</th>
+                            <th>Darbība</th>
+                            <th>Kabinets</th>
+                        </tr>
+                    </thead>
+                    <!--Rekur orientejies pēc  id"vēstures-dati    -->
+                    <tbody id="vesture-dati">
+                            <!--   tr = table ROW   -->
+                            <!--   td = table CELL  -->
+                        <tr>
+                            <td>2024-05-12 14:30</td>                    
+                            <td>Jānis Bērziņš </td>
+                            <td>izveidoja jaunu kabinetu</td>
+                            <td>325</td>
+                        </tr>
+                        <tr> 
+                            <td>2024-05-12 12:32</td>
+                            <td>Oskars Batņa </td>
+                            <td>Paņēma atslēgu</td>
+                            <td>217</td>
+                        </tr>
+                    </tbody>
+                    <!-- katrs td iekš tr aizpilda vienu aili(šūnu) rindā-->
+                </table>
+            </div>
+        </div>
+
+    </div>   
+</body>
+</html>

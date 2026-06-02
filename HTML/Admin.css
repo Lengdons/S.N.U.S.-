@@ -1,0 +1,199 @@
+
+.admin-body {
+    margin: 0;
+    display: flex;
+    min-height: 100vh;
+    background-color: #f4f6f8; 
+    font-family: inherit;
+}
+
+/* --- Sāna panelis---------------------------------------------------------------------------- --- */
+.admin-panelis {
+    width: 280px;
+    background-color: #1a2238; 
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    position: fixed; 
+    height: 100vh;
+}
+
+.panelis-logo {
+    text-align: center;
+    padding: 0 20px 30px 20px;
+    border-bottom: 1px solid #2d3748;
+    margin-bottom: 20px;
+}
+
+.panelis-logo img {
+    width: 80%;
+    height: auto;
+}
+
+.panelis-nav {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.admin-nav-btn {
+    background: none;
+    border: none;
+    color: #a0aec0;
+    padding: 18px 25px;
+    text-align: left;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.admin-nav-btn:hover {
+    background-color: #2d3748;
+    color: white;
+}
+
+.admin-nav-btn.active {
+    background-color: #04AA6D; 
+    color: white;
+    font-weight: bold;
+    border-left: 10px solid white; 
+}
+
+.panelis-footer {
+    padding: 20px;
+}
+
+/* ------------------------------------------------------------------Saturs --- */
+.admin-saturs {
+    margin-left: 280px; 
+    padding: 50px;
+    flex-grow: 1;
+    width: calc(100% - 280px);
+    box-sizing: border-box;
+}
+
+.admin-zurnals {
+    display: none; 
+}
+
+.admin-zurnals.active {
+    display: block; 
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.admin-zurnals h2 {
+    color: #1a2238;
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+}
+
+/* ------------------------------------------------------------- Datu lodzini un  Input'i --- */ 
+.admin-lapa {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.admin-lapa h3 {
+    margin-top: 0;
+    color: #4a5568;
+    border-bottom: 2px solid #edf2f7;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.pievienot-kaste {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.admin-input {
+    padding: 12px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    flex-grow: 1;
+}
+
+.admin-input:focus {
+    border-color: #04AA6D;
+    outline: none;
+}
+
+/* --- POGAS--------------------------------------------------------- --- */
+.btn-zals {
+    background-color: #04AA6D;
+    color: white;
+    border: none;
+    padding: 14px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.btn-zals:hover { background-color: #059862; }
+
+.btn-sarkans, .btn-atgriezties {
+    background-color: #d64652;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn-atgriezties{
+    margin-bottom: 20px;
+}
+
+
+.btn-sarkans:hover, .btn-atgriezties:hover { 
+    background-color: #c0392b; 
+}
+
+/* --- Saraksti----------------------------------- */
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #edf2f7;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #0e0125;
+}
+
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.vesture-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.vesture-table th, .vesture-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.vesture-table th {
+    background-color: #f8fafc;
+    color: #4a5568;
+    font-weight: bold;
+}
