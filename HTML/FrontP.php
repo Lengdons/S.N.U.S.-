@@ -88,6 +88,7 @@ if(!isset($_SESSION['user'])){
     </div>
 
 <script src="html_lengdons.js"></script>
+<script src="html.js"></script>
 
 </body>
 </html>

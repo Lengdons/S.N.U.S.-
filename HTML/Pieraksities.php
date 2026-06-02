@@ -6,8 +6,8 @@ if(isset($_SESSION['user'])){
     exit;
 }
 
-require_once 'mysql/database.php';
-require_once 'classes/user.php';
+require_once '../mysql/database.php';
+require_once '../classes/user.php';
 
 $db = new database();
 $user = new user($db);
