@@ -7,6 +7,4 @@ Saņemšanas & Nodošanas Uzskaites Sistēma
 
 ## Saskarne / CSS
 
-## PHP
-
-Datu bāzes integrēšana (MySQL)
+## PHP to API

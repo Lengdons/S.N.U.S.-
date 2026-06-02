@@ -1,0 +1,412 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+body, html{
+    overflow-x: hidden;
+}
+.container{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #ffffff;
+}
+/* LOGOTIPS --------------------------------------------------------------------------------------------*/
+
+.logo img{
+    width: 250px;
+    height: auto;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding: 10px;
+ 
+    
+}
+.logo img:hover{
+    cursor: pointer;
+}
+
+body {
+    background-color: #ffffff; 
+    padding:0 0 300px;
+    display: flex;
+    justify-content: center;
+    color: #1b1818;
+}
+
+
+/* NAVIGĀCIJAS bar's --------------------------------------------------------------------------------------*/
+
+.info-bar {
+    background-color: #282A35; 
+    color: white;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 40px; 
+    height: 80px; 
+}
+
+.nav-nosaukums p {
+    margin-top: 10px;
+    margin-left: calc(2vw);
+    margin-right:calc(26vw);
+    margin-bottom: 10px;
+    padding: 0;
+    letter-spacing: 5px;
+    font-size: calc(0.01vw + 0.01vh + 1.5vmin);
+   
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    height: 100%; 
+}
+
+.nav-item {
+    padding: 0 50px;
+    height: 100%; 
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s; 
+}
+.nav-item.date{
+    display: flex;
+    margin-inline: auto;
+    justify-content: space-between;
+}
+
+.nav-item:hover {
+    background-color: #000000;
+}
+
+    .nav-item.btn-login {
+        background-color: #04AA6D;
+        margin-left: 15px; 
+        height: 45px; 
+        border-radius: 25px; 
+    }
+
+.nav-item.btn-login:hover {
+    background-color: #059862;
+}
+/* ------------------------------SEARCH BAR's-------------------------------------------------------------------------- */
+
+.search-bar{
+
+    background-color: #282A35;
+    width:100vw;
+    margin-inline: calc(-50vw + 50%);
+    color: #ffffff;
+    display: flex;
+    height: 35px;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 40px;    
+         border-top:solid #04AA6D;
+
+
+}
+.search{
+    margin-left:calc(8vw);
+    margin-right: 20px;
+    padding: 0 150px 0 20px;
+    width:15vw;
+    max-width:250px;
+    min-width: 100px;
+    display: flex;
+    background-color: #ffffff;
+    color: #000000;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: medium;
+    border-radius: 25px;
+}
+.search:hover{
+    background-color: rgb(214, 214, 214);
+    cursor: pointer;
+}
+
+.diena-bar{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    margin-right:calc(48vw);
+    margin-left: auto;
+    
+
+} 
+        .diena{ 
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    }
+
+        .BnF{
+    padding: 1px 5px;
+    border-radius: 50px;
+    background-color: #04AA6D;
+    color: #ffffff;
+}
+.BnF:hover{
+    cursor:pointer;
+    background-color: #059862;
+}
+
+
+
+
+/* BODYYYYYY ----------------------------------------------------------------------------------------------*/
+
+/* --- 3.TABs -----ZEM search bar Tab'a------------ --- */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;       
+    padding: 10px;   
+    border-bottom: 2px solid #ccc;
+}
+
+.header-box {
+    flex: 1;         
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+}
+.header-status{
+    width: 100px;    
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+}
+/* --- ------------------------------------------------------------------------------------------------------------------ */
+.datu-rinda {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.data-box {
+    background-color: #fff;
+    border: 3px solid #666;
+    flex: 1 ;
+    padding: 10px;
+    border-radius: 10px;
+    
+    text-align: center;
+    font-weight: normal;
+}
+
+.status-ind {
+    width: 100px;
+     
+    padding: 5px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+    border: 3px solid;
+}
+
+.status-txt {
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.green {
+    background-color: #63a56a;
+    border-width: 0cap;
+    border-radius: 25px;
+}
+
+.red {
+    background-color: #d64652;
+    border-width: 0cap;
+    border-radius: 25px;
+}
+
+/* ----Pārklējums---FILTRS------------------------------------------------------------------------------------------------------ */
+.modal-parklajums {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4); 
+    backdrop-filter: blur(4px); 
+    
+    display:none;      /*<-------   PARĀDĪT / PASLĒPT (flex / none)------------------------------------------------------------------------------- */
+    justify-content: center;
+    align-items: center;
+    
+    z-index: 1000; 
+}
+
+.filtrs-modal-content {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    height: 30%;
+    max-height: 400px;
+    min-height: 300px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    color: #222;
+}
+.filtrs-close{
+    position: fixed;
+    margin-left: 190px;
+    margin-top: -15px;
+}
+.filtrs-modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+.filtra-kaste{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 40px 100px;
+    border-radius: 25px;
+    background-color: #e8e8e8;
+
+}
+.pieejamiba{
+     border-bottom:solid #030b08;
+     border-width: 1px;
+width: 370px;
+display: flex;
+align-self: center;
+margin-top: -20px;
+padding-bottom: 5px;
+
+    
+}
+.pieejamiba-row{
+    width:max-content;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 70px;
+    padding: 20px;
+    height: 25px;
+    border-radius: 25px; 
+   
+}
+.filtrs-pieejams{
+   background-color:#04AA6D;
+    color: #ffffff;
+    width: 100px;
+    height: 35px;
+     text-transform: uppercase;
+     border-radius: 25px;
+     border:0;
+     letter-spacing: 1px;
+}
+.filtrs-pieejams:hover{
+    background-color: #059862;
+    cursor: pointer;
+}
+.filtrs-aiznemts{
+    background-color:#d43636;
+    color: #ffffff;
+    width: 100px;
+    height: 35px;
+     text-transform: uppercase;
+     border-radius: 25px;
+     border:0;
+     letter-spacing: 1px;
+}
+.filtrs-aiznemts:hover{
+    cursor: pointer;
+    background-color: #ac343e;
+}
+.filtrs-selected{
+    outline: 3px solid #00c7fe;
+    outline-offset: 1px;
+}
+.kabinets{
+     border-bottom:solid #030b08;
+     border-width: 1px;
+width: 370px;
+display: flex;
+align-self: center;
+padding-bottom: 5px;
+}
+.btn-kab-search{
+    background-color: #fff;
+    width:340px;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    height: 25px;
+
+    border-radius: 25px; 
+    border-color: #666;
+    border-width:1px;
+    border-color: #334e55;
+}
+.btn-kab-search:hover{
+    cursor: pointer;
+    background-color: #dadada;
+}
+.filtrs-apply{
+    background-color:#b9b9b9;
+    color: #ffffff;
+    margin-left: -250px;
+    margin-top: 10px;
+    width: 150px;
+    height: 35px;
+     border-radius: 25px;
+     border:0;
+     letter-spacing: 1px;
+}
+.filtrs-apply:hover{
+    cursor: pointer;
+    background-color: #9d9d9d;
+}
+.filtrs-close{
+    background-color: #ffffff;
+    color: #000000;
+    width: 25px;
+    height: 25px;
+     border-radius: 25px;
+     border:0;
+     font-size: large;
+     font-weight: bold;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+
+}
+.filtrs-close:hover{
+cursor: pointer;
+background-color: #9d9d9d;
+}
+
+/* ------------------------------Jāuzraksta JS kas kontrolē Filtra modal'u-------------------------------------------------------------------------- */
+/* jjavascrpita */
+.modal-parklajums.show-modal {
+    display: flex; 
+}
+/* -------------------------------------------------------------------------------------------------------- */
