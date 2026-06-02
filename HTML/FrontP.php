@@ -36,12 +36,16 @@ $isLoggedIn = isset($_SESSION['user']) ? 'true' : 'false';
         </header>
         
         <div class="search-bar">
-            <div class = "search" > Meklēt </div>
+            <div class = "search" ><input
+                                    type="text"
+                                    id="searchInput"
+                                    
+                                    placeholder="Meklēt">  </div>
                 
             <div class="diena-bar"> 
-                <div class = "BnF" > &#129032 </div>
+                <div class = "BnF prev" > &#129032 </div>
                 <div class = "diena"> Pirmdiena </div>
-                <div class = "BnF" > &#129034 </div>
+                <div class = "BnF next" > &#129034 </div>
             </div>
                 
 
