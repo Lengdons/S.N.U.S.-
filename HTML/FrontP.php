@@ -1,12 +1,9 @@
 <?php
 session_start();
-
-// Ja lietotājs nav ielogojies, aizmetam viņu atpakaļ uz login lapu
-if(!isset($_SESSION['user'])){
-    header("Location: Pieraksities.php");
-    exit;
-}
+// We tell the HTML if the user is logged in or not
+$isLoggedIn = isset($_SESSION['user']) ? 'true' : 'false';
 ?>
+
 
 <!DOCTYPE html>
 <html lang="lv">
@@ -16,7 +13,7 @@ if(!isset($_SESSION['user'])){
     <title>S.N.U.S - Saņemšanas & Nodošanas Uzskaites Sistēma</title>
     <link rel="stylesheet" href="FrontP.css">
 </head>
-<body>
+<body data-logged-in="<?php echo $isLoggedIn; ?>">
     <div class="container">
        
         <header>
@@ -63,10 +60,10 @@ if(!isset($_SESSION['user'])){
 
         
 
-    </div>
-    <!-- MODAL popup logs------------------------FILTRAM----------->
+        </div>
+         <!-- MODAL popup logs------------------------FILTRAM----------->
 
-     <div id="filtrs-modal" class="modal-parklajums">
+    <div id="filtrs-modal" class="modal-parklajums">
         
         <div class="filtrs-modal-content">
             <button id="btn-close-modal" class="filtrs-close"> &#10005 </button>      <!--Aizvēršanas poga-->
@@ -74,20 +71,56 @@ if(!isset($_SESSION['user'])){
             <p>Izvēlies filtrus: </p>
             <div class = "filtra-kaste">
                 <div class = "pieejamiba" > Pieejamība </div>
-                <div class = "pieejamiba-row">
-                <button id = "btn-filtrs-pieejams" class = "filtrs-pieejams"> Pieejams </button>   <!-- Filtra poga "Pieejams"-->
-                <button id = "btn-filtrs-aiznemts" class = "filtrs-aiznemts"> Aizņemts </button>   <!-- Filtra poga "Aizņemts"-->
-                </div>
-                <div class = kabinets > Kabineta Numurs </div>
+                    <div class = "pieejamiba-row">
+                        <button id = "btn-filtrs-pieejams" class = "filtrs-pieejams"> Pieejams </button>   <!-- Filtra poga "Pieejams"-->
+                        <button id = "btn-filtrs-aiznemts" class = "filtrs-aiznemts"> Aizņemts </button>   <!-- Filtra poga "Aizņemts"-->
+                     </div>
+                    <div class = kabinets > Kabineta Numurs </div>
                 <button id = "btn-filtrs-kabinets"class = "btn-kab-search"> ...  </button>
+                </div>  
+                <button id="btn-filtrs-apply" class="filtrs-apply"> Pielietot filtrus </button>      <!--Pielietot filtrus poga-->
+
             </div>
-            <button id="btn-filtrs-apply" class="filtrs-apply"> Pielietot filtrus </button>      <!--Pielietot filtrus poga-->
-        </div>
         </div>
         
     </div>
 
+    <div id="login-modal" class="modal-parklajums login-parklajums">
+        <div class="filtrs-modal-content login-content">
+        
+        <h2>Pierakstīties</h2>
+        <p class ="e-pasts">e-pasts</p>
+        <p class="parole">Parole</p>
+
+        <div class="filtra-kaste login-kaste">
+            <input type="text" id="login-epasts" class="login-input" placeholder="e-pasts" required>
+            <input type="password" id="login-password" class="login-input" placeholder="Parole" required>
+            
+            <div id="login-error-msg" class="error-text"></div>
+            
+            <button id="btn-submit-login" class="filtrs-apply btn-login-submit">Ienākt</button>
+        </div>
+
+            <div class="registreties-link-kaste">
+             <span>Nav profila?</span>
+             <a href="Registreties.html" class="registreties-link">Reģistrēties šeit</a>
+            </div>
+
+        </div>
+    </div>
+
 <script src="html_lengdons.js"></script>
+<script>
+    // A quick script to read the PHP Gatekeeper and hide the modal if logged in!
+    const isLoggedIn = document.body.getAttribute('data-logged-in');
+    const loginModal = document.getElementById('login-modal');
+    
+    if (isLoggedIn === 'true') {
+        loginModal.style.display = 'none'; // Hide modal, show website
+    } else {
+        loginModal.style.display = 'flex'; // Show modal, block website
+    }
+</script>
 
 </body>
 </html>

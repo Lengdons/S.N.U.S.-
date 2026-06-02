@@ -1,5 +1,5 @@
 
-const copy = document.getElementById('datu-kaste');
+/*const copy = document.getElementById('datu-kaste');
 
 const P_kabinetuSkaits = 50; 
 const A_kabinetuSkaits = 3;
@@ -38,7 +38,7 @@ for (let i = 0; i < A_kabinetuSkaits; i++) {
             <div class="data-box">Nodeva: </div>
         </div>
     `;
-}
+}*/
 
 // selecto filtra opcijas: Pieejams / Aiznemts ---------------------------------------------------
 copy.innerHTML = PieejamsRindas + AiznemtsRindas;

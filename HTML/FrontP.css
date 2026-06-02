@@ -404,6 +404,82 @@ cursor: pointer;
 background-color: #9d9d9d;
 }
 
+/* --- Pierkastities MODAL'S------------------------------------------------------ --- */
+.login-parklajums {
+   
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4); 
+    backdrop-filter: blur(4px); 
+    
+    
+    z-index: 2000; 
+}
+
+.login-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+    height: auto; 
+    padding-bottom: 30px;
+}
+
+.login-kaste {
+    width: 100%;
+    align-items: center;
+    background-color: transparent;
+    padding: 20px 0;
+}
+
+.login-input {
+    width: 80%;
+    height: 40px;
+    margin-bottom: 15px;
+    padding: 0 15px;
+    border: 2px solid #ccc;
+    border-radius: 25px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.login-input:focus {
+    border-color: #04AA6D;
+}
+
+.btn-login-submit {
+    margin-top: 10px;
+    margin-left: 0;
+    width: 80%;
+}
+
+.error-text {
+    color: #d64652;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    height: 20px; 
+}
+
+.registreties-link-kaste {
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+.registreties-link {
+    color: #04AA6D;
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.registreties-link:hover {
+    text-decoration: underline;
+    color: #059862;
+}
+
 /* ------------------------------Jāuzraksta JS kas kontrolē Filtra modal'u-------------------------------------------------------------------------- */
 /* jjavascrpita */
 .modal-parklajums.show-modal {

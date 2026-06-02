@@ -1,0 +1,100 @@
+
+.register-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color:#282A35;
+    margin: 0;
+}
+
+.registreties-kaste {
+    background-color: #ebebeb;
+    border-radius: 25px;
+    width: 60vw;             
+    max-width: 900px;        
+    min-height: 65vh;        
+    padding: 20px;           
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+}
+
+.logo-kaste {
+    position: absolute; 
+    top: 0;             
+    left: 0;            
+    transform: translate(-50%, -50%); 
+}
+
+.reg-logo {
+    width: clamp(120px, 40vw, 500px); 
+    height: auto;
+}
+
+.registreties-kaste h2 {
+    margin-bottom: 35px;
+    color: #030202;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 2.5rem; 
+}
+
+.registreties-kaste .login-input {
+    width: 100%;
+    max-width: 400px; 
+    min-width: 200px;
+    height: 40px;
+    font-size: 1.2rem;
+    border-radius: 25px;
+    margin-bottom: 20px;
+}
+.login-input{
+    text-indent: 7px;
+    font-weight: bold;
+    border-color:#04AA6D
+}
+
+
+.registreties-kaste .btn-login-submit {
+    height: 50px;
+    font-size: 1.2rem;
+    border-radius: 25px;
+    width: 70%;
+    max-width: 300px; 
+    letter-spacing: 2px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.btn-login-submit{
+    background-color:#aef9dd;
+    border-color: #04AA6D;
+    cursor: pointer;
+}
+
+.error-txt {
+    color: #d64652;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    height: 20px; 
+}
+
+.pierakstities-link-kaste {
+    margin-top: 30px;
+    font-size: 1.1rem;
+    font-weight: bold; 
+    letter-spacing: 0.5px;
+}
+
+.pierakstities-link {
+    color: #04AA6D;
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.pierakstities-link:hover {
+    text-decoration: underline;
+    color: #059862;
+}
