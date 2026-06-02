@@ -1,13 +1,13 @@
 <?php
 
-require 'mysql/database.php';
+require 'mysql/datubaze.php';
 
-$db = new database();
+$db = new datubaze();
 
-$room_id = (int)$_GET['room_id'];
+$atslega_id = (int)$_GET['atslega_id'];
 $date = $_GET['date'];
 
-function getBookedSlots($db, $room_id, $date){
+function getBookedSlots($db, $atslega_id, $date){
 
     $booked = [];
 
@@ -15,11 +15,11 @@ function getBookedSlots($db, $room_id, $date){
     $dayEnd   = strtotime($date . " 23:59:59");
 
     $stmt = $db->conn->prepare("
-        SELECT start_time, end_time
-        FROM bookings
-        WHERE room_id = ?
-        AND start_time <= ?
-        AND end_time >= ?
+        SELECT start_laiks, beigu_laiks
+        FROM raksti
+        WHERE atslega_id = ?
+        AND start_laiks <= ?
+        AND beigu_laiks >= ?
     ");
 
     $endDateTime   = date('Y-m-d H:i:s', $dayEnd);
@@ -27,7 +27,7 @@ function getBookedSlots($db, $room_id, $date){
 
     $stmt->bind_param(
         "iss",
-        $room_id,
+        $atslega_id,
         $endDateTime,
         $startDateTime
     );
@@ -38,8 +38,8 @@ function getBookedSlots($db, $room_id, $date){
 
     while($row = $res->fetch_assoc()){
 
-        $start = strtotime($row['start_time']);
-        $end   = strtotime($row['end_time']);
+        $start = strtotime($row['start_laiks']);
+        $end   = strtotime($row['beigu_laiks']);
 
         $start = max($start, $dayStart);
         $end   = min($end, $dayEnd);
@@ -56,7 +56,7 @@ function getBookedSlots($db, $room_id, $date){
 }
 
 header('Content-Type: application/json');
-echo json_encode(getBookedSlots($db, $room_id, $date));
+echo json_encode(getBookedSlots($db, $atslega_id, $date));
 exit;
 
 ?>

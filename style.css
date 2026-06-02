@@ -5,7 +5,7 @@ body {
     padding-top: 80px;
 }
 
-/* Main box */
+/* sakumlapas box */
 .box {
     background: white;
     width: 320px;
@@ -61,7 +61,7 @@ hr {
     border-top: 1px solid #eee;
 }
 
-.room {
+.atslega {
     width:120px;
     height:120px;
     background:#3498db;
@@ -87,7 +87,7 @@ hr {
     font-size:12px;
 }
 
-.logout {
+.atslegties {
     display:inline-block;
     margin-bottom:10px;
     color:white;
@@ -112,11 +112,11 @@ hr {
     background: #2980b9;
 }
 
-.nav-btn.logout {
+.nav-btn.atslegties {
     background: red;
 }
 
-.nav-btn.logout:hover {
+.nav-btn.atslegties:hover {
     background: darkred;
 }
 
@@ -201,24 +201,24 @@ button:disabled {
     border-radius: 5px;
 }
 
-.sidebar .logout {
+.sidebar .atslegties {
     background: #e74c3c;
 }
 
 
 
-/* ROOMS GRID */
-.rooms {
+/* atslegas GRID */
+.atslegas {
     display: flex;
     flex-wrap: wrap;
 }
 
-.password-wrapper{
+.parole-wrapper{
     position:relative;
     width:100%;
 }
 
-.password-bubble{
+.parole-bubble{
     display:none;
     position:absolute;
     top:105%;
@@ -236,25 +236,25 @@ button:disabled {
     z-index:100;
 }
 
-.password-bubble p{
+.parole-bubble p{
     margin:5px 0;
     font-size:14px;
 }
 
-.logs-table {
+.zurnali-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.logs-table th, .logs-table td {
+.zurnali-table th, .zurnali-table td {
     border: 1px solid #ddd;
     padding: 8px;
 }
 
-.logs-table tr {
+.zurnali-table tr {
     cursor: pointer;
 }
 
-.logs-table tr.selected {
+.zurnali-table tr.selected {
     background: #ffe08a;
 }

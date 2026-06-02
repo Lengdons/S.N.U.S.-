@@ -6,19 +6,19 @@ if(!isset($_SESSION['user'])){
     exit;
 }
 
-require '../mysql/database.php';
+require '../mysql/datubaze.php';
 
-$db = new database();
+$db = new datubaze();
 
-require '../classes/room.php';
-require '../classes/booking.php';
-require '../classes/log.php';
+require '../classes/atslega.php';
+require '../classes/raksts.php';
+require '../classes/zurnals.php';
 require '../classes/user.php';
 require '../login/auth_check.php';
 
-$room = new room($db);
-$booking = new booking($db);
-$log = new log($db);
+$atslega = new atslega($db);
+$raksts = new raksts($db);
+$zurnals = new zurnals($db);
 $user = new user($db);
 
 $msg = "";
@@ -27,27 +27,27 @@ date_default_timezone_set('Europe/Riga');
 
 
 // LOAD USER DATA
-$stmt = $db->conn->prepare("SELECT name,surname FROM users WHERE id=?");
-$stmt->bind_param("i", $_SESSION['user_id']);
+$stmt = $db->conn->prepare("SELECT vards,uzvards FROM lietotaji WHERE id=?");
+$stmt->bind_param("i", $_SESSION['lietotajs_id']);
 $stmt->execute();
 $userData = $stmt->get_result()->fetch_assoc();
 
-$_SESSION['name'] = $userData['name'];
-$_SESSION['surname'] = $userData['surname'];
+$_SESSION['vards'] = $userData['vards'];
+$_SESSION['uzvards'] = $userData['uzvards'];
 
-$needsProfile = empty($userData['name']) || empty($userData['surname']);
+$needsProfile = empty($userData['vards']) || empty($userData['uzvards']);
 
 // SAVE PROFILE
 if(isset($_POST['save_profile'])){
-    $name = trim($_POST['name']);
-    $surname = trim($_POST['surname']);
+    $vards = trim($_POST['vards']);
+    $uzvards = trim($_POST['uzvards']);
 
-    if($name && $surname){
-        $stmt = $db->conn->prepare("UPDATE users SET name=?, surname=? WHERE id=?");
-        $stmt->bind_param("ssi", $name, $surname, $_SESSION['user_id']);
+    if($vards && $uzvards){
+        $stmt = $db->conn->prepare("UPDATE lietotaji SET vards=?, uzvards=? WHERE id=?");
+        $stmt->bind_param("ssi", $vards, $uzvards, $_SESSION['lietotajs_id']);
         $stmt->execute();
 
-        $log->add($name." ".$surname." has joined the system");
+        $zurnals->add($vards." ".$uzvards." has joined the system");
 
         header("Location: main.php");
         exit;
@@ -56,39 +56,39 @@ if(isset($_POST['save_profile'])){
     }
 }
 
-// ADD ROOM (ADMIN)
-if(isset($_POST['add_room'])){
-    if($_SESSION['role'] !== 'admin') die("No permission");
+// ADD atslega (ADMIN)
+if(isset($_POST['add_atslega'])){
+    if($_SESSION['loma'] !== 'admin') die("No permission");
 
-    $name = trim($_POST['room_name']);
-    $name = ucwords(strtolower($name));
+    $nosaukums = trim($_POST['atslega_nosaukums']);
+    $nosaukums = ucwords(strtolower($nosaukums));
 
-    if($name === ""){
-        $msg = "Room name cannot be empty";
-    } elseif($room->exists($name)){
-        $msg = "Room already exists";
+    if($nosaukums === ""){
+        $msg = "atslega nosaukums cannot be empty";
+    } elseif($atslega->exists($nosaukums)){
+        $msg = "atslega already exists";
     } else {
-        $room->add($name);
+        $atslega->add($nosaukums);
 
-        $log->add($_SESSION['name']." ".$_SESSION['surname']." added room: ". $name);
+        $zurnals->add($_SESSION['nosaukums']." ".$_SESSION['uzvards']." added atslega: ". $nosaukums);
         header("Location: main.php");
         exit;
     }
 }
 
-// DELETE ROOM (ADMIN)
-if(isset($_POST['delete_room'])){
-    if($_SESSION['role'] !== 'admin') die("No permission");
+// DELETE atslega (ADMIN)
+if(isset($_POST['delete_atslega'])){
+    if($_SESSION['loma'] !== 'admin') die("No permission");
 
-    $stmt = $db->conn->prepare("SELECT name FROM rooms WHERE id = ?");
-    $stmt->bind_param("i", $_POST['delete_room_id']);
+    $stmt = $db->conn->prepare("SELECT nosaukums FROM atslegas WHERE id = ?");
+    $stmt->bind_param("i", $_POST['delete_atslega_id']);
     $stmt->execute();
 
-    $roomData = $stmt->get_result()->fetch_assoc();
+    $atslegaData = $stmt->get_result()->fetch_assoc();
 
-    $room->delete($_POST['delete_room_id']);
+    $atslega->delete($_POST['delete_atslega_id']);
 
-    $log->add($_SESSION['name']." ".$_SESSION['surname']." removed room: ". $roomData['name']);
+    $zurnals->add($_SESSION['vards']." ".$_SESSION['uzvards']." removed atslega: ". $atslegaData['nosaukums']);
     header("Location: main.php");
     exit;
 }
@@ -104,17 +104,17 @@ if (isset($_POST['book'])) {
         $start_date = $_POST['start_date'] ?? null;
         $end_date   = $_POST['end_date'] ?? null;
 
-        $start_time = $_POST['start_time'] ?? null;
-        $end_time   = $_POST['end_time'] ?? null;
+        $start_laiks = $_POST['start_laiks'] ?? null;
+        $beigu_laiks   = $_POST['beigu_laiks'] ?? null;
 
-        if (!$start_date || !$end_date || !$start_time || !$end_time) {
+        if (!$start_date || !$end_date || !$start_laiks || !$beigu_laiks) {
             $msg = "Invalid time selection";
         } else {
 
-        $bookUserId = $_SESSION['user_id'];
+        $bookUserId = $_SESSION['lietotajs_id'];
 
-        if ($_SESSION['role'] === 'admin') {
-            $bookUserId = $_POST['book_user_id'] ?? null;
+        if ($_SESSION['loma'] === 'admin') {
+            $bookUserId = $_POST['book_lietotajs_id'] ?? null;
             if (!$bookUserId) {
                 $msg = "Select a user";
                 return;
@@ -123,8 +123,8 @@ if (isset($_POST['book'])) {
 
         if (!$msg) {
         
-        $start = $start_date . " " . $start_time . ":00";
-        $end   = $end_date . " " . $end_time . ":00";
+        $start = $start_date . " " . $start_laiks . ":00";
+        $end   = $end_date . " " . $beigu_laiks . ":00";
 
         if (strtotime($start) >= strtotime($end)) {
             $msg = "End time must be after start time";
@@ -134,41 +134,41 @@ if (isset($_POST['book'])) {
         }
         else {
 
-            if ($booking->isAvailable($_POST['room_id'], $start, $end)) {
+            if ($raksts->isAvailable($_POST['atslega_id'], $start, $end)) {
 
-                $booking->book($bookUserId, $_POST['room_id'], $start, $end);
+                $raksts->book($bookUserId, $_POST['atslega_id'], $start, $end);
 
-                $stmt = $db->conn->prepare("SELECT name,surname FROM users WHERE id=?");
+                $stmt = $db->conn->prepare("SELECT vards,uzvards FROM lietotaji WHERE id=?");
                 $stmt->bind_param("i", $bookUserId);
                 $stmt->execute();
                 $u = $stmt->get_result()->fetch_assoc();
 
-                $stmt = $db->conn->prepare("SELECT name FROM rooms WHERE id=?");
-                $stmt->bind_param("i", $_POST['room_id']);
+                $stmt = $db->conn->prepare("SELECT vards FROM atslegas WHERE id=?");
+                $stmt->bind_param("i", $_POST['atslega_id']);
                 $stmt->execute();
-                $roomData = $stmt->get_result()->fetch_assoc();
+                $atslegaData = $stmt->get_result()->fetch_assoc();
 
-                $actor = $_SESSION['name'] . " " . $_SESSION['surname'];
+                $actor = $_SESSION['vards'] . " " . $_SESSION['uzvards'];
 
-                if ($_SESSION['role'] === 'admin' && $bookUserId != $_SESSION['user_id']) {
-                    $log->add(
+                if ($_SESSION['loma'] === 'admin' && $bookUserId != $_SESSION['lietotajs_id']) {
+                    $zurnals->add(
                         $actor .
-                        " booked " . $roomData['name'] .
-                        " for user " . $u['name'] . " " . $u['surname'] .
+                        " booked " . $atslegaData['nosaukums'] .
+                        " for user " . $u['vards'] . " " . $u['uzvards'] .
                         " from " . $start . " - " . $end
                     );
                 } else {
-                    $log->add(
-                        $u['name'] . " " . $u['surname'] .
-                        " booked " . $roomData['name'] .
+                    $zurnals->add(
+                        $u['vards'] . " " . $u['uzvards'] .
+                        " booked " . $atslegaData['nosaukums'] .
                         " from " . $start . " - " . $end
                     );
                 }
 
-                $msg = "Room booked successfully";
+                $msg = "atslega booked successfully";
 
             } else {
-                $msg = "Room already booked in that range";
+                $msg = "atslega already booked in that range";
             }
         }
     }
@@ -177,30 +177,30 @@ if (isset($_POST['book'])) {
 }
 
 
-function getBookedSlots($db, $room_id, $date){
+function getBookedSlots($db, $atslega_id, $date){
     $booked = [];
 
     $dayStart = strtotime($date . " 00:00:00");
     $dayEnd   = strtotime($date . " 23:59:59");
 
     $stmt = $db->conn->prepare("
-        SELECT start_time, end_time
-        FROM bookings
-        WHERE room_id = ?
-        AND start_time <= ?
-        AND end_time >= ?
+        SELECT start_laiks, beigu_laiks
+        FROM raksti
+        WHERE atslega_id = ?
+        AND start_laiks <= ?
+        AND beigu_laiks >= ?
     ");
 
     $endDateTime   = date('Y-m-d H:i:s', $dayEnd);
     $startDateTime = date('Y-m-d H:i:s', $dayStart);
 
-    $stmt->bind_param("iss", $room_id, $endDateTime, $startDateTime);
+    $stmt->bind_param("iss", $atslega_id, $endDateTime, $startDateTime);
     $stmt->execute();
     $res = $stmt->get_result();
 
     while($row = $res->fetch_assoc()){
-        $start = strtotime($row['start_time']);
-        $end = strtotime($row['end_time']);
+        $start = strtotime($row['start_laiks']);
+        $end = strtotime($row['beigu_laiks']);
 
         $start = max($start, $dayStart);
         $end   = min($end, $dayEnd);
@@ -214,26 +214,26 @@ function getBookedSlots($db, $room_id, $date){
     return array_unique($booked);
 }
 
-function getRoomStatus($db, $room_id){
+function getatslegastatus($db, $atslega_id){
 
     $now = date('Y-m-d H:i:s');
 
-    $stmt = $db->conn->prepare(" SELECT bookings.end_time, users.name, users.surname 
-        FROM bookings JOIN users on users.id = bookings.user_id WHERE room_id = ?
-        AND start_time <= ?
-        AND end_time > ?
-        ORDER BY end_time ASC
+    $stmt = $db->conn->prepare(" SELECT raksti.beigu_laiks, lietotaji.vards, lietotaji.uzvards 
+        FROM raksti JOIN lietotaji on lietotaji.id = raksti.lietotajs_id WHERE atslega_id = ?
+        AND start_laiks <= ?
+        AND beigu_laiks > ?
+        ORDER BY beigu_laiks ASC
         LIMIT 1
     ");
 
-    $stmt->bind_param("iss", $room_id, $now, $now);
+    $stmt->bind_param("iss", $atslega_id, $now, $now);
     $stmt->execute();
 
     $res = $stmt->get_result();
 
     if($row = $res->fetch_assoc()){
 
-        return ['occupied' => true, 'until' => $row['end_time'], 'user' => $row['name'].' '.$row['surname']];
+        return ['occupied' => true, 'until' => $row['beigu_laiks'], 'user' => $row['vards'].' '.$row['uzvards']];
     }
 
     return ['occupied' => false, 'until' => null, 'user' => null];
@@ -241,12 +241,12 @@ function getRoomStatus($db, $room_id){
 
 if (isset($_POST['create_user'])) {
 
-    if ($_SESSION['role'] !== 'admin') {
+    if ($_SESSION['loma'] !== 'admin') {
         die("No permission");
     }
 
-    $email = $_POST['new_email'];
-    $password = $_POST['new_password'];
+    $epasts = $_POST['new_epasts'];
+    $parole = $_POST['new_parole'];
 
     $durationDays = (int) $_POST['duration_days']; // e.g. 7, 30, etc.
 
@@ -255,10 +255,10 @@ if (isset($_POST['create_user'])) {
 
     $expiresAt = date('Y-m-d H:i:s', strtotime("+$durationDays days"));
 
-    $result = $user->register($email, $password, $expiresAt);
+    $result = $user->register($epasts, $parole, $expiresAt);
 
     if ($result === true) {
-        $log->add($_SESSION['name']." created user: " . $email);
+        $zurnals->add($_SESSION['vards']." created user: " . $epasts);
         $msg = "User created successfully";
     } else {
         $msg = $result;
@@ -269,15 +269,15 @@ if (isset($_POST['create_user'])) {
 if(isset($_POST['delete_my_account'])){
 
     $stmt = $db->conn->prepare("
-        UPDATE users
-        SET is_active = 0
+        UPDATE lietotaji
+        SET aktivs = 0
         WHERE id = ?
     ");
 
-    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->bind_param("i", $_SESSION['lietotajs_id']);
     $stmt->execute();
 
-    $log->add($_SESSION['name']." ".$_SESSION['surname']." is no longer amongus");
+    $zurnals->add($_SESSION['vards']." ".$_SESSION['uzvards']." is no longer amongus");
 
     session_unset();
     session_destroy();
@@ -302,28 +302,28 @@ if(isset($_POST['delete_my_account'])){
 
         <form method="POST">
 
-            <input type="hidden" name="room_id" id="room_id">
+            <input type="hidden" name="atslega_id" id="atslega_id">
 
-            <?php if($_SESSION['role'] === 'admin'): ?>
+            <?php if($_SESSION['loma'] === 'admin'): ?>
 
             <label>Book for user:</label>
-            <select name="book_user_id" required>
+            <select name="book_lietotajs_id" required>
 
             <?php
-                $users = $db->conn->query("
-                    SELECT id,name,surname,email
-                    FROM users
-                    ORDER BY name ASC
+                $lietotaji = $db->conn->query("
+                    SELECT id,vards,uzvards,epasts
+                    FROM lietotaji
+                    ORDER BY vards ASC
                 ");
 
-                while($u = $users->fetch_assoc()):
+                while($u = $lietotaji->fetch_assoc()):
                 ?>
 
                     <option value="<?php echo $u['id']; ?>">
                         <?php
-                        echo $u['name'] . " " .
-                            $u['surname'] .
-                            " (" . $u['email'] . ")";
+                        echo $u['vards'] . " " .
+                            $u['uzvards'] .
+                            " (" . $u['epasts'] . ")";
                         ?>
                     </option>
 
@@ -334,7 +334,7 @@ if(isset($_POST['delete_my_account'])){
             <?php endif; ?>
 
             <label>Start time:</label>
-            <select name="start_time" required>
+            <select name="start_laiks" required>
             <?php
             for ($h = 6; $h <= 21; $h++) {
                 foreach (["00", "30"] as $m) {
@@ -348,7 +348,7 @@ if(isset($_POST['delete_my_account'])){
             </select>
 
             <label>End time:</label>
-            <select name="end_time" required>
+            <select name="beigu_laiks" required>
             <?php
             for ($h = 6; $h <= 22; $h++) {
                 foreach (["00", "30"] as $m) {
@@ -361,7 +361,7 @@ if(isset($_POST['delete_my_account'])){
             ?>
             </select>
 
-            <?php if($_SESSION['role'] === 'admin'): ?>
+            <?php if($_SESSION['loma'] === 'admin'): ?>
 
                 <label>Start date:</label>
                 <input type="date" id="start_date" name="start_date" value="<?php echo date('Y-m-d'); ?>" required>
@@ -370,7 +370,7 @@ if(isset($_POST['delete_my_account'])){
                 <input type="date" id="end_date" name="end_date" value="<?php echo date('Y-m-d'); ?>" required>
             <?php else: ?>
 
-                <!-- regular users automatically send date by default -->
+                <!-- regular lietotaji automatically send date by default -->
                 <input type="hidden" id="start_date" name="start_date" value="<?php echo date('Y-m-d'); ?>">
                 <input type="hidden" id="end_date" name="end_date" value="<?php echo date('Y-m-d'); ?>">
 
@@ -380,12 +380,12 @@ if(isset($_POST['delete_my_account'])){
 
         </form>
 
-        <?php if($_SESSION['role'] === 'admin'): ?>
+        <?php if($_SESSION['loma'] === 'admin'): ?>
         <form method="POST">
-            <input type="hidden" name="delete_room_id" id="delete_room_id">
-            <button name="delete_room"
-                    onclick="return confirm('Delete this room?')">
-                Delete Room
+            <input type="hidden" name="delete_atslega_id" id="delete_atslega_id">
+            <button name="delete_atslega"
+                    onclick="return confirm('Delete this atslega?')">
+                Delete atslega
             </button>
         </form>
         <?php endif; ?>
@@ -399,8 +399,8 @@ if(isset($_POST['delete_my_account'])){
         <form method="POST">
             <h3>Create User</h3>
 
-            <input type="email" name="new_email" placeholder="Email" required>
-            <input type="password" name="new_password" placeholder="Password" required>
+            <input type="email" name="new_epasts" placeholder="epasts" required>
+            <input type="password" name="new_parole" placeholder="parole" required>
             <label>Account duration (days)</label>
             <input type="number" name="duration_days" value="7" min="1" max="365" oninput="this.value = Math.min(365, Math.max(1, this.value))">
 
@@ -416,8 +416,8 @@ if(isset($_POST['delete_my_account'])){
     <div class="popup">
         <h3>Complete your profile</h3>
         <form method="POST">
-            <input name="name" placeholder="Name" required>
-            <input name="surname" placeholder="Surname" required>
+            <input name="vards" placeholder="vards" required>
+            <input name="uzvards" placeholder="uzvards" required>
             <button name="save_profile" disabled>Save</button>
         </form>
     </div>
@@ -429,18 +429,18 @@ if(isset($_POST['delete_my_account'])){
 
     <!-- LEFT SIDE -->
     <div class="sidebar">
-        <h2>Sveiks, <?php echo $_SESSION['name'] ?: $_SESSION['user']; ?></h2>
+        <h2>Sveiks, <?php echo $_SESSION['vards'] ?: $_SESSION['user']; ?></h2>
 
-        <?php if($_SESSION['role'] === 'admin'): ?>
-            <a href="../admin/log_page.php" class="nav-btn">Logs</a>
-            <a href="../admin/accounts_page.php" class="nav-btn">Accounts</a>
-            <a href="../admin/bookings_page.php" class="nav-btn">Bookings</a>
+        <?php if($_SESSION['loma'] === 'admin'): ?>
+            <a href="../admin/vesture.php" class="nav-btn">zurnali</a>
+            <a href="../admin/konti.php" class="nav-btn">Accounts</a>
+            <a href="../admin/pieraksti.php" class="nav-btn">raksti</a>
         <?php endif; ?>
 
-        <?php if($_SESSION['role'] === 'admin'): ?>
+        <?php if($_SESSION['loma'] === 'admin'): ?>
         <form method="POST">
-            <input id="room_name" name="room_name" placeholder="New room">
-            <button id="add_btn" name="add_room" disabled>Add Room</button>
+            <input id="atslega_nosaukums" name="atslega_nosaukums" placeholder="New atslega">
+            <button id="add_btn" name="add_atslega" disabled>Add atslega</button>
             <button type="button" onclick="openCreateUserPopup()">Create Temp Account</button>
         </form>
         <?php endif; ?>
@@ -461,20 +461,20 @@ if(isset($_POST['delete_my_account'])){
         <div class="msg"><?php echo $msg; ?></div>
         <?php endif; ?>
 
-        <div class="rooms">
+        <div class="atslegas">
             <?php 
-            $result = $room->getAll();
+            $result = $atslega->getAll();
 
             while($r = $result->fetch_assoc()):
-                $status = getRoomStatus($db, $r['id']);
+                $status = getatslegastatus($db, $r['id']);
             ?>
-                <div class="room <?php echo $needsProfile ? 'locked' : ''; ?>"
+                <div class="atslega <?php echo $needsProfile ? 'locked' : ''; ?>"
                     <?php if(!$needsProfile): ?>
                         onclick='openPopup(<?php echo $r["id"]; ?>)'
                     <?php endif; ?>
                 >
 
-                    <?php echo $r['name']; ?>
+                    <?php echo $r['vards']; ?>
 
                     <?php if($status['occupied']): ?>
                         <span class="busy">

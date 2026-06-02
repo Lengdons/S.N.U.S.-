@@ -1,27 +1,27 @@
 <?php
 session_start();
 
-if(isset($_SESSION['user'])){
-    header("Location: home/main.php");
+if(isset($_SESSION['lietotajs'])){
+    header("Location: sakums/sakumlapa.php");
     exit;
 }
 
-require_once 'mysql/database.php';
-require_once 'classes/user.php';
+require_once 'mysql/datubaze.php';
+require_once 'klases/lietotajs.php';
 
-$db = new database();
-$user = new user($db);
+$db = new datubaze();
+$lietotajs = new lietotajs($db);
 
 $msg = "";
 
 
-// REGISTER
+// registreties
 
-if (isset($_POST['register'])) {
-    $u = $_POST['username'];
-    $p = $_POST['password'];
+if (isset($_POST['registreties'])) {
+    $u = $_POST['epasts'];
+    $p = $_POST['parole'];
 
-    if ($user->register($u, $p)) {
+    if ($lietotajs->registreties($u, $p)) {
         $msg = "Account created! You can now login.";
     } else {
         $msg = "Registration failed.";
@@ -32,10 +32,10 @@ if (isset($_POST['register'])) {
 
 if (isset($_POST['login'])) {
 
-    $result = $user->login($_POST['username'], $_POST['password']);
+    $result = $lietotajs->login($_POST['epasts'], $_POST['parole']);
 
     if ($result === true) {
-        header("Location: home/main.php");
+        header("Location: sakums/sakumlapa.php");
         exit;
     }
 
@@ -58,18 +58,18 @@ if (isset($_POST['login'])) {
 
 <div class="box">
 
-    <h2>Room Booking Login</h2>
+    <h2>atslega raksts Login</h2>
 
     <div class="msg"><?php echo $msg; ?></div>
 
     <!-- LOGIN -->
     <form method="POST">
         <h4>Login</h4>
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
+        <input type="text" name="epasts" placeholder="epasts" required>
+        <input type="password" name="parole" placeholder="parole" required>
         <button name="login">Login</button>
     </form>
-        <a href="login/register.php">Don't have an account?<a>
+        <a href="login/registreties.php">Don't have an account?<a>
 
     <hr>
 

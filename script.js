@@ -1,26 +1,26 @@
-let currentRoomId = null;
+let currentatslegaId = null;
 let currentBooked = [];
 
 function openPopup(id){
     //console.log(currentBooked);
 
-    currentRoomId = id;
+    currentatslegaId = id;
 
-    document.getElementById("room_id").value = id;
+    document.getElementById("atslega_id").value = id;
 
     document.getElementById("overlay").style.display = "flex";
 
 
-    const del = document.getElementById("delete_room_id");
+    const del = document.getElementById("delete_atslega_id");
     if(del) del.value = id;
 
-    loadBookings().then(() => {
+    loadraksti().then(() => {
         updateSlots(); //currentBooked
         setDefaultEndTime();
     });
 
-    const startSelect = document.querySelector('select[name="start_time"]');
-    const endSelect = document.querySelector('select[name="end_time"]');
+    const startSelect = document.querySelector('select[name="start_laiks"]');
+    const endSelect = document.querySelector('select[name="beigu_laiks"]');
 
     if (startSelect && endSelect) {
 
@@ -34,12 +34,12 @@ function openPopup(id){
     
 }
 
-function loadBookings(){
+function loadraksti(){
 
-    const roomId = document.getElementById("room_id").value;
+    const atslegaId = document.getElementById("atslega_id").value;
     const date = document.getElementById("start_date").value;
 
-    return fetch(`../get_booked_slots.php?room_id=${currentRoomId}&date=${document.getElementById("start_date").value}`)
+    return fetch(`../aiznemtie_laiki.php?atslega_id=${currentatslegaId}&date=${document.getElementById("start_date").value}`)
         .then(response => response.json())
         .then(data => {
             
@@ -52,8 +52,8 @@ function loadBookings(){
 
 function setDefaultEndTime(){
 
-    const startSelect = document.querySelector("select[name='start_time']");
-    const endSelect = document.querySelector("select[name='end_time']");
+    const startSelect = document.querySelector("select[name='start_laiks']");
+    const endSelect = document.querySelector("select[name='beigu_laiks']");
 
     if (!startSelect || !endSelect) return;
 
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             endDate.value = startDate.value;
 
-           loadBookings().then(() => {
+           loadraksti().then(() => {
                 updateSlots();
                 setDefaultEndTime();
            });
@@ -90,8 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 document.addEventListener("DOMContentLoaded", () => {
-    const startSelect = document.querySelector("select[name='start_time']");
-    const endSelect = document.querySelector("select[name='end_time']");
+    const startSelect = document.querySelector("select[name='start_laiks']");
+    const endSelect = document.querySelector("select[name='beigu_laiks']");
 
     if (!startSelect || !endSelect) return;
 
@@ -121,13 +121,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function updateSlots(){
-    const selects = document.querySelectorAll("select[name='start_time'], select[name='end_time']");
+    const selects = document.querySelectorAll("select[name='start_laiks'], select[name='beigu_laiks']");
     const selectedDate = document.getElementById("start_date")?.value;
     const today = new Date().toISOString().split('T')[0];
     const now = new Date();
     const currentMinutes = now.getHours()*60+now.getMinutes();
 
-    const startSelect = document.querySelector("select[name='start_time']");
+    const startSelect = document.querySelector("select[name='start_laiks']");
     const startValue = startSelect?.value;
 
     selects.forEach(select => {
@@ -140,13 +140,13 @@ function updateSlots(){
             const [h,m] = val.split(':');
             const optionMinutes = parseInt(h)*60+parseInt(m);
 
-            if(select.name === "start_time"){
+            if(select.name === "start_laiks"){
             if(currentBooked.includes(val)){
                 disabled = true;
                 }
             }
 
-            if(select.name === "end_time" && startValue){
+            if(select.name === "beigu_laiks" && startValue){
                 const [sh, sm] = startValue.split(":");
                 const startMinutes = parseInt(sh)*60 + parseInt(sm);
 
@@ -174,7 +174,7 @@ function updateSlots(){
 
         });
 
-        if (select.name === "start_time") {
+        if (select.name === "start_laiks") {
             selectFirstAvailable(select);
         }
 
@@ -197,7 +197,7 @@ function selectFirstAvailable(select){
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    const input = document.getElementById("room_name");
+    const input = document.getElementById("atslega_nosaukums");
     const btn = document.getElementById("add_btn");
 
     if(input && btn){
@@ -210,18 +210,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 function confirmDelete(){
-    return confirm("Are you sure you want to delete this room?");
+    return confirm("Are you sure you want to delete this atslega?");
 }
 
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-    const btn = document.getElementById("registerBtn");
+    const epasts = document.getElementById("epasts");
+    const parole = document.getElementById("parole");
+    const btn = document.getElementById("registretiesBtn");
 
-    // stop if not on register page
-    if(!email || !password || !btn) return;
+    // ja nav ievadijis inputus un nav nospiesta poga tad apstajas
+    if(!epasts || !parole || !btn) return;
 
     // requirement elements
     const len = document.getElementById("len");
@@ -229,13 +229,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const num = document.getElementById("num");
     const sym = document.getElementById("sym");
 
-    const bubble = document.getElementById("passwordBubble");
+    const bubble = document.getElementById("paroleBubble");
 
-    password.addEventListener("focus", () => {
+    parole.addEventListener("focus", () => {
         bubble.style.display = "block";
     });
 
-    password.addEventListener("blur", () => {
+    parole.addEventListener("blur", () => {
         setTimeout(() => {
             bubble.style.display = "none";
         }, 200);
@@ -243,24 +243,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function validate() {
 
-        const pass = password.value;
+        const pass = parole.value;
 
         const hasLength = pass.length >= 8;
         const hasUpper = /[A-Z]/.test(pass);
         const hasNumber = /\d/.test(pass);
         const hasSymbol = /[\W_]/.test(pass);
-        const validEmail = email.value.includes("@");
+        const validepasts = epasts.value.includes("@");
 
         len.className = hasLength ? "valid" : "invalid";
         upper.className = hasUpper ? "valid" : "invalid";
         num.className = hasNumber ? "valid" : "invalid";
         sym.className = hasSymbol ? "valid" : "invalid";
 
-        btn.disabled = !(hasLength && hasUpper && hasNumber && hasSymbol && validEmail);
+        btn.disabled = !(hasLength && hasUpper && hasNumber && hasSymbol && validepasts);
     }
 
-    email.addEventListener("input", validate);
-    password.addEventListener("input", validate);
+    epasts.addEventListener("input", validate);
+    parole.addEventListener("input", validate);
 
 });
 
@@ -288,33 +288,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!profileOverlay) return;
 
-    const nameInput = profileOverlay.querySelector("input[name='name']");
-    const surnameInput = profileOverlay.querySelector("input[name='surname']");
+    const nameInput = profileOverlay.querySelector("input[name='vards']");
+    const uzvardsInput = profileOverlay.querySelector("input[name='uzvards']");
     const saveBtn = profileOverlay.querySelector("button[name='save_profile']");
 
-    if (!nameInput || !surnameInput || !saveBtn) return;
+    if (!nameInput || !uzvardsInput || !saveBtn) return;
 
     function validateProfile() {
         const valid =
             nameInput.value.trim() !== "" &&
-            surnameInput.value.trim() !== "";
+            uzvardsInput.value.trim() !== "";
 
         saveBtn.disabled = !valid;
     }
 
     nameInput.addEventListener("input", validateProfile);
-    surnameInput.addEventListener("input", validateProfile);
+    uzvardsInput.addEventListener("input", validateProfile);
 
     // run once on load (important)
     validateProfile();
 });
 
-function openCreateUserPopup(){
-    document.getElementById("createUserOverlay").style.display = "flex";
+function openCreatelietotajsPopup(){
+    document.getElementById("createlietotajsOverlay").style.display = "flex";
 }
 
-function closeCreateUserPopup(){
-    document.getElementById("createUserOverlay").style.display = "none";
+function closeCreatelietotajsPopup(){
+    document.getElementById("createlietotajsOverlay").style.display = "none";
 }
 
 function toggleRow(row, inputName){

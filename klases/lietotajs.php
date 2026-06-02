@@ -4,33 +4,33 @@ class User {
     private $conn;
     public function __construct($db){ $this->conn=$db->conn; }
 
-    public function register($email,$pass,$expiresAt=null){
+    public function register($epasts,$pass,$expiresAt=null){
 
-    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-        return "Invalid email";
+    if(!filter_var($epasts, FILTER_VALIDATE_EMAIL)){
+        return "Invalid epasts";
     }
 
     if(!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W]).{8,}$/', $pass)){
-        return "Password must be 8+ chars, include uppercase, number, symbol";
+        return "parole must be 8+ chars, include uppercase, number, symbol";
     }
 
-    // check duplicate email
-    $check = $this->conn->prepare("SELECT id FROM users WHERE email=?");
-    $check->bind_param("s", $email);
+    // check duplicate epasts
+    $check = $this->conn->prepare("SELECT id FROM lietotaji WHERE epasts=?");
+    $check->bind_param("s", $epasts);
     $check->execute();
 
     if($check->get_result()->num_rows > 0){
-        return "Email already exists";
+        return "epasts already exists";
     }
 
     $pass = password_hash($pass, PASSWORD_BCRYPT);
 
     $stmt = $this->conn->prepare("
-        INSERT INTO users(email,password,role, expires_at, is_active)
+        INSERT INTO lietotaji(epasts,parole,loma, beigu_term, aktivs)
         VALUES(?,?,'temp', ?, 1)
     ");
 
-    $stmt->bind_param("sss", $email, $pass, $expiresAt);
+    $stmt->bind_param("sss", $epasts, $pass, $expiresAt);
 
     return $stmt->execute() ? true : "Registration failed";
 }
@@ -38,7 +38,7 @@ class User {
 
 
     public function login($u,$p){
-        $stmt = $this->conn->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
+        $stmt = $this->conn->prepare("SELECT * FROM lietotaji WHERE epasts = ? LIMIT 1");
 
         $stmt->bind_param("s", $u);
         $stmt->execute();
@@ -50,23 +50,23 @@ class User {
 
         $row = $res->fetch_assoc();
 
-        // check password
-        if (!password_verify($p, $row['password'])) {
+        // check parole
+        if (!password_verify($p, $row['parole'])) {
             return false;
         }
 
          // checks if account is inactive
-        if((int)$row['is_active'] === 0){
+        if((int)$row['aktivs'] === 0){
         return "INACTIVE";
         }
 
         // 3. check expiry
-        if(!empty($row['expires_at']) && strtotime($row['expires_at']) < time()){
+        if(!empty($row['beigu_term']) && strtotime($row['beigu_term']) < time()){
 
         // auto-disable expired account
         $up = $this->conn->prepare("
-            UPDATE users 
-            SET is_active = 0 
+            UPDATE lietotaji 
+            SET aktivs = 0 
             WHERE id = ?
         ");
         $up->bind_param("i", $row['id']);
@@ -77,8 +77,8 @@ class User {
 
         // login success
         $_SESSION['user'] = $u;
-        $_SESSION['user_id'] = $row['id'];
-        $_SESSION['role'] = $row['role'];
+        $_SESSION['lietotajs_id'] = $row['id'];
+        $_SESSION['loma'] = $row['loma'];
 
         return true;
     }

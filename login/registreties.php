@@ -1,19 +1,19 @@
 <?php
 session_start();
 
-require_once '../mysql/database.php';
-require_once '../classes/user.php';
+require_once '../mysql/datubaze.php';
+require_once '../klases/lietotajs.php';
 
-$db = new Database();
-$user = new User($db);
+$db = new datubaze();
+$lietotajs = new lietotajs($db);
 
 $msg = "";
 
-if(isset($_POST['register'])){
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+if(isset($_POST['registreties'])){
+    $epasts = $_POST['epasts'];
+    $parole = $_POST['parole'];
 
-    $result = $user->register($email,$password);
+    $result = $lietotajs->registreties($epasts,$parole);
 
     if($result === true){
         header("Location: ../index.php");
@@ -30,20 +30,20 @@ if(isset($_POST['register'])){
     <link rel="stylesheet" href="../style.css">
     <script src="../script.js"></script>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>Registreties</title>
 </head>
 <body>
 
 <form method="POST">
-    <h4>Register</h4>
+    <h4>Registreties</h4>
 
-    <input type="email" id="email" name="email" placeholder="Email" required>
+    <input type="email" id="epasts" name="epasts" placeholder="epasts" required>
 
-    <input type="password" id="password" name="password" placeholder="Password" required>
+    <input type="password" id="parole" name="parole" placeholder="parole" required>
 
-    <div class="password-wrapper">
+    <div class="parole-wrapper">
 
-    <div id="passwordBubble" class="password-bubble">
+    <div id="paroleBubble" class="parole-bubble">
         <p id="len" class="invalid">• At least 8 characters</p>
         <p id="upper" class="invalid">• One uppercase letter</p>
         <p id="num" class="invalid">• One number</p>
@@ -52,7 +52,7 @@ if(isset($_POST['register'])){
 
     </div>
 
-    <button id="registerBtn" name="register" disabled>Create account</button>
+    <button id="registretiesBtn" name="registreties" disabled>Create account</button>
     <a href="../index.php">back</a>
 
     <p><?php echo $msg; ?></p>
