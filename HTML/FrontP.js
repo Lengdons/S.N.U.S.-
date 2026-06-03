@@ -138,13 +138,12 @@ function loadRooms(date){
 }
 
 //pievienots kalendars, uzspiezot uz pogu atversies mini kalendars, bet pagaidam nekadu funkciju isti nedod iznemot vienkarsi atver kalendarus
-const picker = flatpickr("#calendar", {
-    dateFormat: "d.m.Y"
+const fp = flatpickr("#calendar", {
+    positionElement: document.getElementById("btn-kalendars"), 
+    monthSelectorType: "static"
 });
 document.getElementById("btn-kalendars").addEventListener("click", () => {
-
-    picker.open();
-
+    fp.open();
 });
 
 //talak uz leju iet viss login lapai
