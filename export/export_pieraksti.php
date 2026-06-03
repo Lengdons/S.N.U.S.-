@@ -20,7 +20,7 @@ $result = $db->conn->query("
     SELECT 
         raksti.id,
         atslegas.nosaukums AS atslega,
-        CONCAT(lietotaji.vards, ' ', lietotaji.uzvards) AS lietotajs,
+        CONCAT(lietotaji.nosaukums, ' ', lietotaji.uzvards) AS lietotajs,
         raksti.start_laiks,
         raksti.beigu_laiks
     FROM raksti
