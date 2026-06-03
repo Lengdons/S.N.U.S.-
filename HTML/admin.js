@@ -229,6 +229,7 @@ function loadPieraksti() {
 
             html += `
             <tr>
+                <td>${row.izveleties}</td>
                 <td>${row.kabinets}</td>
                 <td>${row.lietotajs}</td>
                 <td>${row.start_laiks}</td>
