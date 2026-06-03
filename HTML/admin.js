@@ -146,3 +146,129 @@ document.getElementById("btn-export-vesture").addEventListener("click", () => {
     document.body.removeChild(link);
 
 });
+
+document.getElementById("btn-export-pieraksti")
+.addEventListener("click", () => {
+
+    window.location.href =
+        "../export/export_pieraksti.php";
+
+});
+
+
+document.getElementById("btn-dzest-izvele")
+.addEventListener("click", () => {
+
+    const ids = [];
+
+    document
+        .querySelectorAll(".row-checkbox:checked")
+        .forEach(cb => {
+
+            ids.push(cb.dataset.id);
+
+        });
+
+    if(ids.length === 0){
+        alert("Nav izvēlēts neviens ieraksts");
+        return;
+    }
+
+    fetch("../API/dzest_izveletos_pierakstus.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            ids: ids
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+
+        if(data.status === "success"){
+            location.reload();
+        }
+
+    });
+
+});
+
+document.getElementById("btn-dzest-visus")
+.addEventListener("click", () => {
+
+    if(!confirm("Dzēst visus?")){
+        return;
+    }
+
+    fetch("../API/dzest_visus_pierakstus.php", {
+        method: "POST"
+    })
+    .then(r => r.json())
+    .then(data => {
+
+        if(data.status === "success"){
+            location.reload();
+        }
+
+    });
+
+});
+
+function loadPieraksti() {
+    
+
+    fetch("../API/pieraksti.php")
+    .then(response => response.json())
+    .then(data => { 
+
+        console.log("PIERAKSTI:", data);
+
+        let html = "";
+
+        data.forEach(row => {
+
+            html += `
+            <tr>
+                <td>${row.kabinets}</td>
+                <td>${row.lietotajs}</td>
+                <td>${row.start_laiks}</td>
+                <td>${row.beigu_laiks}</td>
+            </tr>
+            `;
+        });
+
+        document.getElementById("pieraksti-dati").innerHTML = html;
+    })
+    .catch(error => console.error(error));
+}
+
+function loadVesture() {
+
+    fetch("../API/vesture.php")
+    .then(response => response.json())
+    .then(data => {
+
+        let html = "";
+
+        data.forEach(row => {
+
+            html += `
+            <tr>
+                <td>${row.datums}</td>
+                <td>${row.lietotajs}</td>
+                <td>${row.darbiba}</td>
+                <td>${row.kabinets}</td>
+            </tr>
+            `;
+
+        });
+
+        document.getElementById("vesture-dati").innerHTML = html;
+
+    })
+    .catch(error => console.error(error));
+}
+
+loadVesture();
+loadPieraksti();
