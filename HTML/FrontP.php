@@ -86,7 +86,9 @@ if(isset($_POST['save_profile'])){
                 <div class = "diena"> Pirmdiena </div>
                 <div class = "BnF next" > &#129034 </div>
             </div>
+            <?php if($_SESSION['loma'] === 'admin'): ?>
             <button id="btn-admin" class="btn-admin">Administrācija</button>
+            <?php endif; ?>
         </div>
                 
 
@@ -165,7 +167,7 @@ const btnAdmin = document.getElementById("btn-admin");
 
 if(btnAdmin){
     btnAdmin.addEventListener("click", () => {
-        window.location.href = "Admin.html";
+        window.location.href = "Admin.php";
     });
 }
 </script>

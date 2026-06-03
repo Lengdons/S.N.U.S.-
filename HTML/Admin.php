@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+require_once '../mysql/datubaze.php';
+require_once '../klases/zurnals.php';
+
+$db = new datubaze();
+$zurnals = new zurnals($db);
+
+if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
+    header("Location: FrontP.php");
+    exit;
+}
+?>
 
 <!DOCTYPE html>
 <html lang="lv">
