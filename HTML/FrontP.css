@@ -7,6 +7,12 @@
 body, html{
     overflow-x: hidden;
 }
+.container{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #ffffff;
+}
 /* LOGOTIPS --------------------------------------------------------------------------------------------*/
 
 .logo img{
@@ -34,7 +40,7 @@ body {
 /* NAVIGĀCIJAS bar's --------------------------------------------------------------------------------------*/
 
 .info-bar {
-    background-color: #282A35; 
+    background-color: #1a2238; 
     color: white;
     width: 100vw;
     margin-left: calc(-50vw + 50%);
@@ -46,13 +52,14 @@ body {
 }
 
 .nav-nosaukums p {
-    margin-top: 20px;
+    margin-top: 10px;
     margin-left: calc(2vw);
     margin-right:calc(26vw);
     margin-bottom: 10px;
-    padding: 10px;
+    padding: 0;
     letter-spacing: 5px;
     font-size: calc(0.01vw + 0.01vh + 1.5vmin);
+   
 }
 
 .nav-menu {
@@ -91,30 +98,42 @@ body {
     background-color: #059862;
 }
 /* ------------------------------SEARCH BAR's-------------------------------------------------------------------------- */
-/* 
-.search {
-    margin-left: calc(8vw);
+
+
+.search-bar{
+
+    background-color: #1a2238;
+    width:100vw;
+    margin-inline: calc(-50vw + 50%);
+    color: #ffffff;
+    display: flex;
+    height: 35px;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 40px;    
+         border-top:solid #04AA6D;
+
+
+}
+.search{
+      margin-left: calc(8vw);
     margin-right: 20px;
 
-    width: 30vw;
-    max-width: 250px;
-    min-width: 100px;
+    width: 230px;
+    height: 25px;
 
-    padding: 0 20px;
+    display: flex;
+    align-items: center;
 
-    height: 28px;
-
-    background-color: #ffffff; 
-    color: #000000;
-
-    border: none;
+    background-color: white;
     border-radius: 25px;
 
+    padding: 0 15px;
+    box-sizing: border-box;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: medium;
-
-    outline: none;
-} */
+    
+}
 .search-bar {
     background-color: #282A35;
     width: 100vw;
@@ -127,48 +146,29 @@ body {
 
     border-top: solid #04AA6D;
 }
-/* .search:hover {
-    background-color: rgb(214, 214, 214);
-} */
 
 .search:focus {
     background-color: #ffffff;
+}
+.search:hover{
+    background-color: rgb(214, 214, 214);
 }
 
 .search::placeholder {
     color: #666;
 }
-#searchInput:hover{
-    background-color: rgb(214, 214, 214);
-}
+
 #searchInput {
     all: unset;
-
-    background: white;
+    width: 100%;
     color: black;
-
-    margin-left: calc(8vw);
-    margin-right: 20px;
-
-    width: 30vw;
-    max-width: 250px;
-    min-width: 100px;
-
-    padding: 0 20px;
-
-    height: 28px;
-
-    padding: 0 15px;
-
-    border-radius: 999px;
-
-    box-sizing: border-box;
-
+}
+#searchInput:focus {
+    outline: none;
+}
+.search:focus-within {
     border: none;
-    border-radius: 25px;
-
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: medium;
+    outline: none;
 }
 .diena-bar{
     padding: 10px;
@@ -185,7 +185,6 @@ body {
     font-weight: bold;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: #ffffff;
     }
 
         .BnF{
@@ -204,6 +203,29 @@ body {
 
 /* BODYYYYYY ----------------------------------------------------------------------------------------------*/
 
+/* --- 3.TABs -----ZEM search bar Tab'a------------ --- */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;       
+    padding: 10px;   
+    border-bottom: 2px solid #ccc;
+}
+
+.header-box {
+    flex: 1;         
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+}
+.header-status{
+    width: 100px;    
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+}
+/* --- ------------------------------------------------------------------------------------------------------------------ */
 .datu-rinda {
     padding: 10px;
     display: flex;
@@ -250,4 +272,253 @@ body {
 
 .red {
     background-color: #d64652;
+    border-width: 0cap;
+    border-radius: 25px;
 }
+
+/* ----Pārklējums---FILTRS------------------------------------------------------------------------------------------------------ */
+.modal-parklajums {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4); 
+    backdrop-filter: blur(4px); 
+    
+    display:none;      /*<-------   PARĀDĪT / PASLĒPT (flex / none)------------------------------------------------------------------------------- */
+    justify-content: center;
+    align-items: center;
+    
+    z-index: 1000; 
+}
+
+.filtrs-modal-content {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    height: 30%;
+    max-height: 400px;
+    min-height: 300px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    color: #222;
+}
+.filtrs-close{
+    position: fixed;
+    margin-left: 190px;
+    margin-top: -15px;
+}
+.filtrs-modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+.filtra-kaste{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 40px 100px;
+    border-radius: 25px;
+    background-color: #e8e8e8;
+
+}
+.pieejamiba{
+     border-bottom:solid #030b08;
+     border-width: 1px;
+width: 370px;
+display: flex;
+align-self: center;
+margin-top: -20px;
+padding-bottom: 5px;
+
+    
+}
+.pieejamiba-row{
+    width:max-content;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 70px;
+    padding: 20px;
+    height: 25px;
+    border-radius: 25px; 
+   
+}
+.filtrs-pieejams{
+   background-color:#04AA6D;
+    color: #ffffff;
+    width: 100px;
+    height: 35px;
+     text-transform: uppercase;
+     border-radius: 25px;
+     border:0;
+     letter-spacing: 1px;
+}
+.filtrs-pieejams:hover{
+    background-color: #059862;
+    cursor: pointer;
+}
+.filtrs-aiznemts{
+    background-color:#d43636;
+    color: #ffffff;
+    width: 100px;
+    height: 35px;
+     text-transform: uppercase;
+     border-radius: 25px;
+     border:0;
+     letter-spacing: 1px;
+}
+.filtrs-aiznemts:hover{
+    cursor: pointer;
+    background-color: #ac343e;
+}
+.filtrs-selected{
+    outline: 3px solid #00c7fe;
+    outline-offset: 1px;
+}
+.kabinets{
+     border-bottom:solid #030b08;
+     border-width: 1px;
+width: 370px;
+display: flex;
+align-self: center;
+padding-bottom: 5px;
+}
+.btn-kab-search{
+    background-color: #fff;
+    width:300px;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    height: 25px;
+
+    border-radius: 25px; 
+    border-color: #666;
+    border-width:1px;
+    border-color: #334e55;
+}
+.btn-kab-search:hover{
+    cursor: pointer;
+    background-color: #dadada;
+}
+.filtrs-apply{
+    background-color:#b9b9b9;
+    color: #ffffff;
+    margin-left: -250px;
+    margin-top: 10px;
+    width: 150px;
+    height: 35px;
+     border-radius: 25px;
+     border:0;
+     letter-spacing: 1px;
+}
+.filtrs-apply:hover{
+    cursor: pointer;
+    background-color: #9d9d9d;
+}
+.filtrs-close{
+    background-color: #ffffff;
+    color: #000000;
+    width: 25px;
+    height: 25px;
+     border-radius: 25px;
+     border:0;
+     font-size: large;
+     font-weight: bold;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+
+}
+.filtrs-close:hover{
+cursor: pointer;
+background-color: #9d9d9d;
+}
+
+/* --- Pierkastities MODAL'S------------------------------------------------------ --- */
+.login-parklajums {
+   
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4); 
+    backdrop-filter: blur(4px); 
+    
+    
+    z-index: 2000; 
+}
+
+.login-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+    height: auto; 
+    padding-bottom: 30px;
+}
+
+.login-kaste {
+    width: 100%;
+    align-items: center;
+    background-color: transparent;
+    padding: 20px 0;
+}
+
+.login-input {
+    width: 80%;
+    height: 40px;
+    margin-bottom: 15px;
+    padding: 0 15px;
+    border: 2px solid #ccc;
+    border-radius: 25px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.login-input:focus {
+    border-color: #04AA6D;
+}
+
+.btn-login-submit {
+    margin-top: 10px;
+    margin-left: 0;
+    width: 80%;
+}
+
+.error-text {
+    color: #d64652;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    height: 20px; 
+}
+
+.registreties-link-kaste {
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+.registreties-link {
+    color: #04AA6D;
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.registreties-link:hover {
+    text-decoration: underline;
+    color: #059862;
+}
+
+/* ------------------------------Jāuzraksta JS kas kontrolē Filtra modal'u-------------------------------------------------------------------------- */
+/* jjavascrpita */
+.modal-parklajums.show-modal {
+    display: flex; 
+}
+/* -------------------------------------------------------------------------------------------------------- */
