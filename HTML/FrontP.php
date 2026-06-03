@@ -1,7 +1,7 @@
 <?php
 session_start();
-require '../mysql/database.php';
-require '../classes/Log.php';
+require '../mysql/datubaze.php';
+require '../klases/zurnals.php';
 
 if(isset($_POST['save_profile'])){
     $vards = trim($_POST['vards']);

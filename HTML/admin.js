@@ -134,3 +134,15 @@ document.getElementById("btn-pievienot-liet").addEventListener("click",()=>{
         alert(data.message);
     });
 });
+
+document.getElementById("btn-export-vesture").addEventListener("click", () => {
+
+    const link = document.createElement("a");
+    link.href = "../API/export_zurnali.php";
+    link.download = "zurnali.csv";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+});
