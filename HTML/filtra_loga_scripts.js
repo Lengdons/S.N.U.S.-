@@ -41,22 +41,35 @@ for (let i = 0; i < A_kabinetuSkaits; i++) {
 }*/
 
 // selecto filtra opcijas: Pieejams / Aiznemts ---------------------------------------------------
-copy.innerHTML = PieejamsRindas + AiznemtsRindas;
+// document.getElementById("datu-kaste").innerHTML = PieejamsRindas + AiznemtsRindas;
 
-const btnPieejams = document.getElementById('btn-filtrs-pieejams');
-const btnAiznemts = document.getElementById('btn-filtrs-aiznemts');
+document.getElementById("btn-filtrs-apply")
+.addEventListener("click", () => {
 
-btnPieejams.addEventListener('click', () => {
+    const showAvailable =
+        btnPieejams.classList.contains("filtrs-selected");
 
-    btnPieejams.classList.add('filtrs-selected');
+    const showOccupied =
+        btnAiznemts.classList.contains("filtrs-selected");
 
-    btnAiznemts.classList.remove('filtrs-selected');
-});
-btnAiznemts.addEventListener('click', () => {
+    document.querySelectorAll(".datu-rinda")
+    .forEach(rinda => {
 
-    btnAiznemts.classList.add('filtrs-selected');
+        const status =
+            rinda.querySelector(".status-txt").textContent;
 
-    btnPieejams.classList.remove('filtrs-selected');
+        if(showAvailable && status === "Pieejams"){
+            rinda.style.display = "";
+        }
+        else if(showOccupied && status === "Aizņemts"){
+            rinda.style.display = "";
+        }
+        else{
+            rinda.style.display = "none";
+        }
+
+    });
+
 });
 // -----------------------------------------------------------------------------------------------
 

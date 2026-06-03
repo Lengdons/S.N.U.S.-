@@ -36,11 +36,7 @@ $isLoggedIn = isset($_SESSION['user']) ? 'true' : 'false';
         </header>
         
         <div class="search-bar">
-            <div class = "search" ><input
-                                    type="text"
-                                    id="searchInput"
-                                    
-                                    placeholder="Meklēt">  </div>
+            <div class = "search" ><input type="text" id="searchInput" placeholder="Meklēt">  </div>
                 
             <div class="diena-bar"> 
                 <div class = "BnF prev" > &#129032 </div>
@@ -113,8 +109,8 @@ $isLoggedIn = isset($_SESSION['user']) ? 'true' : 'false';
         </div>
     </div>
 
-<script src="html_lengdons.js"></script>
-<script src="html.js"></script>
+<script src="filtra_loga_scripts.js"></script>
+<script src="FrontP.js"></script>
 
 </body>
 </html>
