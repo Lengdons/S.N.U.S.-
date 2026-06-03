@@ -2,21 +2,21 @@
 session_start();
 header('Content-Type: application/json');
 
-if(!isset($_SESSION['user']) || $_SESSION['role'] !== 'admin'){
+if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
     echo json_encode(["status" => "error", "message" => "Unauthorized or No Permission"]);
     exit;
 }
 
-require '../mysql/database.php';
-require '../classes/user.php';
-require '../classes/log.php';
-$db = new database();
-$user = new user($db);
-$log = new log($db);
+require '../mysql/datubaze.php';
+require '../klases/lietotajs.php';
+require '../klases/zurnals.php';
+$db = new datubaze();
+$lietotajs = new lietotajs($db);
+$zurnals = new zurnals($db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
+    $epasts = $_POST['epasts'] ?? '';
+    $parole = $_POST['parole'] ?? '';
     $durationDays = (int)($_POST['duration_days'] ?? 7);
 
     // Limitu uzstādījums
@@ -25,10 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $expiresAt = date('Y-m-d H:i:s', strtotime("+$durationDays days"));
     
-    $result = $user->register($email, $password, $expiresAt);
+    $result = $lietotajs->registreties($epasts, $parole, $beigu_term);
 
     if ($result === true) {
-        $log->add($_SESSION['name']." created user: " . $email);
+        $zurnals->add($_SESSION['vards']." created user: " . $epasts);
         echo json_encode(["status" => "success", "message" => "User created successfully"]);
     } else {
         echo json_encode(["status" => "error", "message" => $result]);

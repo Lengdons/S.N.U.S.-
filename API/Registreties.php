@@ -2,27 +2,27 @@
 session_start();
 header('Content-Type: application/json');
 
-require '../mysql/database.php';
-require '../classes/user.php';
+require '../mysql/datubaze.php';
+require '../klases/lietotajs.php';
 
-$db = new database();
-$user = new User($db);
+$db = new datubaze();
+$lietotajs = new lietotajs($db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
+    $epasts = $_POST['epasts'] ?? '';
+    $parole = $_POST['parole'] ?? '';
 
     // piemēram 30 dienu konts
-    $expiresAt = date(
+    $beigu_term = date(
         'Y-m-d H:i:s',
         strtotime('+30 days')
     );
 
-    $result = $user->register(
-        $email,
-        $password,
-        $expiresAt
+    $result = $lietotajs->registreties(
+        $epasts,
+        $parole,
+        $beigu_term
     );
 
     if ($result === true) {

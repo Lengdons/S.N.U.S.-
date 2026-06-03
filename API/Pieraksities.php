@@ -2,17 +2,17 @@
 session_start();
 header('Content-Type: application/json');
 
-require '../mysql/database.php';
-require '../classes/user.php';
+require '../mysql/datubaze.php';
+require '../klases/lietotajs.php';
 
-$db = new database();
-$user = new user($db);
+$db = new datubaze();
+$lietotajs = new lietotajs($db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
+    $epasts = $_POST['epasts'] ?? '';
+    $parole = $_POST['parole'] ?? '';
 
-    $result = $user->login($username, $password);
+    $result = $lietotajs->login($epasts, $parole);
 
     if ($result === true) {
         echo json_encode(["status" => "success", "message" => "Login successful"]);
