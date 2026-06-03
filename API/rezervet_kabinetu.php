@@ -3,21 +3,21 @@ session_start();
 header('Content-Type: application/json'); 
 
 // 1. Getekeeper's
-if(!isset($_SESSION['user'])){
-    echo json_encode(["status" => "error", "message" => "Unauthorized"]);
+if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
+    echo json_encode(["status" => "error", "message" => "Unauthorized or No Permission"]);
     exit;
 }
 
 // 2. Datubāzes savienojums
-require '../mysql/database.php';
-$db = new database();
-require '../classes/room.php';
-require '../classes/booking.php';
-require '../classes/log.php';
+require '../mysql/datubaze.php';
+$db = new datubaze();
+require '../klases/atslega.php';
+require '../klases/booking.php';
+require '../klases/zurnals.php';
 
-$room = new room($db);
+$atslega = new atslega($db);
 $booking = new booking($db);
-$log = new log($db);
+$zurnals = new zurnals($db);
 
 // 3. G uz JSON
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -26,20 +26,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $end_date   = $_POST['end_date'] ?? null;             //
     $start_time = $_POST['start_time'] ?? null;           //
     $end_time   = $_POST['end_time'] ?? null;             //
-    $room_id    = $_POST['room_id'] ?? null;              //
+    $atslega_id    = $_POST['atslega_id'] ?? null;              //
 
-    if (!$start_date || !$end_date || !$start_time || !$end_time || !$room_id) {
+    if (!$start_date || !$end_date || !$start_time || !$end_time || !$atslega_id) {
         echo json_encode(["status" => "error", "message" => "Invalid time selection"]);
         exit;
     }
 
-    $bookUserId = $_SESSION['user_id'];
+    $booklietotajsId = $_SESSION['lietotajs_id'];
     
     // Admin check
     if ($_SESSION['role'] === 'admin') {
-        $bookUserId = $_POST['book_user_id'] ?? null;
-        if (!$bookUserId) {
-            echo json_encode(["status" => "error", "message" => "Select a user"]);
+        $booklietotajsId = $_POST['book_lietotajs_id'] ?? null;
+        if (!$booklietotajsId) {
+            echo json_encode(["status" => "error", "message" => "Select a lietotajs"]);
             exit;
         }
     }
@@ -55,17 +55,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Pats bookings
-    if ($booking->isAvailable($room_id, $start, $end)) {
-        $booking->book($bookUserId, $room_id, $start, $end);
+    // Pats raksti
+    if ($booking->isAvailable($atslega_id, $start, $end)) {
+        $booking->book($booklietotajsId, $atslega_id, $start, $end);
         
         // Saglabāšana
-        $actor = $_SESSION['name'] . " " . $_SESSION['surname'];
-        $log->add($actor . " booked Room ID " . $room_id . " from " . $start . " - " . $end);
+        $actor = $_SESSION['name'] . " " . $_SESSION['uzvards'];
+        $zurnals->add($actor . " booked atslega ID " . $atslega_id . " from " . $start . " - " . $end);
 
-        echo json_encode(["status" => "success", "message" => "Room booked successfully"]);
+        echo json_encode(["status" => "success", "message" => "atslega booked successfully"]);
     } else {
-        echo json_encode(["status" => "error", "message" => "Room already booked in that range"]);
+        echo json_encode(["status" => "error", "message" => "atslega already booked in that range"]);
     }
 }
 ?>

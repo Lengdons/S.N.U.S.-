@@ -2,34 +2,34 @@
 session_start();
 header('Content-Type: application/json');
 
-if(!isset($_SESSION['user'])){
-    echo json_encode(["status" => "error", "message" => "Unauthorized"]);
+if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
+    echo json_encode(["status" => "error", "message" => "Unauthorized or No Permission"]);
     exit;
 }
 
-require '../mysql/database.php';
-require '../classes/log.php';
-$db = new database();
-$log = new log($db);
+require '../mysql/datubaze.php';
+require '../klases/zurnals.php';
+$db = new datubaze();
+$zurnals = new zurnals($db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = trim($_POST['name'] ?? '');
-    $surname = trim($_POST['surname'] ?? '');
+    $vards = trim($_POST['vards'] ?? '');
+    $uzvards = trim($_POST['uzvards'] ?? '');
 
-    if($name && $surname){
-        $stmt = $db->conn->prepare("UPDATE users SET name=?, surname=? WHERE id=?");
-        $stmt->bind_param("ssi", $name, $surname, $_SESSION['user_id']);
+    if($vards && $uzvards){
+        $stmt = $db->conn->prepare("UPDATE lietotaji SET vards=?, uzvards=? WHERE id=?");
+        $stmt->bind_param("ssi", $vards, $uzvards, $_SESSION['lietotajs_id']);
         
         if($stmt->execute()){
             
             // UI refresh's
             $_SESSION['name'] = $name;
-            $_SESSION['surname'] = $surname;
+            $_SESSION['uzvards'] = $uzvards;
             
-            $log->add($name." ".$surname." has joined the system");
+            $zurnals->add($name." ".$uzvards." has joined the system");
             echo json_encode(["status" => "success", "message" => "Profile updated successfully"]);
         } else {
-            echo json_encode(["status" => "error", "message" => "Database error"]);
+            echo json_encode(["status" => "error", "message" => "datubaze error"]);
         }
     } else {
         echo json_encode(["status" => "error", "message" => "Please fill in all fields"]);

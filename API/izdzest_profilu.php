@@ -2,22 +2,22 @@
 session_start();
 header('Content-Type: application/json');
 
-if(!isset($_SESSION['user'])){
-    echo json_encode(["status" => "error", "message" => "Unauthorized"]);
+if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
+    echo json_encode(["status" => "error", "message" => "Unauthorized or No Permission"]);
     exit;
 }
 
-require '../mysql/database.php';
-require '../classes/log.php';
-$db = new database();
-$log = new log($db);
+require '../mysql/datubaze.php';
+require '../klases/zurnals.php';
+$db = new datubaze();
+$zurnals = new zurnals($db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $stmt = $db->conn->prepare("UPDATE users SET is_active = 0 WHERE id = ?");
-    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt = $db->conn->prepare("UPDATE lietotaji SET aktivs = 0 WHERE id = ?");
+    $stmt->bind_param("i", $_SESSION['lietotajs_id']);
     
     if($stmt->execute()){
-        $log->add($_SESSION['name']." ".$_SESSION['surname']." is no longer amongus");
+        $zurnals->add($_SESSION['vards']." ".$_SESSION['uzvards']." is no longer amongus");
         
         // Izbeidz sesiju - lietotāju uzreiz izmet
         session_unset();
