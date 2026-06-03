@@ -145,3 +145,69 @@ document.getElementById("btn-kalendars").addEventListener("click", () => {
     calendar.showPicker();
 
 });
+
+//talak uz leju iet viss login lapai
+const loginBtn =
+    document.getElementById("btn-login");
+
+const loginModal =
+    document.getElementById("login-modal");
+
+loginBtn.addEventListener("click", () => {
+
+    loginModal.classList.add("show-modal");
+
+});
+
+//uzspiezot arpus lauka pazudis tas
+if(loginBtn && loginModal){
+
+    loginBtn.addEventListener("click", () => {
+
+        loginModal.classList.add("show-modal");
+
+    });
+
+    loginModal.addEventListener("click", (event) => {
+
+        if(event.target === loginModal){
+
+            loginModal.classList.remove("show-modal");
+
+        }
+
+    });
+
+}
+//uz leju iet lai varetu actually log in veikt
+document.getElementById("btn-submit-login")
+.addEventListener("click", () => {
+
+    const email =
+        document.getElementById("login-epasts").value;
+
+    const password =
+        document.getElementById("login-password").value;
+
+    const formData = new FormData();
+
+    formData.append("email", email);
+    formData.append("password", password);
+
+    fetch("../API/Pierakstities.php", {
+
+        method: "POST",
+        body: formData
+
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if(data.status === "success"){
+            location.reload();
+        }
+        else{
+            document.getElementById("login-error-msg").textContent = data.message;
+        }
+    });
+});

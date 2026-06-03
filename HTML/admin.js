@@ -1,3 +1,24 @@
+function deleteRoom(id){
+
+    const formData = new FormData();
+    formData.append("room_id", id);
+
+    fetch("../API/izdzest_kabinetu.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        alert(data.message);
+
+        location.reload();
+
+    });
+
+}
+
+
 fetch("../API/kabineti.php").then(res => res.json()).then(rooms => {
     let html = "";
 

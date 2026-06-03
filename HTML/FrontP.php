@@ -75,8 +75,8 @@ $isLoggedIn = isset($_SESSION['user']) ? 'true' : 'false';
                         <button id = "btn-filtrs-pieejams" class = "filtrs-pieejams"> Pieejams </button>   <!-- Filtra poga "Pieejams"-->
                         <button id = "btn-filtrs-aiznemts" class = "filtrs-aiznemts"> Aizņemts </button>   <!-- Filtra poga "Aizņemts"-->
                      </div>
-                    <div class = kabinets > Kabineta Numurs </div>
-                <button id = "btn-filtrs-kabinets"class = "btn-kab-search"> ...  </button>
+                    <div class = kabinets >Kabineta Numurs </div>
+                <button id = "btn-filtrs-kabinets"class = "btn-kab-search"> <input type="text" id="filtrs-kabinets" class="btn-kab-search" placeholder="Kabineta Numurs"></button>
                 </div>  
                 <button id="btn-filtrs-apply" class="filtrs-apply"> Pielietot filtrus </button>      <!--Pielietot filtrus poga-->
 
@@ -89,11 +89,12 @@ $isLoggedIn = isset($_SESSION['user']) ? 'true' : 'false';
         <div class="filtrs-modal-content login-content">
         
         <h2>Pierakstīties</h2>
-        <p class ="e-pasts">e-pasts</p>
-        <p class="parole">Parole</p>
+        
 
         <div class="filtra-kaste login-kaste">
+            <p class ="e-pasts">e-pasts</p>
             <input type="text" id="login-epasts" class="login-input" placeholder="e-pasts" required>
+            <p class="parole">Parole</p>
             <input type="password" id="login-password" class="login-input" placeholder="Parole" required>
             
             <div id="login-error-msg" class="error-text"></div>
