@@ -35,47 +35,15 @@ function renderDay() {
     document.querySelector(".date").textContent =
         `${sodien.getDate()}.${sodien.getMonth() + 1}.${sodien.getFullYear()}`;
 
+    const selectedDate =
+    datums.getFullYear() + "-" +
+    String(datums.getMonth() + 1).padStart(2, '0') + "-" +
+    String(datums.getDate()).padStart(2, '0');
 
-    fetch("../API/kabineti.php").then(response=>response.json()).then(rooms => { //fetcho API lai rādītos no DB info par kabinetiem (pagaidām tikai room name un id ir)
-        let html="";
-
-        rooms.forEach(room =>{
-            html += `
-            <div class="datu-rinda">
-            <div class="data-box">Kabinets Nr: ${room.name}</div>
-            <div class="data-box">Vietas kabinetā:</div>
-            <div class="data-box">Lietotājs</div>
-            <div class="data-box">Paņēma:</div>
-            <div class="status-ind green">
-                 <span class="status-txt">Pieejams</span>
-            </div>
-            <div class="data-box">Nodeva:</div>
-            </div>
-            `;
-        });
-        document.getElementById("datu-kaste").innerHTML = html;
-    })
-    // for (let i = 0; i < 15; i++) {
-
-    //     html += `
-    //     <div class="datu-rinda">
-    //         <div class="data-box">Kabinets Nr: ${i + 1}</div>
-    //         <div class="data-box">Vietas kabinetā:</div>
-    //         <div class="data-box">Lietotājs</div>
-    //         <div class="data-box">Paņēma:</div>
-    //         <div class="status-ind green">
-    //             <span class="status-txt">Pieejams</span>
-    //         </div>
-    //         <div class="data-box">Nodeva:</div>
-    //     </div>
-    //     `;
-    // }
-
-document.getElementById("datu-kaste").innerHTML = html;
+    loadRooms(selectedDate);
+}
 
 // meklet
-const copy = document.getElementById("datu-kaste");
-copy.innerHTML = html;
 
 const searchInput = document.getElementById("searchInput");
 
@@ -94,8 +62,7 @@ searchInput.addEventListener("input", () => {
     });
 
 });
-    document.getElementById("datu-kaste").innerHTML = html;
-}
+
 
 renderDay();
 // funkcija kas lauj bultinam iet uz prieku atpakalu 
@@ -123,3 +90,25 @@ document.querySelector(".prev").addEventListener("click", () => {
     renderDay();
 });
 // viss ^^^ lauj darīt tā, ka nav javeido atseviski 5 html{php} lapas bet iet ar vienu
+function loadRooms(date){
+    fetch(`../API/kabineti.php?date=${date}`).then(response=> response.json()).then(rooms=>{ //seit ir date klat lai varetu izdarit ta ka ejot uz nakamo dienu radisies tas dienas rezervacijas un kab
+        let html="";
+        
+        rooms.forEach(room=>{
+            const aiznemts = room.user !== null && room.user !== "" && room.user !== undefined; // lai pareizi paraditu vai pieejams vai ne
+            html += `
+            <div class="datu-rinda">
+            <div class="data-box">${room.name}</div>
+            <div class="data-box">Vietas kabinetā:</div>
+            <div class="data-box">${room.user ?? "Nav"}</div> 
+            <div class="data-box">${room.start ?? "-"}</div>
+            <div class="status-ind ${room.occupied ? "red" : "green"}">
+                 <span class="status-txt">${room.occupied ? "Aizņemts" : "Pieejams"}</span>
+            </div>
+            <div class="data-box">${room.end ?? "-"}</div>
+            </div>
+            `;
+        });
+        document.getElementById("datu-kaste").innerHTML = html;
+    })
+}
