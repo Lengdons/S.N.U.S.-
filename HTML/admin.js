@@ -243,6 +243,8 @@ function loadPieraksti() {
     .catch(error => console.error(error));
 }
 
+loadPieraksti();
+
 function loadVesture() {
 
     fetch("../API/vesture.php")
