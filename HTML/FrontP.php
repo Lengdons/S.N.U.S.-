@@ -1,5 +1,6 @@
 <?php
 session_start();
+$isLoggedIn = isset($_SESSION['lietotajs']);
 require '../mysql/datubaze.php';
 require '../klases/zurnals.php';
 
@@ -41,7 +42,7 @@ if(isset($_POST['save_profile'])){
     <title>S.N.U.S - Saņemšanas & Nodošanas Uzskaites Sistēma</title>
     <link rel="stylesheet" href="FrontP.css">
 </head>
-<body data-logged-in="<?php echo $isLoggedIn; ?>">
+<body data-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
     <div class="container">
        
         <header>
