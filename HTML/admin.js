@@ -219,7 +219,7 @@ function loadPieraksti() {
 
     fetch("../API/pieraksti.php")
     .then(response => response.json())
-    .then(data => {
+    .then(data => { 
 
         console.log("PIERAKSTI:", data);
 
@@ -240,6 +240,7 @@ function loadPieraksti() {
         document.getElementById("pieraksti-dati").innerHTML = html;
     })
     .catch(error => console.error(error));
+}
 
 function loadVesture() {
 
