@@ -112,3 +112,12 @@ function loadRooms(date){
         document.getElementById("datu-kaste").innerHTML = html;
     })
 }
+
+//pievienots kalendars, uzspiezot uz pogu atversies mini kalendars, bet pagaidam nekadu funkciju isti nedod iznemot vienkarsi atver kalendaru
+const calendar = document.getElementById("calendar");
+
+document.getElementById("btn-kalendars").addEventListener("click", () => {
+
+    calendar.showPicker();
+
+});

@@ -27,7 +27,7 @@ $isLoggedIn = isset($_SESSION['user']) ? 'true' : 'false';
             </div>
     
             <div class="nav-menu">
-                    <div id= "btn-kalendars" class="nav-item date">Kalendārs</div>
+                    <input type="date" id="calendar" hidden><div id= "btn-kalendars" class="nav-item date"> Kalendārs</div>
                     <div id = "btn-filtrs" class="nav-item">Filtrs</div>
                    <div id = "btn-login" class="nav-item btn-login">Pierakstīties</div> 
             </div>
