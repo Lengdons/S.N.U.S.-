@@ -8,6 +8,7 @@ $isLoggedIn = isset($_SESSION['user']) ? 'true' : 'false';
 <!DOCTYPE html>
 <html lang="lv">
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S.N.U.S - Saņemšanas & Nodošanas Uzskaites Sistēma</title>
@@ -27,7 +28,7 @@ $isLoggedIn = isset($_SESSION['user']) ? 'true' : 'false';
             </div>
     
             <div class="nav-menu">
-                    <input type="date" id="calendar" hidden><div id= "btn-kalendars" class="nav-item date"> Kalendārs</div>
+                    <input type="text" id="calendar" hidden><div id= "btn-kalendars" class="nav-item date"> Kalendārs</div>
                     <div id = "btn-filtrs" class="nav-item">Filtrs</div>
                    <div id = "btn-login" class="nav-item btn-login">Pierakstīties</div> 
             </div>
@@ -110,7 +111,7 @@ $isLoggedIn = isset($_SESSION['user']) ? 'true' : 'false';
 
         </div>
     </div>
-
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="filtra_loga_scripts.js"></script>
 <script src="FrontP.js"></script>
 

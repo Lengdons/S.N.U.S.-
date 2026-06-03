@@ -275,8 +275,11 @@ body {
     border-width: 0cap;
     border-radius: 25px;
 }
-
-
+.flatpickr-calendar {
+    position: fixed !important;
+    top: 100px !important;
+    left: 500px !important;
+}
 /* ----Pārklējums---FILTRS------------------------------------------------------------------------------------------------------ */
 .modal-parklajums {
     position: fixed; 
