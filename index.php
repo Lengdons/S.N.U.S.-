@@ -51,25 +51,24 @@ if (isset($_POST['login'])) {
 <html>
 <head>
     <link rel="stylesheet" href="style.css">
-    <title>Login</title>
+    <title>Pieslēgties</title>
 </head>
 
 <body>
 
 <div class="box">
 
-    <h2>atslega raksts Login</h2>
+    <h2>Pieslēgties</h2>
 
     <div class="msg"><?php echo $msg; ?></div>
 
     <!-- LOGIN -->
     <form method="POST">
-        <h4>Login</h4>
-        <input type="text" name="epasts" placeholder="epasts" required>
-        <input type="password" name="parole" placeholder="parole" required>
-        <button name="login">Login</button>
+        <input type="text" name="epasts" placeholder="Epasts" required>
+        <input type="password" name="parole" placeholder="Parole" required>
+        <button name="login">Pieslēgties</button>
     </form>
-        <a href="login/registreties.php">Don't have an account?<a>
+        <a href="login/registreties.php">Nav izveidots konts?<a>
 
     <hr>
 

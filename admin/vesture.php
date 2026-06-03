@@ -45,10 +45,10 @@ if(isset($_POST['delete_selected']) && !empty($_POST['zurnals_ids'])){
 <link rel="stylesheet" href="../style.css">
 <script src="../script.js"></script>
 
-<h2>System zurnali</h2>
+<h2>Sistēmas žurnāls</h2>
 
 <div>
-    <a href="../sakums/sakumlapa.php" class="nav-btn">Atslegas</a>
+    <a href="../sakums/sakumlapa.php" class="nav-btn">Atslēgas</a>
 </div>
 
 <form method="POST">
@@ -56,25 +56,25 @@ if(isset($_POST['delete_selected']) && !empty($_POST['zurnals_ids'])){
     <div>
 
         <button name="delete_selected" class="danger-btn">
-            Delete selected
+            Dzēst izvēlētos rakstus
         </button>
 
         <button name="clear_zurnali" class="danger-btn"
-            onclick="return confirm('Delete ALL zurnali?');">
-            Clear ALL
+            onclick="return confirm('Dzēst visu žurnālu?');">
+            Dzēst visu
         </button>
     </div>
 
     <a href="../export/export_vesture.php" class="nav-btn">
-    Download zurnali CSV
+    Eksportēt žurnālu kā CSV failu
     </a>
   
 
     <table class="zurnali-table">
         <thead>
             <tr>
-                <th>darbiba</th>
-                <th>Date</th>
+                <th>Darbība</th>
+                <th>Datums</th>
             </tr>
         </thead>
 

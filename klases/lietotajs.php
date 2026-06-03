@@ -1,10 +1,10 @@
 <?php
-class User {
+class lietotajs {
     
     private $conn;
     public function __construct($db){ $this->conn=$db->conn; }
 
-    public function register($epasts,$pass,$expiresAt=null){
+    public function registreties($epasts,$pass,$expiresAt=null){
 
     if(!filter_var($epasts, FILTER_VALIDATE_EMAIL)){
         return "Invalid epasts";
@@ -76,7 +76,7 @@ class User {
         }
 
         // login success
-        $_SESSION['user'] = $u;
+        $_SESSION['lietotajs'] = $u;
         $_SESSION['lietotajs_id'] = $row['id'];
         $_SESSION['loma'] = $row['loma'];
 

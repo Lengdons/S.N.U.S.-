@@ -3,19 +3,19 @@
 session_start();
 
 require '../mysql/datubaze.php';
-require '../klases/raksts.php';
+require '../klases/rezerve.php';
 
 $db = new datubaze();
-$raksts = new raksts($db);
+$rezerve = new rezerve($db);
 
 if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
     header("Location: ../index.php");
     exit;
 }
 
-if(isset($_POST['delete_selected']) && !empty($_POST['raksts_ids'])){
+if(isset($_POST['delete_selected']) && !empty($_POST['rezerve_ids'])){
 
-    $ids = $_POST['raksts_ids'];
+    $ids = $_POST['rezerve_ids'];
 
     $placeholders = implode(',', array_fill(0, count($ids), '?'));
 
@@ -65,7 +65,7 @@ ORDER BY raksti.id DESC
 <body>
 
 <div>
-    <a href="../sakums/sakumlapa.php" class="nav-btn">atslegas</a>
+    <a href="../sakums/sakumlapa.php" class="nav-btn">Atslegas</a>
 </div>
 
 <tr>
@@ -75,26 +75,26 @@ ORDER BY raksti.id DESC
 
     <button name="clear_raksti"
         class="danger-btn"
-        onclick="return confirm('Delete ALL raksti?');">
-    Clear ALL
+        onclick="return confirm('Dzest visus rakstus?');">
+        Dzēst visu
     </button>
 
     <button name="delete_selected" class="danger-btn">
-        Delete Selected
+        Dzēst izvēlētos pierakstus
     </button>
     
     <a href="../export/export_pieraksti.php" class="nav-btn">
-    Download raksti CSV
+        Eksportēt rakstus kā CSV failu
     </a>
 
     <table class="zurnali-table">
 
         <thead>
             <tr>
-                <th>atslega</th>
-                <th>Lietotajs</th>
-                <th>Start</th>
-                <th>End</th>
+                <th>Atslēga</th>
+                <th>Lietotājs</th>
+                <th>Sākuma laiks</th>
+                <th>Beigu laiks</th>
             </tr>
         </thead>
 
@@ -102,14 +102,14 @@ ORDER BY raksti.id DESC
 
         <?php while($row = $result->fetch_assoc()): ?>
 
-        <tr onclick="toggleRow(this, 'raksts_ids[]')">
+        <tr onclick="toggleRow(this, 'rezerve_ids[]')">
 
             <td>
                 <?php echo htmlspecialchars($row['atslega_nosaukums'] ?? '[Deleted atslega]'); ?>
 
                 <input
                     type="hidden"
-                    name="raksts_ids[]"
+                    name="rezerve_ids[]"
                     value="<?php echo $row['id']; ?>"
                     disabled>
             </td>

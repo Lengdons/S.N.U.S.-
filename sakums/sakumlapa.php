@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if(!isset($_SESSION['user'])){
+if(!isset($_SESSION['lietotajs'])){
     header("Location: ../index.php");
     exit;
 }
@@ -10,32 +10,32 @@ require '../mysql/datubaze.php';
 
 $db = new datubaze();
 
-require '../classes/atslega.php';
-require '../classes/raksts.php';
-require '../classes/zurnals.php';
-require '../classes/user.php';
-require '../login/auth_check.php';
+require '../klases/atslega.php';
+require '../klases/rezerve.php';
+require '../klases/zurnals.php';
+require '../klases/lietotajs.php';
+require '../login/auth_parbaude.php';
 
 $atslega = new atslega($db);
-$raksts = new raksts($db);
+$rezerve = new rezerve($db);
 $zurnals = new zurnals($db);
-$user = new user($db);
+$lietotajs = new lietotajs($db);
 
 $msg = "";
 
 date_default_timezone_set('Europe/Riga');
 
 
-// LOAD USER DATA
+// LOAD lietotajs DATA
 $stmt = $db->conn->prepare("SELECT vards,uzvards FROM lietotaji WHERE id=?");
 $stmt->bind_param("i", $_SESSION['lietotajs_id']);
 $stmt->execute();
-$userData = $stmt->get_result()->fetch_assoc();
+$lietotajsData = $stmt->get_result()->fetch_assoc();
 
-$_SESSION['vards'] = $userData['vards'];
-$_SESSION['uzvards'] = $userData['uzvards'];
+$_SESSION['vards'] = $lietotajsData['vards'];
+$_SESSION['uzvards'] = $lietotajsData['uzvards'];
 
-$needsProfile = empty($userData['vards']) || empty($userData['uzvards']);
+$needsProfile = empty($lietotajsData['vards']) || empty($lietotajsData['uzvards']);
 
 // SAVE PROFILE
 if(isset($_POST['save_profile'])){
@@ -49,7 +49,7 @@ if(isset($_POST['save_profile'])){
 
         $zurnals->add($vards." ".$uzvards." has joined the system");
 
-        header("Location: main.php");
+        header("Location: sakumlapa.php");
         exit;
     } else {
         $msg = "Fill all fields";
@@ -71,7 +71,7 @@ if(isset($_POST['add_atslega'])){
         $atslega->add($nosaukums);
 
         $zurnals->add($_SESSION['nosaukums']." ".$_SESSION['uzvards']." added atslega: ". $nosaukums);
-        header("Location: main.php");
+        header("Location: sakumlapa.php");
         exit;
     }
 }
@@ -89,7 +89,7 @@ if(isset($_POST['delete_atslega'])){
     $atslega->delete($_POST['delete_atslega_id']);
 
     $zurnals->add($_SESSION['vards']." ".$_SESSION['uzvards']." removed atslega: ". $atslegaData['nosaukums']);
-    header("Location: main.php");
+    header("Location: sakumlapa.php");
     exit;
 }
 
@@ -111,12 +111,12 @@ if (isset($_POST['book'])) {
             $msg = "Invalid time selection";
         } else {
 
-        $bookUserId = $_SESSION['lietotajs_id'];
+        $booklietotajsId = $_SESSION['lietotajs_id'];
 
         if ($_SESSION['loma'] === 'admin') {
-            $bookUserId = $_POST['book_lietotajs_id'] ?? null;
-            if (!$bookUserId) {
-                $msg = "Select a user";
+            $booklietotajsId = $_POST['book_lietotajs_id'] ?? null;
+            if (!$booklietotajsId) {
+                $msg = "Select a lietotajs";
                 return;
             }
         }
@@ -134,27 +134,27 @@ if (isset($_POST['book'])) {
         }
         else {
 
-            if ($raksts->isAvailable($_POST['atslega_id'], $start, $end)) {
+            if ($rezerve->isAvailable($_POST['atslega_id'], $start, $end)) {
 
-                $raksts->book($bookUserId, $_POST['atslega_id'], $start, $end);
+                $rezerve->book($booklietotajsId, $_POST['atslega_id'], $start, $end);
 
                 $stmt = $db->conn->prepare("SELECT vards,uzvards FROM lietotaji WHERE id=?");
-                $stmt->bind_param("i", $bookUserId);
+                $stmt->bind_param("i", $booklietotajsId);
                 $stmt->execute();
                 $u = $stmt->get_result()->fetch_assoc();
 
-                $stmt = $db->conn->prepare("SELECT vards FROM atslegas WHERE id=?");
+                $stmt = $db->conn->prepare("SELECT nosaukums FROM atslegas WHERE id=?");
                 $stmt->bind_param("i", $_POST['atslega_id']);
                 $stmt->execute();
                 $atslegaData = $stmt->get_result()->fetch_assoc();
 
                 $actor = $_SESSION['vards'] . " " . $_SESSION['uzvards'];
 
-                if ($_SESSION['loma'] === 'admin' && $bookUserId != $_SESSION['lietotajs_id']) {
+                if ($_SESSION['loma'] === 'admin' && $booklietotajsId != $_SESSION['lietotajs_id']) {
                     $zurnals->add(
                         $actor .
                         " booked " . $atslegaData['nosaukums'] .
-                        " for user " . $u['vards'] . " " . $u['uzvards'] .
+                        " for lietotajs " . $u['vards'] . " " . $u['uzvards'] .
                         " from " . $start . " - " . $end
                     );
                 } else {
@@ -233,13 +233,13 @@ function getatslegastatus($db, $atslega_id){
 
     if($row = $res->fetch_assoc()){
 
-        return ['occupied' => true, 'until' => $row['beigu_laiks'], 'user' => $row['vards'].' '.$row['uzvards']];
+        return ['occupied' => true, 'until' => $row['beigu_laiks'], 'lietotajs' => $row['vards'].' '.$row['uzvards']];
     }
 
-    return ['occupied' => false, 'until' => null, 'user' => null];
+    return ['occupied' => false, 'until' => null, 'lietotajs' => null];
 }
 
-if (isset($_POST['create_user'])) {
+if (isset($_POST['create_lietotajs'])) {
 
     if ($_SESSION['loma'] !== 'admin') {
         die("No permission");
@@ -255,11 +255,11 @@ if (isset($_POST['create_user'])) {
 
     $expiresAt = date('Y-m-d H:i:s', strtotime("+$durationDays days"));
 
-    $result = $user->register($epasts, $parole, $expiresAt);
+    $result = $lietotajs->registreties($epasts, $parole, $expiresAt);
 
     if ($result === true) {
-        $zurnals->add($_SESSION['vards']." created user: " . $epasts);
-        $msg = "User created successfully";
+        $zurnals->add($_SESSION['vards']." created lietotajs: " . $epasts);
+        $msg = "lietotajs created successfully";
     } else {
         $msg = $result;
     }
@@ -306,13 +306,13 @@ if(isset($_POST['delete_my_account'])){
 
             <?php if($_SESSION['loma'] === 'admin'): ?>
 
-            <label>Book for user:</label>
+            <label>Rezervēt priekš lietotāja:</label>
             <select name="book_lietotajs_id" required>
 
             <?php
                 $lietotaji = $db->conn->query("
                     SELECT id,vards,uzvards,epasts
-                    FROM lietotaji
+                    FROM lietotaji WHERE aktivs = 1
                     ORDER BY vards ASC
                 ");
 
@@ -333,7 +333,7 @@ if(isset($_POST['delete_my_account'])){
 
             <?php endif; ?>
 
-            <label>Start time:</label>
+            <label>Sākuma laiks:</label>
             <select name="start_laiks" required>
             <?php
             for ($h = 6; $h <= 21; $h++) {
@@ -347,7 +347,7 @@ if(isset($_POST['delete_my_account'])){
             ?>
             </select>
 
-            <label>End time:</label>
+            <label>Beigu laiks:</label>
             <select name="beigu_laiks" required>
             <?php
             for ($h = 6; $h <= 22; $h++) {
@@ -363,10 +363,10 @@ if(isset($_POST['delete_my_account'])){
 
             <?php if($_SESSION['loma'] === 'admin'): ?>
 
-                <label>Start date:</label>
+                <label>Sākuma datums:</label>
                 <input type="date" id="start_date" name="start_date" value="<?php echo date('Y-m-d'); ?>" required>
 
-                <label>End date:</label>
+                <label>Beigu datums:</label>
                 <input type="date" id="end_date" name="end_date" value="<?php echo date('Y-m-d'); ?>" required>
             <?php else: ?>
 
@@ -376,7 +376,7 @@ if(isset($_POST['delete_my_account'])){
 
             <?php endif; ?>
 
-            <button name="book">Book</button>
+            <button name="book">Rezervēt</button>
 
         </form>
 
@@ -384,8 +384,8 @@ if(isset($_POST['delete_my_account'])){
         <form method="POST">
             <input type="hidden" name="delete_atslega_id" id="delete_atslega_id">
             <button name="delete_atslega"
-                    onclick="return confirm('Delete this atslega?')">
-                Delete atslega
+                    onclick="return confirm('Dzēst šo atslēgu?')">
+                Dzēst atslēgu
             </button>
         </form>
         <?php endif; ?>
@@ -393,18 +393,18 @@ if(isset($_POST['delete_my_account'])){
     </div>
 </div>
 
-<div id="createUserOverlay" class="overlay" onclick="closeCreateUserPopup()">
+<div id="createlietotajsOverlay" class="overlay" onclick="closeCreatelietotajsPopup()">
     <div class="popup" onclick="event.stopPropagation()">
 
         <form method="POST">
-            <h3>Create User</h3>
+            <h3>Pievienot lietotāju</h3>
 
-            <input type="email" name="new_epasts" placeholder="epasts" required>
-            <input type="password" name="new_parole" placeholder="parole" required>
-            <label>Account duration (days)</label>
+            <input type="email" name="new_epasts" placeholder="Epasts" required>
+            <input type="password" name="new_parole" placeholder="Parole" required>
+            <label>Kontu ilgums (dienās)</label>
             <input type="number" name="duration_days" value="7" min="1" max="365" oninput="this.value = Math.min(365, Math.max(1, this.value))">
 
-            <button name="create_user">Create</button>
+            <button name="create_lietotajs">Izveidot</button>
         </form>
 
     </div>
@@ -414,11 +414,11 @@ if(isset($_POST['delete_my_account'])){
 <?php if($needsProfile): ?>
 <div id="profileOverlay" class="overlay">
     <div class="popup">
-        <h3>Complete your profile</h3>
+        <h3>Pabeidz savu profilu</h3>
         <form method="POST">
-            <input name="vards" placeholder="vards" required>
-            <input name="uzvards" placeholder="uzvards" required>
-            <button name="save_profile" disabled>Save</button>
+            <input name="vards" placeholder="Vārds" required>
+            <input name="uzvards" placeholder="Uzvārds" required>
+            <button name="save_profile" disabled>Saglabāt</button>
         </form>
     </div>
 </div>
@@ -429,26 +429,26 @@ if(isset($_POST['delete_my_account'])){
 
     <!-- LEFT SIDE -->
     <div class="sidebar">
-        <h2>Sveiks, <?php echo $_SESSION['vards'] ?: $_SESSION['user']; ?></h2>
+        <h2>Sveiks, <?php echo $_SESSION['vards'] ?: $_SESSION['lietotajs']; ?></h2>
 
         <?php if($_SESSION['loma'] === 'admin'): ?>
-            <a href="../admin/vesture.php" class="nav-btn">zurnali</a>
-            <a href="../admin/konti.php" class="nav-btn">Accounts</a>
-            <a href="../admin/pieraksti.php" class="nav-btn">raksti</a>
+            <a href="../admin/vesture.php" class="nav-btn">Žurnāli</a>
+            <a href="../admin/konti.php" class="nav-btn">Konti</a>
+            <a href="../admin/pieraksti.php" class="nav-btn">Vēsture</a>
         <?php endif; ?>
 
         <?php if($_SESSION['loma'] === 'admin'): ?>
         <form method="POST">
-            <input id="atslega_nosaukums" name="atslega_nosaukums" placeholder="New atslega">
-            <button id="add_btn" name="add_atslega" disabled>Add atslega</button>
-            <button type="button" onclick="openCreateUserPopup()">Create Temp Account</button>
+            <input id="atslega_nosaukums" name="atslega_nosaukums" placeholder="Jaunu atslēgu">
+            <button id="add_btn" name="add_atslega" disabled>Pievienot atslēgu</button>
+            <button type="button" onclick="openCreatelietotajsPopup()">Izveidot Vieša Kontu</button>
         </form>
         <?php endif; ?>
-                <a href="../login/logout.php" class="nav-btn logout">Logout</a>
+                <a href="../login/atslegties.php" class="nav-btn atslegties">Atslegties</a>
         <form method="POST" onsubmit="return confirm('Are you sure you want to deactivate your account?');">
             <button name="delete_my_account"
                     class="danger-btn">
-                Delete My Account
+                Dzēst manu kontu
             </button>
 
         </form>
@@ -474,18 +474,18 @@ if(isset($_POST['delete_my_account'])){
                     <?php endif; ?>
                 >
 
-                    <?php echo $r['vards']; ?>
+                    <?php echo $r['nosaukums']; ?>
 
                     <?php if($status['occupied']): ?>
                         <span class="busy">
-                            Occupied by
-                            <?php echo htmlspecialchars($status['user']); ?>
-                            Until
+                            Aizņemts:
+                            <?php echo htmlspecialchars($status['lietotajs']); ?>
+                            Līdz
                             <?php echo date('H:i', strtotime($status['until'])); ?>
                         </span>
                     <?php else: ?>
                         <span class="free">
-                            Available
+                            Pieejams
                         </span>
                     <?php endif; ?>
                 </div>

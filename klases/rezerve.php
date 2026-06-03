@@ -1,5 +1,5 @@
 <?php
-class raksts {
+class rezerve {
     private $conn;
     public function __construct($db){ $this->conn=$db->conn; }
 
@@ -10,9 +10,9 @@ class raksts {
         return $stmt->get_result()->num_rows===0;
     }
 
-    public function book($user,$atslega,$start,$end){
+    public function book($lietotajs,$atslega,$start,$end){
         $stmt=$this->conn->prepare("INSERT INTO raksti(lietotajs_id,atslega_id,start_laiks,beigu_laiks) VALUES(?,?,?,?)");
-        $stmt->bind_param("iiss",$user,$atslega,$start,$end);
+        $stmt->bind_param("iiss",$lietotajs,$atslega,$start,$end);
         $stmt->execute();
     }
     public function delete($id){

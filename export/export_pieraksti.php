@@ -14,7 +14,7 @@ header('Content-Disposition: attachment; filename="raksti.csv"');
 $output = fopen("php://output", "w");
 
 // headers
-fputcsv($output, ['ID', 'atslega', 'lietotajs', 'Start Time', 'End Time']);
+fputcsv($output, ['ID', 'Atslēga', 'Lietotājs', 'Sākumu laiks', 'Beigu laiks']);
 
 $result = $db->conn->query("
     SELECT 

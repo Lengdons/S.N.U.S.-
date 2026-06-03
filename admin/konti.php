@@ -39,19 +39,19 @@ $result = $db->conn->query("
 
 <link rel="stylesheet" href="../style.css">
 
-<h2>Accounts</h2>
+<h2>Konti</h2>
 
 <div>
-    <a href="../sakums/sakumlapa.php" class="nav-btn">Atslegas</a>
+    <a href="../sakums/sakumlapa.php" class="nav-btn">Atslēgas</a>
 </div>
 
 <table class="zurnali-table">
     <thead>
         <tr>
-            <th>vards</th>
-            <th>uzvards</th>
-            <th>epasts</th>
-            <th>darbiba</th>
+            <th>Vārds</th>
+            <th>Uzvārds</th>
+            <th>Epasts</th>
+            <th>Darbība</th>
         </tr>
     </thead>
 
@@ -64,9 +64,9 @@ $result = $db->conn->query("
 
             <td>
                 <form method="POST"
-                      onsubmit="return confirm('Delete this account?');">
+                      onsubmit="return confirm('Dzest šo kontu?');">
                     <input type="hidden" name="delete_lietotajs_id" value="<?= $u['id'] ?>">
-                    <button class="danger-btn">Delete</button>
+                    <button class="danger-btn">Dzēst</button>
                 </form>
             </td>
         </tr>

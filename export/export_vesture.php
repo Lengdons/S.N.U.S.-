@@ -14,7 +14,7 @@ header('Content-Disposition: attachment; filename="zurnali.csv"');
 $output = fopen("php://output", "w");
 
 // headers
-fputcsv($output, ['ID', 'darbiba', 'Created At']);
+fputcsv($output, ['ID', 'Darbība', 'Veidota']);
 
 $result = $db->conn->query("SELECT id, darbiba, veidota FROM zurnali ORDER BY id DESC");
 
