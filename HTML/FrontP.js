@@ -147,17 +147,18 @@ document.getElementById("btn-kalendars").addEventListener("click", () => {
 });
 
 //talak uz leju iet viss login lapai
-const loginBtn =
-    document.getElementById("btn-login");
+const loginBtn = document.getElementById("btn-login");
+const loginModal = document.getElementById("login-modal");
 
-const loginModal =
-    document.getElementById("login-modal");
+if(loginBtn && loginModal){
 
-loginBtn.addEventListener("click", () => {
+    loginBtn.addEventListener("click", () => {
 
-    loginModal.classList.add("show-modal");
+        loginModal.classList.add("show-modal");
 
-});
+    });
+
+}
 
 //uzspiezot arpus lauka pazudis tas
 if(loginBtn && loginModal){
@@ -222,3 +223,18 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.style.overflow = "hidden";
     }
 });
+
+const logoutBtn = document.getElementById("btn-logout");
+
+console.log(logoutBtn);
+
+if(logoutBtn){
+
+    logoutBtn.addEventListener("click", () => {
+
+
+        window.location.href = "../API/Izrakstities.php";
+
+    });
+
+}

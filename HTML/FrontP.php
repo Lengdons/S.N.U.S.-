@@ -58,7 +58,20 @@ if(isset($_POST['save_profile'])){
             <div class="nav-menu">
                     <input type="text" id="calendar" hidden><div id= "btn-kalendars" class="nav-item date"> Kalendārs</div>
                     <div id = "btn-filtrs" class="nav-item">Filtrs</div>
-                   <div id = "btn-login" class="nav-item btn-login">Pierakstīties</div> 
+                   <!-- <div id = "btn-login" class="nav-item btn-login">Pierakstīties</div>  -->
+                   <?php if(isset($_SESSION['lietotajs'])): ?>
+
+                        <div id="btn-logout" class="nav-item btn-login">
+                            Izrakstīties
+                        </div>
+
+                   <?php else: ?>
+
+                        <div id="btn-login" class="nav-item btn-login">
+                            Pierakstīties
+                        </div>
+
+                    <?php endif; ?>
             </div>
         </div>
             
@@ -114,7 +127,7 @@ if(isset($_POST['save_profile'])){
         </div>
         
     </div>
-
+    
     <div id="login-modal" class="modal-parklajums login-parklajums">
         <div class="filtrs-modal-content login-content">
         
