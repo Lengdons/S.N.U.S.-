@@ -68,8 +68,8 @@ function getRoomStatus($db, $room_id){
 
     $now = date('Y-m-d H:i:s');
 
-    $stmt = $db->conn->prepare(" SELECT bookings.end_time, lietotaji.name, lietotaji.surname 
-        FROM atslegas JOIN lietotaji on lietotaji.id = bookings.user_id WHERE room_id = ?
+    $stmt = $db->conn->prepare(" SELECT raksti.beigu_laiks, lietotaji.vards, lietotaji.uzvards 
+        FROM atslegas JOIN lietotaji on lietotaji.id = bookings.lietotajs_id WHERE atslega_id = ?
         AND start_laiks <= ?
         AND beigu_laiks > ?
         ORDER BY beigu_laiks ASC
