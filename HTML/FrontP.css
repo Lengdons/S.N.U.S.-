@@ -275,11 +275,7 @@ body {
     border-width: 0cap;
     border-radius: 25px;
 }
-.flatpickr-calendar {
-    position: fixed !important;
-    top: 100px !important;
-    left: 500px !important;
-}
+
 /* ----Pārklējums---FILTRS------------------------------------------------------------------------------------------------------ */
 .modal-parklajums {
     position: fixed; 
@@ -304,6 +300,7 @@ body {
     height: 30%;
     max-height: 400px;
     min-height: 300px;
+    height: 90%;
     width: 90%;
     max-width: 500px;
     text-align: center;
@@ -460,12 +457,22 @@ background-color: #9d9d9d;
 }
 
 .login-content {
+    background-color: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: center;
     max-width: 400px;
-    height: auto; 
+    max-height: 600px;
+    width: 90%;
+    height: 90%; 
     padding-bottom: 30px;
+}
+.login-content h2{
+
+    color: #ffffff;
+    background-color: #04AA6D;
+    padding: 10px;
+    border-radius:25px;
 }
 
 .login-kaste {

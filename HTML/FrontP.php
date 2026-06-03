@@ -1,6 +1,5 @@
 <?php
 session_start();
-// We tell the HTML if the user is logged in or not
 $isLoggedIn = isset($_SESSION['user']) ? 'true' : 'false';
 ?>
 
