@@ -215,11 +215,13 @@ document.getElementById("btn-dzest-visus")
 
 });
 
-function loadPieraksti(){
+function loadPieraksti() {
 
     fetch("../API/pieraksti.php")
     .then(response => response.json())
     .then(data => {
+
+        console.log("PIERAKSTI:", data);
 
         let html = "";
 
@@ -227,32 +229,17 @@ function loadPieraksti(){
 
             html += `
             <tr>
-                <td>
-                    <input
-                        type="checkbox"
-                        class="row-checkbox"
-                        data-id="${row.id}"
-                    >
-                </td>
-
                 <td>${row.kabinets}</td>
                 <td>${row.lietotajs}</td>
                 <td>${row.start_laiks}</td>
                 <td>${row.beigu_laiks}</td>
             </tr>
             `;
-
         });
 
-        document.getElementById(
-            "pieraksti-dati"
-        ).innerHTML = html;
-
-    });
-
-}
-
-loadPieraksti();
+        document.getElementById("pieraksti-dati").innerHTML = html;
+    })
+    .catch(error => console.error(error));
 
 function loadVesture() {
 

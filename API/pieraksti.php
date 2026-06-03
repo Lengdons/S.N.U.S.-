@@ -6,34 +6,32 @@ require '../mysql/datubaze.php';
 
 $db = new datubaze();
 
-$result = $db->conn->query("
+$sql = "
     SELECT
         raksti.id,
-        atslegas.nosaukums,
-        lietotaji.nosaukums AS vards,
-        lietotaji.uzvards,
+        atslegas.nosaukums AS kabinets,
+        CONCAT(lietotaji.nosaukums, ' ', lietotaji.uzvards) AS lietotajs,
         raksti.start_laiks,
         raksti.beigu_laiks
     FROM raksti
     LEFT JOIN atslegas ON atslegas.id = raksti.atslega_id
     LEFT JOIN lietotaji ON lietotaji.id = raksti.lietotajs_id
     ORDER BY raksti.id DESC
-");
+";
 
-if(!$result){
-    die($db->conn->error);
+$result = $db->conn->query($sql);
+
+if (!$result) {
+    echo json_encode([
+        "error" => $db->conn->error
+    ]);
+    exit;
 }
+
 $data = [];
 
-while($row = $result->fetch_assoc()){
-
-    $data[] = [
-        "id" => $row["id"],
-        "kabinets" => $row["nosaukums"],
-        "lietotajs" => $row["vards"] . " " . $row["uzvards"],
-        "start_laiks" => $row["start_laiks"],
-        "beigu_laiks" => $row["beigu_laiks"]
-    ];
+while ($row = $result->fetch_assoc()) {
+    $data[] = $row;
 }
 
 echo json_encode($data);
