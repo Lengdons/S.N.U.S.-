@@ -18,6 +18,8 @@
             <button class="admin-nav-btn active" data-target="s-kabineti">Kabineta Pārvaldība</button>
             <button class="admin-nav-btn" data-target="sistemas-lietotaji">Lietotāji</button>
             <button class="admin-nav-btn" data-target="sistemas-vesture">Vēsture</button>
+            <button class="admin-nav-btn" data-target="sistemas-pieraksti">Pieraksti</button>
+
         </nav>
 
         <div class="panelis-footer">
@@ -118,6 +120,50 @@
                 </table>
             </div>
         </div>
+        <!-- ---------------------------------------------------------------------------------------PIERAKSTI -->
+<div id="sistemas-pieraksti" class="admin-zurnals">
+    
+    <div class="list-item">
+        <span><h2>Aktuālie Pieraksti</h2></span>
+        <button id="btn-export-pieraksti" class="btn-zals">Eksportēt</button>
+    </div>
+    
+    <div class="admin-lapa">
+        <div class="tabula-pieraksti">
+            <button class="btn-sarkans" id="btn-dzest-visus">Dzēst Visus</button>
+            <button class="btn-sarkans" id="btn-dzest-izvele">Dzēst Izvēlētos</button>
+        </div>
+        
+        <table class="pieraksti-tabula">
+            <thead>
+                <tr>
+                    <th>Izvēlēties</th>
+                    <th>Kabinets</th>
+                    <th>Lietotājs</th>
+                    <th>Sākums</th>
+                    <th>Beigas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>101. Kabinets</td>
+                    <td>Jānis Bērziņš</td>
+                    <td>2026-06-03 10:00</td>
+                    <td>2026-06-03 11:30</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>Sporta Zāle</td>
+                    <td>Līva Kļaviņa</td>
+                    <td>2026-06-04 14:00</td>
+                    <td>2026-06-04 15:30</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+</div>
 
     </div>
 <script src="admin.js"></script>
