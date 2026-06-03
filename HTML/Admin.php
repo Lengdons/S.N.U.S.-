@@ -111,6 +111,10 @@ if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
                      -->
             
             <div class="admin-lapa">
+                <div class="tabula-pieraksti">
+                    <button class="btn-sarkans" id="btn-dzest-visus-vesture">Dzēst Visus</button>
+                    <button class="btn-sarkans" id="btn-dzest-izvele-vesture">Dzēst Izvēlētos</button>
+                </div>
                 <table class="vesture-table">
                     <thead>
                         <tr>
@@ -135,8 +139,8 @@ if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
     
     <div class="admin-lapa">
         <div class="tabula-pieraksti">
-            <button class="btn-sarkans" id="btn-dzest-visus">Dzēst Visus</button>
-            <button class="btn-sarkans" id="btn-dzest-izvele">Dzēst Izvēlētos</button>
+            <button class="btn-sarkans" id="btn-dzest-visus-pieraksti">Dzēst Visus</button>
+            <button class="btn-sarkans" id="btn-dzest-izvele-pieraksti">Dzēst Izvēlētos</button>
         </div>
         
         <table class="pieraksti-tabula">

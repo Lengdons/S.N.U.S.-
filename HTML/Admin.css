@@ -242,3 +242,12 @@
     background: #2ecc71;
     color: rgb(197, 12, 12);
 }
+
+.vesture-row {
+    cursor: pointer;
+}
+
+.vesture-row.selected {
+    background: #2ecc71;
+    color: rgb(197, 12, 12);
+}

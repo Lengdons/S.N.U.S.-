@@ -162,7 +162,7 @@ document.getElementById("btn-export-pieraksti")
 });
 
 
-document.getElementById("btn-dzest-izvele")
+document.getElementById("btn-dzest-izvele-pieraksti")
 .addEventListener("click", () => {
 
     const ids = [];
@@ -200,7 +200,45 @@ document.getElementById("btn-dzest-izvele")
 
 });
 
-document.getElementById("btn-dzest-visus")
+document.getElementById("btn-dzest-izvele-vesture")
+.addEventListener("click", () => {
+
+    const ids = [];
+
+    document
+        .querySelectorAll(".vesture-row.selected")
+        .forEach(cb => {
+
+            ids.push(cb.dataset.id);
+
+        });
+
+    if(ids.length === 0){
+        alert("Nav izvēlēts neviens ieraksts");
+        return;
+    }
+
+    fetch("../API/dzest_izveleto_vesturi.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            ids: ids
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+
+        if(data.status === "success"){
+            location.reload();
+        }
+
+    });
+
+});
+
+document.getElementById("btn-dzest-visus-pieraksti")
 .addEventListener("click", () => {
 
     if(!confirm("Dzēst visus?")){
@@ -208,6 +246,27 @@ document.getElementById("btn-dzest-visus")
     }
 
     fetch("../API/dzest_visus_pierakstus.php", {
+        method: "POST"
+    })
+    .then(r => r.json())
+    .then(data => {
+
+        if(data.status === "success"){
+            location.reload();
+        }
+
+    });
+
+});
+
+document.getElementById("btn-dzest-visus-vesture")
+.addEventListener("click", () => {
+
+    if(!confirm("Dzēst visus?")){
+        return;
+    }
+
+    fetch("../API/dzest_visu_vesturi.php", {
         method: "POST"
     })
     .then(r => r.json())
@@ -271,7 +330,7 @@ function loadVesture() {
         data.forEach(row => {
 
             html += `
-            <tr>
+            <tr class="vesture-row" data-id="${row.id}">
                 <td>${row.darbiba}</td>
                 <td>${row.veidota}</td>
             </tr>
@@ -287,13 +346,21 @@ function loadVesture() {
 
 loadVesture();
 
+document.addEventListener("click", function (e) {
+
+    const row = e.target.closest(".vesture-row");
+    if (!row) return;
+
+    row.classList.toggle("selected");
+});
+
 function loadLietotaji() {
 
     fetch("../API/konti.php")
     .then(response => response.json())
     .then(data => {
 
-        console.log("LIETOTAJI:", data);
+        //console.log("LIETOTAJI:", data);
 
         let html = "";
 
