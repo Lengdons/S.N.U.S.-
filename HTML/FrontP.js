@@ -194,7 +194,7 @@ document.getElementById("btn-submit-login")
     formData.append("email", email);
     formData.append("password", password);
 
-    fetch("../API/Pierakstities.php", {
+    fetch("../API/Pieraksities.php", {
 
         method: "POST",
         body: formData

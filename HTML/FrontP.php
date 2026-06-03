@@ -76,7 +76,8 @@ $isLoggedIn = isset($_SESSION['user']) ? 'true' : 'false';
                         <button id = "btn-filtrs-aiznemts" class = "filtrs-aiznemts"> Aizņemts </button>   <!-- Filtra poga "Aizņemts"-->
                      </div>
                     <div class = kabinets >Kabineta Numurs </div>
-                <button id = "btn-filtrs-kabinets"class = "btn-kab-search"> <input type="text" id="filtrs-kabinets" class="btn-kab-search" placeholder="Kabineta Numurs"></button>
+                <!-- <button id = "btn-filtrs-kabinets"class = "btn-kab-search"> --><input type="text" id="filtrs-kabinets" class="btn-kab-search" placeholder="Kabineta Numurs"><!--</button> -->
+                 <!-- seit ir problema ka button box aizmugure radas un search radas prieksa, ja var tad japarlabo ari dizains pasam input -->
                 </div>  
                 <button id="btn-filtrs-apply" class="filtrs-apply"> Pielietot filtrus </button>      <!--Pielietot filtrus poga-->
 
