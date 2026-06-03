@@ -380,9 +380,19 @@ function loadLietotaji() {
 
 loadLietotaji();
 
-// pievienošana gan klikšķim, gan Enter
+// pievienošana gan klikšķim, gan Enter prieks jaunu kabinetu pievienosanas
 const form = document.getElementById("kabinets-form");
 form.addEventListener("submit", function(e) {
     e.preventDefault(); // novērš lapas refresh
     pievienotKabinetu();
+});
+
+
+const input = document.getElementById("jauns-kabinets-nosaukums");
+const button = document.getElementById("btn-pievienot-kab");
+
+input.addEventListener("input", () => {
+    const value = input.value.trim();
+
+    button.disabled = input.value.trim().length === 0;
 });

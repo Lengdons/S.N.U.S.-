@@ -50,7 +50,7 @@ if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
                 <h3>Pievienot Jaunu Kabinetu</h3>
                 <form id="kabinets-form" class="pievienot-kaste">
                     <input type="text" id="jauns-kabinets-nosaukums" class="admin-input" placeholder="Kabineta nosaukums...">
-                    <button id="btn-pievienot-kab" class="btn-zals">Pievienot</button>
+                    <button id="btn-pievienot-kab" class="btn-zals" disabled>Pievienot</button>
                 </form>
             </div>
 

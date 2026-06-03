@@ -251,3 +251,8 @@
     background: #2ecc71;
     color: rgb(197, 12, 12);
 }
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
