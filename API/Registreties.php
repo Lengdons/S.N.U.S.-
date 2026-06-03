@@ -13,16 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $epasts = $_POST['epasts'] ?? '';
     $parole = $_POST['parole'] ?? '';
 
-    // piemēram 30 dienu konts
-    $beigu_term = date(
-        'Y-m-d H:i:s',
-        strtotime('+30 days')
-    );
-
     $result = $lietotajs->registreties(
         $epasts,
         $parole,
-        $beigu_term
     );
 
     if ($result === true) {

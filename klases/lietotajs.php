@@ -4,14 +4,14 @@ class lietotajs {
     private $conn;
     public function __construct($db){ $this->conn=$db->conn; }
 
-    public function registreties($epasts,$pass,$expiresAt=null){
+    public function registreties($epasts,$parole, $beigu_term=null){
 
     if(!filter_var($epasts, FILTER_VALIDATE_EMAIL)){
-        return "Invalid epasts";
+        return "Nederīgs epasts";
     }
 
-    if(!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W]).{8,}$/', $pass)){
-        return "parole must be 8+ chars, include uppercase, number, symbol";
+    if(!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W]).{8,}$/', $parole)){
+        return "Parole jabut >7 virkne, jaiekļauj lielie burti, cipari, un simboli";
     }
 
     // check duplicate epasts
@@ -20,19 +20,19 @@ class lietotajs {
     $check->execute();
 
     if($check->get_result()->num_rows > 0){
-        return "epasts already exists";
+        return "Epasts jau eksistē";
     }
 
-    $pass = password_hash($pass, PASSWORD_BCRYPT);
+    $parole = password_hash($parole, PASSWORD_BCRYPT);
 
     $stmt = $this->conn->prepare("
         INSERT INTO lietotaji(epasts,parole,loma, beigu_term, aktivs)
-        VALUES(?,?,'temp', ?, 1)
+        VALUES(?,?,'lietotajs', ?, 1)
     ");
 
-    $stmt->bind_param("sss", $epasts, $pass, $expiresAt);
+    $stmt->bind_param("sss", $epasts, $parole, $beigu_term);
 
-    return $stmt->execute() ? true : "Registration failed";
+    return $stmt->execute() ? true : "Registrācija neveiksmīga";
 }
 
 
