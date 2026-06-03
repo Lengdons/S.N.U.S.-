@@ -7,15 +7,15 @@ require '../mysql/datubaze.php';
 $db = new datubaze();
 
 $sql = "
-    SELECT
+    SELECT 
         raksti.id,
-        atslegas.nosaukums AS kabinets,
+        atslegas.nosaukums AS atslega,
         CONCAT(lietotaji.nosaukums, ' ', lietotaji.uzvards) AS lietotajs,
         raksti.start_laiks,
         raksti.beigu_laiks
     FROM raksti
-    LEFT JOIN atslegas ON atslegas.id = raksti.atslega_id
-    LEFT JOIN lietotaji ON lietotaji.id = raksti.lietotajs_id
+    JOIN atslegas ON atslegas.id = raksti.atslega_id
+    JOIN lietotaji ON lietotaji.id = raksti.lietotajs_id
     ORDER BY raksti.id DESC
 ";
 

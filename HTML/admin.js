@@ -216,6 +216,7 @@ document.getElementById("btn-dzest-visus")
 });
 
 function loadPieraksti() {
+    
 
     fetch("../API/pieraksti.php")
     .then(response => response.json())
@@ -242,8 +243,6 @@ function loadPieraksti() {
     })
     .catch(error => console.error(error));
 }
-
-loadPieraksti();
 
 function loadVesture() {
 
@@ -273,3 +272,4 @@ function loadVesture() {
 }
 
 loadVesture();
+loadPieraksti();
