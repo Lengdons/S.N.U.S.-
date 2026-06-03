@@ -33,13 +33,18 @@ while($row = $result->fetch_assoc()){
 
     $booking = $stmt->get_result()->fetch_assoc();
 
-    $occupied = false;
+    $status = "Pieejams";
 
     if($booking){
-        $occupied =
-            strtotime($booking['start_time']) <= strtotime($now)
-            &&
-            strtotime($booking['end_time']) > strtotime($now);
+        if(strtotime($booking['end_time']) < time()){
+            $status = "Nodots";
+        }
+        elseif(strtotime($booking['start_time']) > time()){
+            $status = "Rezervēts";
+        }
+        else{
+            $status = "Aizņemts";
+    }
     }
 
     $rooms[] = [
@@ -50,7 +55,7 @@ while($row = $result->fetch_assoc()){
             : null,
         'start' => $booking['start_time'] ?? null,
         'end' => $booking['end_time'] ?? null,
-        'occupied' => $occupied
+        'status' => $status
         
     ];
 }
