@@ -35,23 +35,41 @@ function renderDay() {
     document.querySelector(".date").textContent =
         `${sodien.getDate()}.${sodien.getMonth() + 1}.${sodien.getFullYear()}`;
 
-    let html = "";
 
-    for (let i = 0; i < 15; i++) {
+    fetch("../API/kabineti.php").then(response=>response.json()).then(rooms => { //fetcho API lai rādītos no DB info par kabinetiem (pagaidām tikai room name un id ir)
+        let html="";
 
-        html += `
-        <div class="datu-rinda">
-            <div class="data-box">Kabinets Nr: ${i + 1}</div>
+        rooms.forEach(room =>{
+            html += `
+            <div class="datu-rinda">
+            <div class="data-box">Kabinets Nr: ${room.name}</div>
             <div class="data-box">Vietas kabinetā:</div>
             <div class="data-box">Lietotājs</div>
             <div class="data-box">Paņēma:</div>
             <div class="status-ind green">
-                <span class="status-txt">Pieejams</span>
+                 <span class="status-txt">Pieejams</span>
             </div>
             <div class="data-box">Nodeva:</div>
-        </div>
-        `;
-    }
+            </div>
+            `;
+        });
+        document.getElementById("datu-kaste").innerHTML = html;
+    })
+    // for (let i = 0; i < 15; i++) {
+
+    //     html += `
+    //     <div class="datu-rinda">
+    //         <div class="data-box">Kabinets Nr: ${i + 1}</div>
+    //         <div class="data-box">Vietas kabinetā:</div>
+    //         <div class="data-box">Lietotājs</div>
+    //         <div class="data-box">Paņēma:</div>
+    //         <div class="status-ind green">
+    //             <span class="status-txt">Pieejams</span>
+    //         </div>
+    //         <div class="data-box">Nodeva:</div>
+    //     </div>
+    //     `;
+    // }
 
 document.getElementById("datu-kaste").innerHTML = html;
 
@@ -104,4 +122,4 @@ document.querySelector(".prev").addEventListener("click", () => {
 
     renderDay();
 });
-// viss ^^^ lauj darīt tā, ka nav javeido atseviski 5 html lapas bet iet ar vienu
+// viss ^^^ lauj darīt tā, ka nav javeido atseviski 5 html{php} lapas bet iet ar vienu
