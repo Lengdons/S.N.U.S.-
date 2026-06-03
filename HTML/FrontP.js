@@ -6,7 +6,13 @@ const dienas = [
     "Piektdiena"
 ];
 
-let currentDay = 0;
+let weekday = new Date().getDay();
+
+if (weekday === 0) {
+    weekday = 7;
+}
+
+let currentDay = weekday - 1;
 let currentWeek = 0;
 
 function renderDay() {
@@ -113,7 +119,7 @@ function loadRooms(date){
     })
 }
 
-//pievienots kalendars, uzspiezot uz pogu atversies mini kalendars, bet pagaidam nekadu funkciju isti nedod iznemot vienkarsi atver kalendaru
+//pievienots kalendars, uzspiezot uz pogu atversies mini kalendars, bet pagaidam nekadu funkciju isti nedod iznemot vienkarsi atver kalendarus
 const calendar = document.getElementById("calendar");
 
 document.getElementById("btn-kalendars").addEventListener("click", () => {
