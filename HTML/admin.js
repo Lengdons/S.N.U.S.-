@@ -138,7 +138,7 @@ document.getElementById("btn-pievienot-liet").addEventListener("click",()=>{
 document.getElementById("btn-export-vesture").addEventListener("click", () => {
 
     const link = document.createElement("a");
-    link.href = "../API/export_zurnali.php";
+    link.href = "../export/export_vesture.php";
     link.download = "zurnali.csv";
 
     document.body.appendChild(link);
