@@ -3,7 +3,7 @@ session_start();
 header('Content-Type: application/json');
 
 if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
-    echo json_encode(["status" => "error", "message" => "Unauthorized or No Permission"]);
+    echo json_encode(["status" => "error", "message" => "Nav privilēģijas"]);
     exit;
 }
 
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("i", $_SESSION['lietotajs_id']);
     
     if($stmt->execute()){
-        $zurnals->add($_SESSION['vards']." ".$_SESSION['uzvards']." is no longer amongus");
+        $zurnals->add($_SESSION['vards']." ".$_SESSION['uzvards']." vairs nav ar mums");
         
         // Izbeidz sesiju - lietotāju uzreiz izmet
         session_unset();
@@ -25,9 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // šeit atmet lietotāju atpakaļ uz pierkastīties.php (jeb login logu)
         
-        echo json_encode(["status" => "success", "message" => "Account deactivated"]);
+        echo json_encode(["status" => "success", "message" => "Konts neaktivs"]);
     } else {
-        echo json_encode(["status" => "error", "message" => "Failed to deactivate account"]);
+        echo json_encode(["status" => "error", "message" => "Nesanāca deaktivizēt kotnu"]);
     }
 }
 ?>

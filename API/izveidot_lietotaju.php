@@ -3,7 +3,7 @@ session_start();
 header('Content-Type: application/json');
 
 if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
-    echo json_encode(["status" => "error", "message" => "Unauthorized or No Permission"]);
+    echo json_encode(["status" => "error", "message" => "Nav privilēģijas"]);
     exit;
 }
 
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($result === true) {
         $zurnals->add($_SESSION['vards']." created user: " . $epasts);
-        echo json_encode(["status" => "success", "message" => "User created successfully"]);
+        echo json_encode(["status" => "success", "message" => "Lietotājs izveidots"]);
     } else {
         echo json_encode(["status" => "error", "message" => $result]);
     }

@@ -3,7 +3,7 @@ session_start();
 header('Content-Type: application/json');
 
 if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
-    echo json_encode(["status" => "error", "message" => "Unauthorized or No Permission"]);
+    echo json_encode(["status" => "error", "message" => "Nav privilēģijas"]);
     exit;
 }
 
@@ -40,9 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $atslega->delete($atslegaId);
         $zurnals->add($user['nosaukums']." ".$user['uzvards']." noņēma atslēgu: ". $atslegaData['nosaukums']);
         
-        echo json_encode(["status" => "success", "message" => "atslega deleted successfully"]);
+        echo json_encode(["status" => "success", "message" => "Atslega dzēsta"]);
     } else {
-        echo json_encode(["status" => "error", "message" => "No atslega ID provided"]);
+        echo json_encode(["status" => "error", "message" => "Nav atslegas iD"]);
     }
 }
 ?>

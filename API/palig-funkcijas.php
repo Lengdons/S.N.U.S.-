@@ -71,7 +71,7 @@ function getatslegaStatus($db, $atslega_id){
 
     $now = date('Y-m-d H:i:s');
 
-    $stmt = $db->conn->prepare(" SELECT raksti.beigu_laiks, lietotaji.vards, lietotaji.uzvards 
+    $stmt = $db->conn->prepare(" SELECT raksti.beigu_laiks, lietotaji.nosaukums, lietotaji.uzvards 
         FROM raksti JOIN lietotaji on lietotaji.id = raksti.lietotajs_id WHERE atslega_id = ?
         AND start_laiks <= ?
         AND beigu_laiks > ?
@@ -86,10 +86,10 @@ function getatslegaStatus($db, $atslega_id){
 
     if($row = $res->fetch_assoc()){
 
-        return ['occupied' => true, 'until' => $row['beigu_laiks'], 'user' => $row['vards'].' '.$row['uzvards']];
+        return ['aiznemts' => true, 'until' => $row['beigu_laiks'], 'user' => $row['nosaukums'].' '.$row['uzvards']];
     }
 
-    return ['occupied' => false, 'until' => null, 'user' => null];
+    return ['aiznemts' => false, 'until' => null, 'user' => null];
 }
 
 

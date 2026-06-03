@@ -27,12 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['uzvards'] = $uzvards;
             
             $zurnals->add($name." ".$uzvards." has joined the system");
-            echo json_encode(["status" => "success", "message" => "Profile updated successfully"]);
+            echo json_encode(["status" => "success", "message" => "Profils izmaiņas veiktas"]);
         } else {
             echo json_encode(["status" => "error", "message" => "datubaze error"]);
         }
     } else {
-        echo json_encode(["status" => "error", "message" => "Please fill in all fields"]);
+        echo json_encode(["status" => "error", "message" => "Lūdzu aizpildi visas ailes"]);
     }
 }
 ?>

@@ -20,13 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nosaukums = ucwords(strtolower($nosaukums));
 
     if($nosaukums === ""){
-        echo json_encode(["status" => "error", "message" => "atslega nosaukums cannot be empty"]);
+        echo json_encode(["status" => "error", "message" => "Atslegas nosakums nevar but tukss"]);
     } elseif($atslega->exists($nosaukums)){
-        echo json_encode(["status" => "error", "message" => "atslega already exists"]);
+        echo json_encode(["status" => "error", "message" => "Atslega jau ir"]);
     } else {
         $atslega->add($nosaukums);
-        $zurnals->add($_SESSION['nosaukums']." ".$_SESSION['uzvards']." added atslega: ". $nosaukums);
-        echo json_encode(["status" => "success", "message" => "atslega added successfully"]);
+        $zurnals->add($_SESSION['lietotajs']." pievienoja atslegu: ". $nosaukums);
+        echo json_encode(["status" => "success", "message" => "Atslega pievienota"]);
     }
 }
 ?>

@@ -19,8 +19,9 @@ function deleteRoom(id){
 
 }
 
-
+function loadKabineti() {
 fetch("../API/kabineti.php").then(res => res.json()).then(rooms => {
+
     let html = "";
 
     rooms.forEach(room => {
@@ -40,6 +41,9 @@ fetch("../API/kabineti.php").then(res => res.json()).then(rooms => {
 // lauj izdzest kabinetu
     document.getElementById("kabinetu-saraksts").innerHTML = html;
 });
+}
+
+loadKabineti();
 
 //pievienot kabinetu kas izmanto pievienot kabinetu api
 //ar post palidzibu ievieto db jauno
@@ -60,6 +64,11 @@ document.getElementById("btn-pievienot-kab").addEventListener("click",()=>{
     .then(response => response.json()).then(data => {
         //console.log(data);
         alert(data.message);
+
+        if (data.status === "success") {
+            document.getElementById("jauns-kabinets-nosaukums").value = "";
+            loadKabineti(); //ja veiksmigi pievieno kabinetu, tad palaidz loadkabineti funkciju lai nav manuali refresh jataisa
+        }
     });
 });
 

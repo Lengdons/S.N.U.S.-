@@ -4,7 +4,7 @@ header('Content-Type: application/json');
 
 // 1. Getekeeper's
 if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
-    echo json_encode(["status" => "error", "message" => "Unauthorized or No Permission"]);
+    echo json_encode(["status" => "error", "message" => "Nav privilēģijas"]);
     exit;
 }
 
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $atslega_id    = $_POST['atslega_id'] ?? null;              //
 
     if (!$start_date || !$end_date || !$start_time || !$end_time || !$atslega_id) {
-        echo json_encode(["status" => "error", "message" => "Invalid time selection"]);
+        echo json_encode(["status" => "error", "message" => "Nederīgs laika intervāls"]);
         exit;
     }
 
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($_SESSION['role'] === 'admin') {
         $booklietotajsId = $_POST['book_lietotajs_id'] ?? null;
         if (!$booklietotajsId) {
-            echo json_encode(["status" => "error", "message" => "Select a lietotajs"]);
+            echo json_encode(["status" => "error", "message" => "Izvēlēties lietotāju"]);
             exit;
         }
     }
@@ -48,10 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $end   = $end_date . " " . $end_time . ":00";
 
     if (strtotime($start) >= strtotime($end)) {
-        echo json_encode(["status" => "error", "message" => "End time must be after start time"]);
+        echo json_encode(["status" => "error", "message" => "Bieug laikam jābūt lielākam par sākuma laiku"]);
         exit;
     } elseif (strtotime($start) < time() - 15*60) {
-        echo json_encode(["status" => "error", "message" => "Cannot book past time"]);
+        echo json_encode(["status" => "error", "message" => "Nevar rezervēt pāri laikam"]);
         exit;
     }
 
@@ -63,9 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $actor = $_SESSION['name'] . " " . $_SESSION['uzvards'];
         $zurnals->add($actor . " booked atslega ID " . $atslega_id . " from " . $start . " - " . $end);
 
-        echo json_encode(["status" => "success", "message" => "atslega booked successfully"]);
+        echo json_encode(["status" => "success", "message" => "Atslēga rezervēta"]);
     } else {
-        echo json_encode(["status" => "error", "message" => "atslega already booked in that range"]);
+        echo json_encode(["status" => "error", "message" => "Atslēga rezervēta tajā laiku robežā"]);
     }
 }
 ?>
