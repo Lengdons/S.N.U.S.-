@@ -166,7 +166,7 @@
     background-color: #c0392b; 
 }
 
-/* --- Saraksti----------------------------------- */
+/* --- Saraksti-----Vesture------------------------------ */
 .list-item {
     display: flex;
     justify-content: space-between;
@@ -197,4 +197,39 @@
     background-color: #f8fafc;
     color: #4a5568;
     font-weight: bold;
+}
+/* -------------------------------------------------------------------------------------PIERKASTI  */
+
+.tabula-pieraksti {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.pieraksti-tabula {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pieraksti-tabula th, .pieraksti-tabula td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.pieraksti-tabula th {
+    background-color: #f8fafc;
+    color: #4a5568;
+    font-weight: bold;
+}
+
+.pieraksti-tabula input[type="checkbox"] {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    accent-color: #04AA6D;
+}
+
+.pieraksti-tabula tbody tr:hover {
+    background-color: #f9f9f9;
 }
