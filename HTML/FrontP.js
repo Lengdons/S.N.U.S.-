@@ -191,14 +191,12 @@ document.getElementById("btn-submit-login")
 
     const formData = new FormData();
 
-    formData.append("email", email);
-    formData.append("password", password);
+    formData.append("epasts", email);
+    formData.append("parole", password);
 
     fetch("../API/Pieraksities.php", {
-
         method: "POST",
         body: formData
-
     })
     .then(response => response.json())
     .then(data => {

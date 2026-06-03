@@ -1,30 +1,33 @@
-document.getElementById("btn-register")
-.addEventListener("click", () => {
+document.getElementById("btn-submit-register").addEventListener("click", async () => {
 
-    const email =
-        document.getElementById("register-email").value;
-
-    const password =
-        document.getElementById("register-password").value;
+    const epasts = document.getElementById("reg-epasts").value;
+    const parole = document.getElementById("reg-password").value;
 
     const formData = new FormData();
 
-    formData.append("email", email);
-    formData.append("password", password);
+    formData.append("epasts", epasts);
+    formData.append("parole", parole);
 
-    fetch("../API/registreties.php", {
-        method: "POST",
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+
+        const response = await fetch("../API/Registreties.php", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
 
         alert(data.message);
 
-        if(data.status === "success"){
+        if (data.status === "success") {
             window.location.href = "FrontP.php";
         }
 
-    });
+    } catch (error) {
+
+        console.error(error);
+        alert("Servera kļūda");
+
+    }
 
 });
