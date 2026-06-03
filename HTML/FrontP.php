@@ -1,6 +1,34 @@
 <?php
 session_start();
-$isLoggedIn = isset($_SESSION['user']) ? 'true' : 'false';
+require '../mysql/database.php';
+require '../classes/Log.php';
+
+if(isset($_POST['save_profile'])){
+    $vards = trim($_POST['vards']);
+    $uzvards = trim($_POST['uzvards']);
+
+    if($vards && $uzvards){
+        $stmt = $db->conn->prepare(
+            "UPDATE lietotaji SET vards=?, uzvards=? WHERE id=?"
+        );
+
+        $stmt->bind_param(
+            "ssi",
+            $vards,
+            $uzvards,
+            $_SESSION['lietotajs_id']
+        );
+
+        $stmt->execute();
+
+        $zurnals->add(
+            $vards . " " . $uzvards . " has joined the system"
+        );
+
+        header("Location: sakumlapa.php");
+        exit;
+    }
+}
 ?>
 
 
