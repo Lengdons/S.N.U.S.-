@@ -2,36 +2,36 @@
 session_start();
 header('Content-Type: application/json');
 
-if(!isset($_SESSION['user']) || $_SESSION['role'] !== 'admin'){
+if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
     echo json_encode(["status" => "error", "message" => "Unauthorized or No Permission"]);
     exit;
 }
 
-require '../mysql/database.php';
-require '../classes/room.php';
-require '../classes/log.php';
-$db = new database();
-$room = new room($db);
-$log = new log($db);
+require '../mysql/datubaze.php';
+require '../klases/atslega.php';
+require '../klases/zurnals.php';
+$db = new datubaze();
+$atslega = new atslega($db);
+$zurnals = new zurnals($db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $roomId = $_POST['room_id'] ?? null;
+    $atslegaId = $_POST['atslega_id'] ?? null;
 
-    if ($roomId) {
+    if ($atslegaId) {
 
         // Paņem ID/vardu pirms izdzeshanas - vēsturei 
         
-        $stmt = $db->conn->prepare("SELECT name FROM rooms WHERE id = ?");
-        $stmt->bind_param("i", $roomId);
+        $stmt = $db->conn->prepare("SELECT nosaukums FROM atslegas WHERE id = ?");
+        $stmt->bind_param("i", $atslegaId);
         $stmt->execute();
-        $roomData = $stmt->get_result()->fetch_assoc();
+        $atslegaData = $stmt->get_result()->fetch_assoc();
 
-        $room->delete($roomId);
-        $log->add($_SESSION['name']." ".$_SESSION['surname']." removed room: ". $roomData['name']);
+        $atslega->delete($atslegaId);
+        $zurnals->add($_SESSION['vards']." ".$_SESSION['uzvards']." removed atslega: ". $atslegaData['nosaukums']);
         
-        echo json_encode(["status" => "success", "message" => "Room deleted successfully"]);
+        echo json_encode(["status" => "success", "message" => "atslega deleted successfully"]);
     } else {
-        echo json_encode(["status" => "error", "message" => "No room ID provided"]);
+        echo json_encode(["status" => "error", "message" => "No atslega ID provided"]);
     }
 }
 ?>

@@ -1,7 +1,6 @@
 <?php
 
-
-function getBookedSlots($db, $atslega_id, $date){
+function getBookedSlots($db, $room_id, $date){
 
 require 'mysql/datubaze.php';
 
@@ -11,7 +10,6 @@ $atslega_id = (int)$_GET['atslega_id'];
 $date = $_GET['date'];
 
 function getBookedSlots($db, $atslega_id, $date){
-
 
     $booked = [];
 
@@ -30,7 +28,7 @@ function getBookedSlots($db, $atslega_id, $date){
     $startDateTime = date('Y-m-d H:i:s', $dayStart);
 
 
-    $stmt->bind_param("iss", $atslega_id, $endDateTime, $startDateTime);
+    $stmt->bind_param("iss", $room_id, $endDateTime, $startDateTime);
 
     $stmt->bind_param(
         "iss",
@@ -39,14 +37,13 @@ function getBookedSlots($db, $atslega_id, $date){
         $startDateTime
     );
 
-
     $stmt->execute();
     $res = $stmt->get_result();
 
     while($row = $res->fetch_assoc()){
 
-        $start = strtotime($row['start_laiks']);
-        $end = strtotime($row['beigu_laiks']);
+        $start = strtotime($row['start_time']);
+        $end = strtotime($row['end_time']);
 
 
         $start = strtotime($row['start_laiks']);
@@ -67,29 +64,29 @@ function getBookedSlots($db, $atslega_id, $date){
 }
 
 
-function getatslegaStatus($db, $atslega_id){
+function getRoomStatus($db, $room_id){
 
     $now = date('Y-m-d H:i:s');
 
     $stmt = $db->conn->prepare(" SELECT raksti.beigu_laiks, lietotaji.vards, lietotaji.uzvards 
-        FROM raksti JOIN lietotaji on lietotaji.id = raksti.lietotajs_id WHERE atslega_id = ?
+        FROM atslegas JOIN lietotaji on lietotaji.id = bookings.lietotajs_id WHERE atslega_id = ?
         AND start_laiks <= ?
         AND beigu_laiks > ?
         ORDER BY beigu_laiks ASC
         LIMIT 1
     ");
 
-    $stmt->bind_param("iss", $atslega_id, $now, $now);
+    $stmt->bind_param("iss", $room_id, $now, $now);
     $stmt->execute();
 
     $res = $stmt->get_result();
 
     if($row = $res->fetch_assoc()){
 
-        return ['occupied' => true, 'until' => $row['beigu_laiks'], 'user' => $row['vards'].' '.$row['uzvards']];
+        return ['aiznemts' => true, 'until' => $row['beigu_laiks'], 'user' => $row['vards'].' '.$row['uzvards']];
     }
 
-    return ['occupied' => false, 'until' => null, 'user' => null];
+    return ['aiznemts' => false, 'until' => null, 'user' => null];
 }
 
 
@@ -97,6 +94,4 @@ function getatslegaStatus($db, $atslega_id){
 header('Content-Type: application/json');
 echo json_encode(getBookedSlots($db, $atslega_id, $date));
 exit;
-
-
 ?>

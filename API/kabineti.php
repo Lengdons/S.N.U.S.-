@@ -1,14 +1,14 @@
 <?php
 
-require '../mysql/database.php';
-require '../classes/Room.php';
+require '../mysql/datubaze.php';
+require '../klases/atslega.php';
 
-$db = new database();
-$room = new Room($db);
+$db = new datubaze();
+$atslega = new atslega($db);
 $date = $_GET['date'] ?? date('Y-m-d');
-$result = $room->getAll();
+$result = $atslega->getAll();
 
-$rooms = [];
+$atslegas = [];
 $now = date('Y-m-d H:i:s');
 
 
@@ -16,15 +16,15 @@ while($row = $result->fetch_assoc()){
 
     $stmt = $db->conn->prepare("
         SELECT
-            bookings.start_time,
-            bookings.end_time,
-            users.name,
-            users.surname
-        FROM bookings
-        LEFT JOIN users ON users.id = bookings.user_id
-        WHERE bookings.room_id = ?
-        AND DATE(bookings.start_time) = ?
-        ORDER BY bookings.start_time ASC
+            raksti.start_laiks,
+            raksti.beigu_laiks,
+            lietotaji.nosaukums,
+            lietotaji.uzvards
+        FROM raksti
+        LEFT JOIN lietotaji ON lietotaji.id = raksti.lietotajs_id
+        WHERE raksti.atslega_id = ?
+        AND DATE(raksti.start_laiks) = ?
+        ORDER BY raksti.start_laiks ASC
         LIMIT 1
     ");
 
@@ -36,10 +36,10 @@ while($row = $result->fetch_assoc()){
     $status = "Pieejams";
 
     if($booking){
-        if(strtotime($booking['end_time']) < time()){
+        if(strtotime($booking['beigu_laiks']) < time()){
             $status = "Nodots";
         }
-        elseif(strtotime($booking['start_time']) > time()){
+        elseif(strtotime($booking['start_laiks']) > time()){
             $status = "Rezervēts";
         }
         else{
@@ -47,18 +47,18 @@ while($row = $result->fetch_assoc()){
     }
     }
 
-    $rooms[] = [
+    $atslegas[] = [
         'id' => $row['id'],
-        'name' => $row['name'],
-        'user' => $booking
-            ? $booking['name'].' '.$booking['surname']
+        'nosaukums' => $row['nosaukums'],
+        'lietotajs' => $booking
+            ? $booking['nosaukums'].' '.$booking['uzvards']
             : null,
-        'start' => $booking['start_time'] ?? null,
-        'end' => $booking['end_time'] ?? null,
+        'start' => $booking['start_laiks'] ?? null,
+        'end' => $booking['beigu_laiks'] ?? null,
         'status' => $status
         
     ];
 }
 
 header('Content-Type: application/json');
-echo json_encode($rooms);
+echo json_encode($atslegas);

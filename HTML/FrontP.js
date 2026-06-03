@@ -101,7 +101,7 @@ function loadRooms(date){
         let html="";
         
         rooms.forEach(room=>{
-            const aiznemts = room.user !== null && room.user !== "" && room.user !== undefined; // lai pareizi paraditu vai pieejams vai ne
+            const aiznemts = room.lietotajs !== null && room.lietotajs !== "" && room.lietotajs !== undefined; // lai pareizi paraditu vai pieejams vai ne
             let statusClass = "";
             switch(room.status){
 
@@ -122,9 +122,9 @@ function loadRooms(date){
                     break;}
             html += `
             <div class="datu-rinda">
-            <div class="data-box">${room.name}</div>
+            <div class="data-box">${room.nosaukums}</div>
             <div class="data-box">Vietas kabinetā:</div>
-            <div class="data-box">${room.user ?? "Nav"}</div> 
+            <div class="data-box">${room.lietotajs ?? "Nav"}</div> 
             <div class="data-box">${room.start ?? "-"}</div>
             <div class="status-ind ${statusClass}">
                  <span class="status-txt">${room.status}</span>
