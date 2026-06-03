@@ -216,7 +216,7 @@ document.getElementById("btn-dzest-visus")
 });
 
 function loadPieraksti() {
-    alert("PIERAKSTI FUNKCIJA PALAISTA");
+    
 
     fetch("../API/pieraksti.php")
     .then(response => response.json())
@@ -242,8 +242,6 @@ function loadPieraksti() {
     })
     .catch(error => console.error(error));
 }
-
-loadPieraksti();
 
 function loadVesture() {
 
