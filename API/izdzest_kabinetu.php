@@ -15,7 +15,7 @@ $atslega = new atslega($db);
 $zurnals = new zurnals($db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $atslegaId = $_POST['atslega_id'] ?? null;
+    $atslegaId = $_POST['room_id'] ?? null;
 
     if ($atslegaId) {
 
@@ -26,8 +26,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $atslegaData = $stmt->get_result()->fetch_assoc();
 
+        $stmt = $db->conn->prepare("
+            SELECT nosaukums, uzvards
+            FROM lietotaji
+            WHERE id = ?
+        ");
+
+        $stmt->bind_param("i", $_SESSION['lietotajs_id']);
+        $stmt->execute();
+
+        $user = $stmt->get_result()->fetch_assoc();
+
         $atslega->delete($atslegaId);
-        $zurnals->add($_SESSION['vards']." ".$_SESSION['uzvards']." removed atslega: ". $atslegaData['nosaukums']);
+        $zurnals->add($user['nosaukums']." ".$user['uzvards']." noņēma atslēgu: ". $atslegaData['nosaukums']);
         
         echo json_encode(["status" => "success", "message" => "atslega deleted successfully"]);
     } else {

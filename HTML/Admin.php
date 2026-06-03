@@ -58,14 +58,7 @@ if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
                 <h3>Esošie Kabineti</h3>
                 <div id="kabinetu-saraksts" class="admin-list">
                     <!---šitos var izolēt JS scriptā------------------------------------>
-                    <div class="list-item">
-                        <span>Kabinets Nr: 1</span>
-                        <button class="btn-sarkans">Dzēst</button>
-                    </div>
-                    <div class="list-item">
-                        <span>Kabinets Nr: 2</span>
-                        <button class="btn-sarkans">Dzēst</button>
-                    </div>
+                   
                     <!--------------------------------tikai nemaini nosaukumu------"btn-sarkans"---------------------------------->
                 </div>
             </div>
@@ -86,6 +79,19 @@ if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
                     <button id="btn-pievienot-liet" class="btn-zals">Izveidot</button>
                 </div>
             </div>
+
+             <table class="pieraksti-tabula">
+                <thead>
+                    <tr>
+                        <th>Epasts</th>
+                        <th>Vards</th>
+                        <th>Uzvards</th>
+                    </tr>
+                </thead>
+                <tbody id="lietotaji-dati">
+
+                </tbody>
+            </table>
         </div>
         <!-------------------------------------------------------------------------------------------------------------------------------------------->
 
@@ -96,6 +102,8 @@ if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
             
                 <button id="btn-export-vesture" class="btn-zals">Eksportēt</button>
             </div>
+
+            
             <!-- <div class="list-item">
                         <span>Kabinets Nr: 1</span>
                         <button class="btn-sarkans">Dzēst</button>
@@ -107,10 +115,8 @@ if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
                     <thead>
                         <tr>
                             <!--   th = table HEADER   ---- šis nemainās, ja vien nevajag kaut ko man pielikt vai atņemt  -->
-                            <th>Laiks</th>
-                            <th>Lietotājs</th>
                             <th>Darbība</th>
-                            <th>Kabinets</th>
+                            <th>Laiks</th>
                         </tr>
                     </thead>
                     <!--Rekur orientejies pēc  id"vēstures-dati    -->
@@ -136,11 +142,10 @@ if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
         <table class="pieraksti-tabula">
             <thead>
                 <tr>
-                    <th>Izvēlēties</th>
-                    <th>Kabinets</th>
+                    <th>Atslēga</th>
                     <th>Lietotājs</th>
-                    <th>Sākums</th>
-                    <th>Beigas</th>
+                    <th>Sākuma laiks</th>
+                    <th>Beigu laiks</th>
                 </tr>
             </thead>
             <tbody id="pieraksti-dati">

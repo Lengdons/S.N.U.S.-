@@ -16,7 +16,7 @@ $atslega = new atslega($db);
 $zurnals = new zurnals($db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nosaukums = trim($_POST['atslega_nosaukums'] ?? '');
+    $nosaukums = trim($_POST['room_name'] ?? '');
     $nosaukums = ucwords(strtolower($nosaukums));
 
     if($nosaukums === ""){

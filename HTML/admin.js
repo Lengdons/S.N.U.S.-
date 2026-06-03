@@ -9,6 +9,7 @@ function deleteRoom(id){
     })
     .then(response => response.json())
     .then(data => {
+        //console.log(data);
 
         alert(data.message);
 
@@ -26,7 +27,7 @@ fetch("../API/kabineti.php").then(res => res.json()).then(rooms => {
 
         html += `
         <div class="list-item">
-            <span>Kabinets Nr: ${room.name}</span>
+            <span>Kabinets Nr: ${room.nosaukums}</span>
             <button
                 class="btn-sarkans"
                 onclick="deleteRoom(${room.id})" 
@@ -44,16 +45,11 @@ fetch("../API/kabineti.php").then(res => res.json()).then(rooms => {
 //ar post palidzibu ievieto db jauno
 document.getElementById("btn-pievienot-kab").addEventListener("click",()=>{
     const roomName =
-        document.getElementById(
-            "jauns-kabinets-nosaukums"
-        ).value;
+        document.getElementById("jauns-kabinets-nosaukums").value;
 
     const formData = new FormData();
 
-    formData.append(
-        "room_name",
-        roomName
-    );
+    formData.append("room_name",roomName);
 
     fetch("../API/pievienot_kabinetu.php", {
 
@@ -62,6 +58,7 @@ document.getElementById("btn-pievienot-kab").addEventListener("click",()=>{
 
     })
     .then(response => response.json()).then(data => {
+        //console.log(data);
         alert(data.message);
     });
 });
@@ -222,7 +219,7 @@ function loadPieraksti() {
     .then(response => response.json())
     .then(data => { 
 
-        console.log("PIERAKSTI:", data);
+        //console.log("PIERAKSTI:", data);
 
         let html = "";
 
@@ -230,8 +227,7 @@ function loadPieraksti() {
 
             html += `
             <tr>
-                <td>${row.izveleties}</td>
-                <td>${row.kabinets}</td>
+                <td>${row.atslega}</td>
                 <td>${row.lietotajs}</td>
                 <td>${row.start_laiks}</td>
                 <td>${row.beigu_laiks}</td>
@@ -258,10 +254,8 @@ function loadVesture() {
 
             html += `
             <tr>
-                <td>${row.datums}</td>
-                <td>${row.lietotajs}</td>
                 <td>${row.darbiba}</td>
-                <td>${row.kabinets}</td>
+                <td>${row.veidota}</td>
             </tr>
             `;
 
@@ -274,3 +268,31 @@ function loadVesture() {
 }
 
 loadVesture();
+
+function loadLietotaji() {
+
+    fetch("../API/konti.php")
+    .then(response => response.json())
+    .then(data => {
+
+        console.log("LIETOTAJI:", data);
+
+        let html = "";
+
+        data.forEach(row => {
+
+            html += `
+            <tr>
+                <td>${row.epasts}</td>
+                <td>${row.nosaukums}</td>
+                <td>${row.uzvards}</td>
+            </tr>
+            `;
+        });
+
+        document.getElementById("lietotaji-dati").innerHTML = html;
+    })
+    .catch(error => console.error(error));
+}
+
+loadLietotaji();
