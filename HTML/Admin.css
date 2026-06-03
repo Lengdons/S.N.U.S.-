@@ -233,3 +233,12 @@
 .pieraksti-tabula tbody tr:hover {
     background-color: #f9f9f9;
 }
+
+.pieraksts-row {
+    cursor: pointer;
+}
+
+.pieraksts-row.selected {
+    background: #2ecc71;
+    color: rgb(197, 12, 12);
+}

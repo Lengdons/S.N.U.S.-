@@ -2,7 +2,7 @@
 class atslega {
     private $conn;
     public function __construct($db){ $this->conn=$db->conn; }
-    public function getAll(){ return $this->conn->query("SELECT * FROM atslegas"); }
+    public function getAll(){ return $this->conn->query("SELECT * FROM atslegas ORDER BY id DESC"); }
     public function add($nosaukums){
         $stmt=$this->conn->prepare("INSERT INTO atslegas(nosaukums) VALUES(?)");
         $stmt->bind_param("s",$nosaukums);

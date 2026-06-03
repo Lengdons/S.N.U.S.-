@@ -168,7 +168,7 @@ document.getElementById("btn-dzest-izvele")
     const ids = [];
 
     document
-        .querySelectorAll(".row-checkbox:checked")
+        .querySelectorAll(".pieraksts-row.selected")
         .forEach(cb => {
 
             ids.push(cb.dataset.id);
@@ -235,7 +235,8 @@ function loadPieraksti() {
         data.forEach(row => {
 
             html += `
-            <tr>
+            <tr class="pieraksts-row" data-id="${row.id}">
+                
                 <td>${row.atslega}</td>
                 <td>${row.lietotajs}</td>
                 <td>${row.start_laiks}</td>
@@ -250,6 +251,14 @@ function loadPieraksti() {
 }
 
 loadPieraksti();
+
+document.addEventListener("click", function (e) {
+
+    const row = e.target.closest(".pieraksts-row");
+    if (!row) return;
+
+    row.classList.toggle("selected");
+});
 
 function loadVesture() {
 
