@@ -47,12 +47,10 @@ loadKabineti();
 
 //pievienot kabinetu kas izmanto pievienot kabinetu api
 //ar post palidzibu ievieto db jauno
-document.getElementById("btn-pievienot-kab").addEventListener("click",()=>{
-    const roomName =
-        document.getElementById("jauns-kabinets-nosaukums").value;
+function pievienotKabinetu() {
+    const roomName = document.getElementById("jauns-kabinets-nosaukums").value;
 
     const formData = new FormData();
-
     formData.append("room_name",roomName);
 
     fetch("../API/pievienot_kabinetu.php", {
@@ -70,7 +68,7 @@ document.getElementById("btn-pievienot-kab").addEventListener("click",()=>{
             loadKabineti(); //ja veiksmigi pievieno kabinetu, tad palaidz loadkabineti funkciju lai nav manuali refresh jataisa
         }
     });
-});
+};
 
 //pogas funkcijas, kas lauj aiziet uz lietotaju sadalu un vestures sadalu
 
@@ -381,3 +379,10 @@ function loadLietotaji() {
 }
 
 loadLietotaji();
+
+// pievienošana gan klikšķim, gan Enter
+const form = document.getElementById("kabinets-form");
+form.addEventListener("submit", function(e) {
+    e.preventDefault(); // novērš lapas refresh
+    pievienotKabinetu();
+});

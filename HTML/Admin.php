@@ -48,10 +48,10 @@ if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
             
             <div class="admin-lapa">
                 <h3>Pievienot Jaunu Kabinetu</h3>
-                <div class="pievienot-kaste">
+                <form id="kabinets-form" class="pievienot-kaste">
                     <input type="text" id="jauns-kabinets-nosaukums" class="admin-input" placeholder="Kabineta nosaukums...">
                     <button id="btn-pievienot-kab" class="btn-zals">Pievienot</button>
-                </div>
+                </form>
             </div>
 
             <div class="admin-lapa">
@@ -70,14 +70,15 @@ if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
             
             <div class="admin-lapa">
                 <h3>Izveidot Īslaicīgo Profilu</h3>
-                <div class="pievienot-kaste">
+                <form id="lietotajs-form" class="pievienot-kaste">
                     <input type="name" id="jauns-vards" class="admin-input" placeholder="Vārds">
                     <input type="surname" id="jauns-uzvards" class="admin-input" placeholder="Uzvārds">
                     <input type="email" id="jauns-epasts" class="admin-input" placeholder="E-pasts">
                     <input type="password" id="jauna-parole" class="admin-input" placeholder="Parole">
                     <input type="number" id="dienu-skaits" class="admin-input" placeholder="Dienu skaits" min="1" max="365">
+                    
                     <button id="btn-pievienot-liet" class="btn-zals">Izveidot</button>
-                </div>
+                </form>
             </div>
 
              <table class="pieraksti-tabula">
