@@ -18,7 +18,7 @@ while($row = $result->fetch_assoc()){
         SELECT
             raksti.start_laiks,
             raksti.beigu_laiks,
-            lietotaji.vards,
+            lietotaji.nosaukums,
             lietotaji.uzvards
         FROM raksti
         LEFT JOIN lietotaji ON lietotaji.id = raksti.lietotajs_id
@@ -51,7 +51,7 @@ while($row = $result->fetch_assoc()){
         'id' => $row['id'],
         'nosaukums' => $row['nosaukums'],
         'lietotajs' => $booking
-            ? $booking['vards'].' '.$booking['uzvards']
+            ? $booking['nosaukums'].' '.$booking['uzvards']
             : null,
         'start' => $booking['start_laiks'] ?? null,
         'end' => $booking['beigu_laiks'] ?? null,
