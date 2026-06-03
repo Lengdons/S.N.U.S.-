@@ -1,4 +1,5 @@
-# S.N.U.S.  
+# S.N.U.S.
+
 Saņemšanas & Nodošanas Uzskaites Sistēma
 
 ## Logic engine
