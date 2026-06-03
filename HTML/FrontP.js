@@ -181,8 +181,7 @@ if(loginBtn && loginModal){
 
 }
 //uz leju iet lai varetu actually log in veikt
-document.getElementById("btn-submit-login")
-.addEventListener("click", () => {
+function login(){
 
     const email =
         document.getElementById("login-epasts").value;
@@ -209,7 +208,7 @@ document.getElementById("btn-submit-login")
             document.getElementById("login-error-msg").textContent = data.message;
         }
     });
-});
+};
 document.addEventListener("DOMContentLoaded", () => {
 
     const isLoggedIn =
@@ -239,3 +238,10 @@ if(logoutBtn){
 
 }
 
+document.getElementById("btn-submit-login")
+    .addEventListener("click", login);
+
+document.getElementById("login-form").addEventListener("submit", function(e){
+    e.preventDefault();
+    login();
+});

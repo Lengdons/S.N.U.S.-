@@ -139,16 +139,16 @@ if(isset($_POST['save_profile'])){
         <h2>Pierakstīties</h2>
         
 
-        <div class="filtra-kaste login-kaste">
-            <p class ="e-pasts">e-pasts</p>
-            <input type="text" id="login-epasts" class="login-input" placeholder="e-pasts" required>
+        <form id="login-form" class="filtra-kaste login-kaste">
+            <p class ="e-pasts">E-pasts</p>
+            <input type="text" id="login-epasts" class="login-input" placeholder="E-pasts" required>
             <p class="parole">Parole</p>
             <input type="password" id="login-password" class="login-input" placeholder="Parole" required>
             
             <div id="login-error-msg" class="error-text"></div>
             
             <button id="btn-submit-login" class="filtrs-apply btn-login-submit">Ienākt</button>
-        </div>
+        </form>
 
             <div class="registreties-link-kaste">
              <span>Nav profila?</span>
