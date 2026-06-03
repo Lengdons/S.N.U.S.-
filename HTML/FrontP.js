@@ -211,3 +211,16 @@ document.getElementById("btn-submit-login")
         }
     });
 });
+document.addEventListener("DOMContentLoaded", () => {
+
+    const isLoggedIn =
+        document.body.dataset.loggedIn === "true";
+
+    const loginModal =
+        document.getElementById("login-modal");
+
+    if (!isLoggedIn) {
+        loginModal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+    }
+});
