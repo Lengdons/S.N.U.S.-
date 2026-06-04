@@ -245,3 +245,45 @@ document.getElementById("login-form").addEventListener("submit", function(e){
     e.preventDefault();
     login();
 });
+
+//koda fragments kas parbauda vai lietotajam ir vards un uzvards un ja nav tad izmet popup un liek lietotajam ievadit vardu un uzvardu
+document.addEventListener("DOMContentLoaded", () => {
+
+    const vajagProfile = document.body.dataset.vajagProfile === "true";
+    const profileModal = document.getElementById("profile-modal");
+    
+    if (vajagProfile && profileModal) {
+        profileModal.classList.add("show-modal");
+        document.body.style.overflow = "hidden";
+    }
+
+    const btn = document.getElementById("save-profile-btn");
+    if(!btn) return;
+
+    btn.addEventListener("click", () => {
+        const nosaukums = document.getElementById("prof-nosaukums").value.trim();
+        const uzvards = document.getElementById("prof-uzvards").value.trim();
+
+        if(!nosaukums || !uzvards){
+            alert("Aizpildi visus laukus");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("nosaukums", nosaukums);
+        formData.append("uzvards", uzvards);
+
+        fetch("../API/saglabat_profile.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(r => r.json())
+        .then(data => {
+            if(data.status === "success"){
+                location.reload();
+            } else {
+                alert(data.message);
+            }
+        });
+    });
+});

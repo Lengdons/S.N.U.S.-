@@ -42,7 +42,8 @@ if(isset($_POST['save_profile'])){
     <title>S.N.U.S - Saņemšanas & Nodošanas Uzskaites Sistēma</title>
     <link rel="stylesheet" href="FrontP.css">
 </head>
-<body data-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
+<body data-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>"
+    data-vajag-profile="<?= ($_SESSION['vajag_profile'] ?? false) ? 'true' : 'false' ?>">
     <div class="container">
        
         <header>
@@ -86,6 +87,7 @@ if(isset($_POST['save_profile'])){
                 <div class = "diena"> Pirmdiena </div>
                 <div class = "BnF next" > &#129034 </div>
             </div>
+            <h2 class="text-login">Sveiks <?php echo $_SESSION['nosaukums'] ?? 'lietotāj'?></h2>
             <?php if($_SESSION['loma'] === 'admin'): ?>
             <button id="btn-admin" class="btn-admin">Administrācija</button>
             <?php endif; ?>
@@ -154,6 +156,23 @@ if(isset($_POST['save_profile'])){
              <span>Nav profila?</span>
              <a href="Registreties.html" class="registreties-link">Reģistrēties šeit</a>
             </div>
+
+        </div>
+    </div>
+
+
+            <!--Ja vards un uzvards ir tukss tad uzmet so logu lai lietotajs ievada savu vardu un uzvardu-->
+    <div id="profile-modal" class="modal-parklajums">
+        <div class="filtrs-modal-content">
+
+        <h2>Ievadi profila datus</h2>
+
+        <input type="text" id="prof-nosaukums" class="login-input" placeholder="Vārds">
+        <input type="text" id="prof-uzvards" class="login-input" placeholder="Uzvārds">
+
+        <button id="save-profile-btn" class="btn-zals">
+            Saglabāt
+        </button>
 
         </div>
     </div>

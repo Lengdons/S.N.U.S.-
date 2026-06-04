@@ -77,8 +77,11 @@ class lietotajs {
 
         // login success
         $_SESSION['lietotajs'] = $u;
-        $_SESSION['lietotajs_id'] = $row['id'];
+        $_SESSION['id'] = $row['id'];
         $_SESSION['loma'] = $row['loma'];
+        $_SESSION['epasts'] = $row['epasts'];
+        $_SESSION['nosaukums'] = $row['nosaukums'];
+        $_SESSION['vajag_profile'] = empty($row['nosaukums']) || empty($row['uzvards']);
 
         return true;
     }
