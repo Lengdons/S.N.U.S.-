@@ -310,6 +310,7 @@ if(isset($_POST['save_profile'])){
     </div>
 
 </div>
+            </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="filtra_loga_scripts.js"></script>
