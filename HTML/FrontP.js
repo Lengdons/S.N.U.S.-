@@ -166,15 +166,15 @@ if(loginBtn && loginModal){
 
     });
 
-    loginModal.addEventListener("click", (event) => {
+    // loginModal.addEventListener("click", (event) => {
 
-        if(event.target === loginModal){
+    //     if(event.target === loginModal){
 
-            loginModal.classList.remove("show-modal");
+    //         loginModal.classList.remove("show-modal");
 
-        }
+    //     }
 
-    });
+    // });
 
 }
 //uz leju iet lai varetu actually log in veikt
@@ -456,11 +456,15 @@ modals.forEach(modal => {
 
     modal.addEventListener("click", function(e){
 
-        if(e.target === modal){
+        if(
+            e.target === modal &&
+            modal.id !== "login-modal"
+        ){
             modal.classList.remove("show-modal");
         }
 
     });
+
 });
 // const closeRezBtn =
 //     document.getElementById("btn-aizvert-rezervi");
