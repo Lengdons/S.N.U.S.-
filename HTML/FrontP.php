@@ -181,116 +181,135 @@ if(isset($_POST['save_profile'])){
 
 
      <!--Sakuma laiks un beigu laiks lai varetu rezervet prieks katra lietotaja-->
+     <?php
+        if(isset($_SESSION['loma']) && $_SESSION['loma'] === 'admin'){
+
+            $db = new datubaze();
+
+            $res = $db->conn->query("
+                SELECT
+                    id,
+                    epasts,
+                    nosaukums,
+                    uzvards
+                FROM lietotaji
+                ORDER BY epasts
+            ");
+        }
+        ?>
      
     <div id="rezervet-modal" class="modal-parklajums">
 
-        <div class="filtrs-modal-content">
-            
-            <h2>Rezervēt kabinetu</h2>
+    <div class="filtrs-modal-content rezervacija-content">
+
+        <h2>Rezervēt kabinetu</h2>
+
+        <div class="rezervacija-form">
 
             <input type="hidden" id="rez-kabinets-id">
 
             <?php if($_SESSION['loma'] === 'admin'): ?>
 
+            <div class="form-group">
                 <label>Lietotājs</label>
+                <select id="book_lietotajs_id" class="modal-input">
 
-                <select id="book_lietotajs_id">
+                    <?php while($row = $res->fetch_assoc()): ?>
 
-                <?php
+                    <option value="<?= $row['id'] ?>">
+                        <?= htmlspecialchars($row['epasts']) ?>
+                        (<?= htmlspecialchars($row['nosaukums']) ?>
+                        <?= htmlspecialchars($row['uzvards']) ?>)
+                    </option>
 
-
-                $db = new datubaze();
-
-                $res = $db->conn->query("
-                    SELECT
-                        id,
-                        epasts,
-                        nosaukums,
-                        uzvards
-                    FROM lietotaji
-                    ORDER BY epasts
-                ");
-
-                while($row = $res->fetch_assoc()):
-
-                ?>
-
-                <option value="<?= $row['id'] ?>">
-
-                <?= htmlspecialchars($row['epasts']) ?>
-
-                (<?= htmlspecialchars($row['nosaukums']) ?>
-                <?= htmlspecialchars($row['uzvards']) ?>)
-
-                </option>
-
-                <?php endwhile; ?>
+                    <?php endwhile; ?>
 
                 </select>
+            </div>
 
-                <label>Sākuma datums</label>
-                <input
-                    type="date"
-                    id="start_date"
-                    value="<?php echo date('Y-m-d'); ?>"
-                >
+            <div class="form-row">
 
-                <label>Beigu datums</label>
-                <input
-                    type="date"
-                    id="end_date"
-                    value="<?php echo date('Y-m-d'); ?>"
-                >
+                <div class="form-group">
+                    <label>Sākuma datums</label>
+                    <input
+                        type="date"
+                        id="start_date"
+                        class="modal-input"
+                        value="<?php echo date('Y-m-d'); ?>"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Beigu datums</label>
+                    <input
+                        type="date"
+                        id="end_date"
+                        class="modal-input"
+                        value="<?php echo date('Y-m-d'); ?>"
+                    >
+                </div>
+
+            </div>
 
             <?php else: ?>
 
-                <input
-                    type="hidden"
-                    id="start_date"
-                    value="<?php echo date('Y-m-d'); ?>"
-                >
+            <input
+                type="hidden"
+                id="start_date"
+                value="<?php echo date('Y-m-d'); ?>"
+            >
 
-                <input
-                    type="hidden"
-                    id="end_date"
-                    value="<?php echo date('Y-m-d'); ?>"
-                >
+            <input
+                type="hidden"
+                id="end_date"
+                value="<?php echo date('Y-m-d'); ?>"
+            >
 
             <?php endif; ?>
 
-            <label>Sākuma laiks</label>
+            <div class="form-row">
 
-            <select id="start_laiks">
-                <?php
-                for($h=6;$h<=21;$h++){
-                    foreach(["00","30"] as $m){
-                        $t = sprintf("%02d:%s",$h,$m);
-                        echo "<option value='$t'>$t</option>";
-                    }
-                }
-                ?>
-            </select>
+                <div class="form-group">
+                    <label>Sākuma laiks</label>
 
-            <label>Beigu laiks</label>
+                    <select id="start_laiks" class="modal-input">
+                        <?php
+                        for($h=6;$h<=21;$h++){
+                            foreach(["00","30"] as $m){
+                                $t = sprintf("%02d:%s",$h,$m);
+                                echo "<option value='$t'>$t</option>";
+                            }
+                        }
+                        ?>
+                    </select>
+                </div>
 
-            <select id="beigu_laiks">
-                <?php
-                for($h=6;$h<=22;$h++){
-                    foreach(["00","30"] as $m){
-                        $t = sprintf("%02d:%s",$h,$m);
-                        echo "<option value='$t'>$t</option>";
-                    }
-                }
-                ?>
-            </select>
+                <div class="form-group">
+                    <label>Beigu laiks</label>
 
-            <button id="btn-rezervet">
+                    <select id="beigu_laiks" class="modal-input">
+                        <?php
+                        for($h=6;$h<=22;$h++){
+                            foreach(["00","30"] as $m){
+                                $t = sprintf("%02d:%s",$h,$m);
+                                echo "<option value='$t'>$t</option>";
+                            }
+                        }
+                        ?>
+                    </select>
+                </div>
+
+            </div>
+
+            <button id="btn-rezervet" class="btn pilns-platums">
                 Rezervēt
             </button>
 
         </div>
 
     </div>
+
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="filtra_loga_scripts.js"></script>

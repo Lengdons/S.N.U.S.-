@@ -24,6 +24,7 @@ let currentWeek = 0;
 
 function renderDay() {
 
+    
     const sodien = new Date();
 
     const pirmdiena = new Date(sodien);
