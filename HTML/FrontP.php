@@ -83,7 +83,7 @@ if(isset($_POST['save_profile'])){
         <div class="search-bar">
             
             <div class = "search" ><input type="text" id="searchInput" placeholder="Meklēt">  </div>
-                <div clas="search-item">
+                <div class="search-item">
             <div class="diena-bar"> 
                 <div class = "BnF prev" > &#129032 </div>
                 <div class = "diena"> Pirmdiena </div>
