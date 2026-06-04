@@ -100,34 +100,34 @@ navButtons.forEach(button => {
 
 //api ar izveidot lietotaju, lietotaju sadala
 
-document.getElementById("btn-pievienot-liet").addEventListener("click",()=>{
-    const name =
-        document.getElementById(
-            "jauns-vards"
-        ).value;
-    const surname =
-        document.getElementById(
-            "jauns-uzvards"
-        ).value;
-    const email =
+document.getElementById("lietotajs-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const epasts =
         document.getElementById(
             "jauns-epasts"
         ).value;
-    const password =
+    const parole =
         document.getElementById(
             "jauna-parole"
         ).value;
-    const number =
+    const nr =
         document.getElementById(
             "dienu-skaits"
-        ).value;    
-    const formData = new FormData();
+        ).value;
 
-    formData.append(
-        formData.append("email", email),
-        formData.append("password", password),
-        formData.append("duration_days", number),
-    );
+
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W]).{8,}$/; //parbauda vai ir viss vajadzigais prieks paroles
+
+    if (!passwordRegex.test(parole)) {
+    alert("Parolei jābūt vismaz 8 simboliem, ar lielo burtu, ciparu un speciālo simbolu");
+    return;
+    } //parada pazinojumu prieks admin ko vajag prieks paroles
+
+    const formData = new FormData();
+    formData.append("epasts", epasts);
+    formData.append("parole", parole);
+    formData.append("beigu_term", nr);
 
     fetch("../API/pievienot_lietotaju.php", {
 
@@ -396,4 +396,25 @@ input.addEventListener("input", () => {
     const value = input.value.trim();
 
     button.disabled = input.value.trim().length === 0;
+});
+
+//lai admin nevar ievadit datus kas nav intervala 1 - 365
+const dienuInput = document.getElementById("dienu-skaits");
+
+dienuInput.addEventListener("input", () => {
+    if (dienuInput.value === "") return;
+
+    let value = parseInt(dienuInput.value, 10);
+
+    if (value < 1) {
+        dienuInput.value = 1;
+    } else if (value > 365) {
+        dienuInput.value = 365;
+    }
+});
+
+dienuInput.addEventListener("blur", () => {
+    if (dienuInput.value === "") {
+        dienuInput.value = 1;
+    }
 });

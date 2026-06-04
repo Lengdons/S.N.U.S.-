@@ -71,11 +71,9 @@ if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
             <div class="admin-lapa">
                 <h3>Izveidot Īslaicīgo Profilu</h3>
                 <form id="lietotajs-form" class="pievienot-kaste">
-                    <input type="name" id="jauns-vards" class="admin-input" placeholder="Vārds">
-                    <input type="surname" id="jauns-uzvards" class="admin-input" placeholder="Uzvārds">
                     <input type="email" id="jauns-epasts" class="admin-input" placeholder="E-pasts">
                     <input type="password" id="jauna-parole" class="admin-input" placeholder="Parole">
-                    <input type="number" id="dienu-skaits" class="admin-input" placeholder="Dienu skaits" min="1" max="365">
+                    <input type="number" id="dienu-skaits" class="admin-input" placeholder="Dienu skaits" min="1" max="365" value="1">
                     
                     <button id="btn-pievienot-liet" class="btn-zals">Izveidot</button>
                 </form>
