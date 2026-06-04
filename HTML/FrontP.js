@@ -475,3 +475,10 @@ modals.forEach(modal => {
 //     });
 
 // }
+const btnAdmin = document.getElementById("btn-admin");
+
+if(btnAdmin){
+    btnAdmin.addEventListener("click", () => {
+        window.location.href = "Admin.php";
+    });
+}

@@ -296,14 +296,5 @@ if(isset($_POST['save_profile'])){
 <script src="filtra_loga_scripts.js"></script>
 <script src="FrontP.js"></script>
 
-<script>
-const btnAdmin = document.getElementById("btn-admin");
-
-if(btnAdmin){
-    btnAdmin.addEventListener("click", () => {
-        window.location.href = "Admin.php";
-    });
-}
-</script>
 </body>
 </html>
