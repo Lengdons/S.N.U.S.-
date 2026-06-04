@@ -9,11 +9,12 @@ function deleteRoom(id){
     })
     .then(response => response.json())
     .then(data => {
-        //console.log(data);
+        console.log(data);
 
         alert(data.message);
-
-        location.reload();
+        
+        if(data.status === "success")
+        loadKabineti(); //parlade kabinetus kad veiksmigi izdzests kabinets
 
     });
 

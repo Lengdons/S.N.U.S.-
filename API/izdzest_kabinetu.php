@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             WHERE id = ?
         ");
 
-        $stmt->bind_param("i", $_SESSION['lietotajs_id']);
+        $stmt->bind_param("i", $_SESSION['id']);
         $stmt->execute();
 
         $user = $stmt->get_result()->fetch_assoc();
