@@ -4,29 +4,31 @@ $isLoggedIn = isset($_SESSION['lietotajs']);
 require '../mysql/datubaze.php';
 require '../klases/zurnals.php';
 
+date_default_timezone_set('Europe/Riga');
+
 if(isset($_POST['save_profile'])){
-    $vards = trim($_POST['vards']);
+    $nosaukums = trim($_POST['nosaukums']);
     $uzvards = trim($_POST['uzvards']);
 
-    if($vards && $uzvards){
+    if($nosaukums && $uzvards){
         $stmt = $db->conn->prepare(
-            "UPDATE lietotaji SET vards=?, uzvards=? WHERE id=?"
+            "UPDATE lietotaji SET nosaukums=?, uzvards=? WHERE id=?"
         );
 
         $stmt->bind_param(
             "ssi",
-            $vards,
+            $nosaukums,
             $uzvards,
-            $_SESSION['lietotajs_id']
+            $_SESSION['id']
         );
 
         $stmt->execute();
 
         $zurnals->add(
-            $vards . " " . $uzvards . " has joined the system"
+            $nosaukums . " " . $uzvards . " pievienojas sistema"
         );
 
-        header("Location: sakumlapa.php");
+        header("Location: FrontP.php");
         exit;
     }
 }
@@ -88,7 +90,7 @@ if(isset($_POST['save_profile'])){
                 <div class = "BnF next" > &#129034 </div>
             </div>
             <h2 class="text-login">Sveiks <?php echo $_SESSION['nosaukums'] ?? 'lietotāj'?></h2>
-            <?php if($_SESSION['loma'] === 'admin'): ?>
+            <?php if(isset($_SESSION['loma']) && $_SESSION['loma'] === 'admin'): ?>
             <button id="btn-admin" class="btn-admin">Administrācija</button>
             <?php endif; ?>
         </div>
@@ -175,6 +177,119 @@ if(isset($_POST['save_profile'])){
         </button>
 
         </div>
+    </div>
+
+
+     <!--Sakuma laiks un beigu laiks lai varetu rezervet prieks katra lietotaja-->
+     
+    <div id="rezervet-modal" class="modal-parklajums">
+
+        <div class="filtrs-modal-content">
+
+            <h2>Rezervēt kabinetu</h2>
+
+            <input type="hidden" id="rez-kabinets-id">
+
+            <?php if($_SESSION['loma'] === 'admin'): ?>
+
+                <label>Lietotājs</label>
+
+                <select id="book_lietotajs_id">
+
+                <?php
+
+
+                $db = new datubaze();
+
+                $res = $db->conn->query("
+                    SELECT
+                        id,
+                        epasts,
+                        nosaukums,
+                        uzvards
+                    FROM lietotaji
+                    ORDER BY epasts
+                ");
+
+                while($row = $res->fetch_assoc()):
+
+                ?>
+
+                <option value="<?= $row['id'] ?>">
+
+                <?= htmlspecialchars($row['epasts']) ?>
+
+                (<?= htmlspecialchars($row['nosaukums']) ?>
+                <?= htmlspecialchars($row['uzvards']) ?>)
+
+                </option>
+
+                <?php endwhile; ?>
+
+                </select>
+
+                <label>Sākuma datums</label>
+                <input
+                    type="date"
+                    id="start_date"
+                    value="<?php echo date('Y-m-d'); ?>"
+                >
+
+                <label>Beigu datums</label>
+                <input
+                    type="date"
+                    id="end_date"
+                    value="<?php echo date('Y-m-d'); ?>"
+                >
+
+            <?php else: ?>
+
+                <input
+                    type="hidden"
+                    id="start_date"
+                    value="<?php echo date('Y-m-d'); ?>"
+                >
+
+                <input
+                    type="hidden"
+                    id="end_date"
+                    value="<?php echo date('Y-m-d'); ?>"
+                >
+
+            <?php endif; ?>
+
+            <label>Sākuma laiks</label>
+
+            <select id="start_laiks">
+                <?php
+                for($h=6;$h<=21;$h++){
+                    foreach(["00","30"] as $m){
+                        $t = sprintf("%02d:%s",$h,$m);
+                        echo "<option value='$t'>$t</option>";
+                    }
+                }
+                ?>
+            </select>
+
+            <label>Beigu laiks</label>
+
+            <select id="beigu_laiks">
+                <?php
+                for($h=6;$h<=22;$h++){
+                    foreach(["00","30"] as $m){
+                        $t = sprintf("%02d:%s",$h,$m);
+                        echo "<option value='$t'>$t</option>";
+                    }
+                }
+                ?>
+            </select>
+
+            <button id="btn-rezervet">
+                Rezervēt
+            </button>
+
+        </div>
+
     </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

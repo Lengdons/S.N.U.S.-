@@ -1,3 +1,10 @@
+//globalie mainigie
+let currentRoomId = null;
+let currentBooked = [];
+let selectedDate = null;
+
+
+
 const dienas = [
     "Pirmdiena",
     "Otrdiena",
@@ -41,7 +48,7 @@ function renderDay() {
     document.querySelector(".date").textContent =
         `${sodien.getDate()}.${sodien.getMonth() + 1}.${sodien.getFullYear()}`;
 
-    const selectedDate =
+    selectedDate =
     datums.getFullYear() + "-" +
     String(datums.getMonth() + 1).padStart(2, '0') + "-" +
     String(datums.getDate()).padStart(2, '0');
@@ -121,7 +128,7 @@ function loadRooms(date){
                     statusClass = "green";
                     break;}
             html += `
-            <div class="datu-rinda">
+            <div class="datu-rinda" onclick="openRezerve(${room.id})">
             <div class="data-box">${room.nosaukums}</div>
             <div class="data-box">Vietas kabinetā:</div>
             <div class="data-box">${room.lietotajs ?? "Nav"}</div> 
@@ -149,16 +156,6 @@ document.getElementById("btn-kalendars").addEventListener("click", () => {
 //talak uz leju iet viss login lapai
 const loginBtn = document.getElementById("btn-login");
 const loginModal = document.getElementById("login-modal");
-
-if(loginBtn && loginModal){
-
-    loginBtn.addEventListener("click", () => {
-
-        loginModal.classList.add("show-modal");
-
-    });
-
-}
 
 //uzspiezot arpus lauka pazudis tas
 if(loginBtn && loginModal){
@@ -218,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("login-modal");
 
     if (!isLoggedIn) {
-        loginModal.style.display = "flex";
+        loginModal.classList.add("show-modal");
         document.body.style.overflow = "hidden";
     }
 });
@@ -238,13 +235,22 @@ if(logoutBtn){
 
 }
 
-document.getElementById("btn-submit-login")
-    .addEventListener("click", login);
+const submitBtn =
+    document.getElementById("btn-submit-login");
 
-document.getElementById("login-form").addEventListener("submit", function(e){
-    e.preventDefault();
-    login();
-});
+if(submitBtn){
+    submitBtn.addEventListener("click", login);
+}
+
+const loginForm =
+    document.getElementById("login-form");
+
+if(loginForm){
+    loginForm.addEventListener("submit", function(e){
+        e.preventDefault();
+        login();
+    });
+}
 
 //koda fragments kas parbauda vai lietotajam ir vards un uzvards un ja nav tad izmet popup un liek lietotajam ievadit vardu un uzvardu
 document.addEventListener("DOMContentLoaded", () => {
@@ -286,4 +292,175 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+});
+
+//funkcija kas lauj lietotajam rezervet istabas
+function openRezerve(roomId){
+
+    const loggedIn =
+        document.body.dataset.loggedIn === "true";
+
+    if(!loggedIn){
+        alert("Vispirms pieslēdzieties");
+        return;
+    }
+
+    currentRoomId = roomId;
+
+    document.getElementById("rez-kabinets-id").value =
+        roomId;
+
+    document.getElementById("rezervet-modal")
+        .classList.add("show-modal");
+
+    loadBookedTimes().then(() => {
+
+        updateSlots();
+        setDefaultEndTime();
+
+    });
+}
+
+//funkcija kas panem esosam kabinetam id  un sakuma datumu aizmet prom uz aiznemtie laiki un panem datus no aiznemtie_laiki.php
+function loadBookedTimes(){
+
+    return fetch(
+        `../API/aiznemtie_laiki.php?atslega_id=${currentRoomId}&date=${document.getElementById("start_date").value}`
+    )
+    .then(r => r.json())
+    .then(data => {
+
+        currentBooked = data;
+
+    });
+}
+
+
+//rezervet poga
+document.getElementById("btn-rezervet")
+.addEventListener("click", () => {
+
+    const roomId =
+        document.getElementById("rez-kabinets-id").value;
+
+    const formData = new FormData();
+
+    formData.append("atslega_id", roomId);
+
+    const userSelect =
+    document.getElementById("book_lietotajs_id");
+
+    if(userSelect){
+
+        formData.append(
+            "book_lietotajs_id",
+            userSelect.value
+        );
+
+    }
+
+    formData.append(
+        "start_date",
+        document.getElementById("start_date").value
+    );
+
+    formData.append(
+        "end_date",
+        document.getElementById("end_date").value
+    );
+
+    formData.append(
+        "start_laiks",
+        document.getElementById("start_laiks").value
+    );
+
+    formData.append(
+        "beigu_laiks",
+        document.getElementById("beigu_laiks").value
+    );
+
+    fetch("../API/rezervet_kabinetu.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+
+        alert(data.message);
+
+        if(data.status === "success"){
+
+            document.getElementById(
+                "rezervet-modal"
+            ).style.display = "none";
+
+            loadRooms(selectedDate);
+        }
+    });
+});
+
+//atjaunot pielajamas vietas prieks start laika un beigu laika, ta kad nomaina datumu tiek atjaunots ari laiks
+function updateSlots(){
+
+    const startSelect =
+        document.getElementById("start_laiks");
+
+    const endSelect =
+        document.getElementById("beigu_laiks");
+
+    const selectedDate =
+        document.getElementById("start_date").value;
+
+    const today =
+        new Date().toISOString().split("T")[0];
+
+    const now = new Date();
+
+    const currentMinutes =
+        now.getHours()*60 + now.getMinutes();
+
+    [...startSelect.options].forEach(opt => {
+
+        let disabled = false;
+
+        const [h,m] =
+            opt.value.split(":");
+
+        const optionMinutes =
+            parseInt(h)*60 + parseInt(m);
+
+        if(currentBooked.includes(opt.value)){
+            disabled = true;
+        }
+
+        if(selectedDate === today){
+
+            if(currentMinutes > optionMinutes + 15){
+                disabled = true;
+            }
+
+        }
+
+        opt.disabled = disabled;
+
+    });
+
+}
+
+//koda fragments lai aizvertu ciet rezerves logu
+
+const modals = document.querySelectorAll(".modal-parklajums.show-modal");
+
+document.addEventListener("click", function (e) {
+
+    modals.forEach(modal => {
+
+        const content = modal.querySelector(".filtrs-modal-content");
+        // ja klikšķis NAV iekš modal satura → aizver
+        if (content && !content.contains(e.target)) {
+            modal.classList.remove("show-modal");
+        }
+
+    });
+
 });

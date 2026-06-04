@@ -81,6 +81,7 @@ class lietotajs {
         $_SESSION['loma'] = $row['loma'];
         $_SESSION['epasts'] = $row['epasts'];
         $_SESSION['nosaukums'] = $row['nosaukums'];
+        $_SESSION['uzvards'] = $row['uzvards'];
         $_SESSION['vajag_profile'] = empty($row['nosaukums']) || empty($row['uzvards']);
 
         return true;

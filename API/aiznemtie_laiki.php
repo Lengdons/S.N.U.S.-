@@ -1,7 +1,5 @@
 <?php
 
-function getBookedSlots($db, $room_id, $date){
-
 require 'mysql/datubaze.php';
 
 $db = new datubaze();
@@ -61,7 +59,7 @@ function getBookedSlots($db, $atslega_id, $date){
 
     return array_unique($booked);
 }
-}
+
 
 
 function getRoomStatus($db, $room_id){
@@ -69,7 +67,7 @@ function getRoomStatus($db, $room_id){
     $now = date('Y-m-d H:i:s');
 
     $stmt = $db->conn->prepare(" SELECT raksti.beigu_laiks, lietotaji.vards, lietotaji.uzvards 
-        FROM atslegas JOIN lietotaji on lietotaji.id = bookings.lietotajs_id WHERE atslega_id = ?
+        FROM raksti JOIN lietotaji on lietotaji.id = raksti.lietotajs_id WHERE atslega_id = ?
         AND start_laiks <= ?
         AND beigu_laiks > ?
         ORDER BY beigu_laiks ASC
