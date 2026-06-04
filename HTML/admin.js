@@ -370,6 +370,13 @@ function loadLietotaji() {
                 <td>${row.epasts}</td>
                 <td>${row.nosaukums}</td>
                 <td>${row.uzvards}</td>
+                <td>
+                    <button
+                        class="btn-sarkans"
+                        onclick="disableLietotajs(${row.id})">
+                        Dzēst
+                    </button>
+                </td>
             </tr>
             `;
         });
@@ -418,3 +425,30 @@ dienuInput.addEventListener("blur", () => {
         dienuInput.value = 1;
     }
 });
+
+//si funkcija atlauj lietotajam lietotaju statusu mainit prieks aktivs no 1 uz 0 
+function disableLietotajs(id){
+
+    if(!confirm("Vai tiešām deaktivizēt lietotāju?")){
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("id", id);
+
+    fetch("../API/deaktivizet_lietotaju.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        alert(data.message);
+
+        if(data.status === "success"){
+            loadLietotaji();
+        }
+
+    })
+    .catch(error => console.error(error));
+}

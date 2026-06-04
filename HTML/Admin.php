@@ -85,6 +85,7 @@ if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
                         <th>Epasts</th>
                         <th>Vards</th>
                         <th>Uzvards</th>
+                        <th>Darbības</th>
                     </tr>
                 </thead>
                 <tbody id="lietotaji-dati">

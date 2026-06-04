@@ -6,7 +6,7 @@ require_once '../mysql/datubaze.php';
 $db = new datubaze();
 
 $result = $db->conn->query("
-    SELECT epasts, nosaukums, uzvards
+    SELECT id, epasts, nosaukums, uzvards
     FROM lietotaji WHERE aktivs = 1 AND loma = 'lietotajs'
 ");
 
