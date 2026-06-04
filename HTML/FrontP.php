@@ -185,7 +185,7 @@ if(isset($_POST['save_profile'])){
     <div id="rezervet-modal" class="modal-parklajums">
 
         <div class="filtrs-modal-content">
-
+            
             <h2>Rezervēt kabinetu</h2>
 
             <input type="hidden" id="rez-kabinets-id">

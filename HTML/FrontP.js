@@ -392,7 +392,7 @@ document.getElementById("btn-rezervet")
 
             document.getElementById(
                 "rezervet-modal"
-            ).style.display = "none";
+            ).classList.remove("show-modal");
 
             loadRooms(selectedDate);
         }
@@ -449,18 +449,29 @@ function updateSlots(){
 
 //koda fragments lai aizvertu ciet rezerves logu
 
-const modals = document.querySelectorAll(".modal-parklajums.show-modal");
 
-document.addEventListener("click", function (e) {
+const modals = document.querySelectorAll(".modal-parklajums");
 
-    modals.forEach(modal => {
+modals.forEach(modal => {
 
-        const content = modal.querySelector(".filtrs-modal-content");
-        // ja klikšķis NAV iekš modal satura → aizver
-        if (content && !content.contains(e.target)) {
+    modal.addEventListener("click", function(e){
+
+        if(e.target === modal){
             modal.classList.remove("show-modal");
         }
 
     });
-
 });
+// const closeRezBtn =
+//     document.getElementById("btn-aizvert-rezervi");
+
+// if(closeRezBtn){
+
+//     closeRezBtn.addEventListener("click", () => {
+
+//         document.getElementById("rezervet-modal")
+//             .classList.remove("show-modal");
+
+//     });
+
+// }
