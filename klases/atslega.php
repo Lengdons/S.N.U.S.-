@@ -1,7 +1,12 @@
 <?php
-class atslega {
-    private $conn;
-    public function __construct($db){ $this->conn=$db->conn; }
+require_once 'modelis.php';
+
+class atslega extends modelis {
+
+    public function getTips(){
+        return "Atslēga";
+    }
+
     public function getAll(){ return $this->conn->query("SELECT * FROM atslegas ORDER BY id DESC"); }
     public function add($nosaukums){
         $stmt=$this->conn->prepare("INSERT INTO atslegas(nosaukums) VALUES(?)");

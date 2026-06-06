@@ -2,6 +2,7 @@
 session_start();
 
 require_once '../mysql/datubaze.php';
+require_once '../klases/modelis.php';
 require_once '../klases/zurnals.php';
 
 $db = new datubaze();

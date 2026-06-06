@@ -2,6 +2,7 @@
 session_start();
 $isLoggedIn = isset($_SESSION['lietotajs']);
 require '../mysql/datubaze.php';
+require_once '../klases/modelis.php';
 require '../klases/zurnals.php';
 
 date_default_timezone_set('Europe/Riga');
@@ -192,7 +193,7 @@ if(isset($_POST['save_profile'])){
                     epasts,
                     nosaukums,
                     uzvards
-                FROM lietotaji
+                FROM lietotaji WHERE aktivs = '1'
                 ORDER BY epasts
             ");
         }

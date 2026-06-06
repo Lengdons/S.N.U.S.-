@@ -3,6 +3,7 @@ session_start();
 header('Content-Type: application/json');
 
 require '../mysql/datubaze.php';
+require_once '../klases/modelis.php';
 require '../klases/lietotajs.php';
 
 $db = new datubaze();
