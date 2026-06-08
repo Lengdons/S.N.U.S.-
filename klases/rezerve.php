@@ -1,7 +1,11 @@
 <?php
-class rezerve {
-    private $conn;
-    public function __construct($db){ $this->conn=$db->conn; }
+require_once 'modelis.php';
+
+class rezerve extends modelis {
+
+    public function getTips(){
+            return "Rezerve";
+        }
 
     public function isAvailable($atslega,$start,$end){
         $stmt=$this->conn->prepare("SELECT * FROM raksti WHERE atslega_id=? AND (start_laiks < ? AND beigu_laiks > ?)");

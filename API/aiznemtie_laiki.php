@@ -1,6 +1,6 @@
 <?php
 
-require 'mysql/datubaze.php';
+require '../mysql/datubaze.php';
 
 $db = new datubaze();
 
@@ -26,8 +26,6 @@ function getBookedSlots($db, $atslega_id, $date){
     $startDateTime = date('Y-m-d H:i:s', $dayStart);
 
 
-    $stmt->bind_param("iss", $room_id, $endDateTime, $startDateTime);
-
     $stmt->bind_param(
         "iss",
         $atslega_id,
@@ -39,10 +37,6 @@ function getBookedSlots($db, $atslega_id, $date){
     $res = $stmt->get_result();
 
     while($row = $res->fetch_assoc()){
-
-        $start = strtotime($row['start_time']);
-        $end = strtotime($row['end_time']);
-
 
         $start = strtotime($row['start_laiks']);
         $end   = strtotime($row['beigu_laiks']);
@@ -56,7 +50,6 @@ function getBookedSlots($db, $atslega_id, $date){
             $start = strtotime("+30 minutes", $start);
         }
     }
-
     return array_unique($booked);
 }
 

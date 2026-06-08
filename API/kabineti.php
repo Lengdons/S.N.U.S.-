@@ -1,6 +1,7 @@
 <?php
 
 require '../mysql/datubaze.php';
+require_once '../klases/modelis.php';
 require '../klases/atslega.php';
 
 $db = new datubaze();

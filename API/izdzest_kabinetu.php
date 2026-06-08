@@ -8,6 +8,7 @@ if(!isset($_SESSION['loma']) || $_SESSION['loma'] !== 'admin'){
 }
 
 require '../mysql/datubaze.php';
+require_once '../klases/modelis.php';
 require '../klases/atslega.php';
 require '../klases/zurnals.php';
 $db = new datubaze();

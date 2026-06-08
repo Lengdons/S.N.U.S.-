@@ -13,6 +13,7 @@ if(!isset($_SESSION['id'])){
 // 2. Datubāzes savienojums
 require '../mysql/datubaze.php';
 $db = new datubaze();
+require_once '../klases/modelis.php';
 require '../klases/atslega.php';
 require '../klases/rezerve.php';
 require '../klases/zurnals.php';

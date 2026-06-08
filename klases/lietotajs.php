@@ -1,8 +1,11 @@
 <?php
-class lietotajs {
-    
-    private $conn;
-    public function __construct($db){ $this->conn=$db->conn; }
+require_once 'modelis.php';
+
+class lietotajs extends modelis {
+
+    public function getTips(){
+        return "Lietotājs";
+    }
 
     public function registreties($epasts,$parole, $beigu_term=null){
 

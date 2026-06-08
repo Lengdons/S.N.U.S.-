@@ -311,15 +311,62 @@ function openRezerve(roomId){
     document.getElementById("rez-kabinets-id").value =
         roomId;
 
+    document.getElementById("start_date").value =
+        selectedDate;
+
+    const endDate =
+        document.getElementById("end_date");
+
+    if(endDate){
+        endDate.value = selectedDate;
+    }
+
     document.getElementById("rezervet-modal")
         .classList.add("show-modal");
 
     loadBookedTimes().then(() => {
 
         updateSlots();
+        const startSelect = document.getElementById("start_laiks");
+        const endSelect = document.getElementById("beigu_laiks");
+
+        selectFirstAvailable(startSelect);
         setDefaultEndTime();
 
     });
+}
+
+function setDefaultEndTime(){
+
+    const startSelect =
+        document.getElementById("start_laiks");
+
+    const endSelect =
+        document.getElementById("beigu_laiks");
+
+    if(!startSelect || !endSelect) return;
+
+    const startIndex = startSelect.selectedIndex;
+
+    const endIndex =
+        Math.min(
+            startIndex + 1,
+            endSelect.options.length - 1
+        );
+
+    endSelect.selectedIndex = endIndex;
+}
+
+function selectFirstAvailable(select){
+
+    for(const option of select.options){
+
+        if(!option.disabled){
+
+            select.value = option.value;
+            return;
+        }
+    }
 }
 
 //funkcija kas panem esosam kabinetam id  un sakuma datumu aizmet prom uz aiznemtie laiki un panem datus no aiznemtie_laiki.php
@@ -401,7 +448,7 @@ document.getElementById("btn-rezervet")
 });
 
 //atjaunot pielajamas vietas prieks start laika un beigu laika, ta kad nomaina datumu tiek atjaunots ari laiks
-function updateSlots(){
+function updateSlots(){ 
 
     const startSelect =
         document.getElementById("start_laiks");
@@ -412,6 +459,8 @@ function updateSlots(){
     const selectedDate =
         document.getElementById("start_date").value;
 
+    if (!startSelect || !endSelect) return;
+
     const today =
         new Date().toISOString().split("T")[0];
 
@@ -420,33 +469,175 @@ function updateSlots(){
     const currentMinutes =
         now.getHours()*60 + now.getMinutes();
 
-    [...startSelect.options].forEach(opt => {
+    const isPastDate = selectedDate < today;
+    const startValue = startSelect?.value;
 
-        let disabled = false;
+    // reset state (IMPORTANT — this is what fixes your bug)
+    startSelect.disabled = false;
+    endSelect.disabled = false;
 
-        const [h,m] =
-            opt.value.split(":");
+     // reset selections ONLY when changing day
+    const previousStart = startSelect.value;
+    const previousEnd = endSelect.value;
 
-        const optionMinutes =
-            parseInt(h)*60 + parseInt(m);
+    [startSelect, endSelect].forEach(select => {
 
-        if(currentBooked.includes(opt.value)){
-            disabled = true;
-        }
+        [...select.options].forEach(opt => {
 
-        if(selectedDate === today){
+            let disabled = false;
 
-            if(currentMinutes > optionMinutes + 15){
-                disabled = true;
+            if (isPastDate) {
+                disabled = true; // disable visas opcijas lai nevaretu book vecus datus
             }
 
+            const [h,m] = opt.value.split(":");
+
+            const optionMinutes =
+                parseInt(h)*60 + parseInt(m);
+
+            if(select.id === "start_laiks"){
+
+                if(currentBooked.includes(opt.value)){
+                    disabled = true;
+                }
+            }
+
+            if(
+                select.id === "beigu_laiks" &&
+                startValue
+            ){
+
+                const [sh,sm] =
+                    startValue.split(":");
+
+                const startMinutes =
+                    parseInt(sh)*60 +
+                    parseInt(sm);
+
+                if(optionMinutes <= startMinutes){
+                    disabled = true;
+                }
+            }
+
+            if(selectedDate === today){
+
+                if(currentMinutes > optionMinutes + 15){
+                    disabled = true;
+                }
+            }
+
+            opt.disabled = disabled;
+
+            if(disabled){
+
+                opt.style.background = "#ddd";
+                opt.style.color = "#888";
+
+            }else{
+
+                opt.style.background = "";
+                opt.style.color = "";
+            }
+
+        });
+
+    });
+    // restore previous selection if still valid
+if ([...startSelect.options].some(o => o.value === previousStart && !o.disabled)) {
+    startSelect.value = previousStart;
+} else {
+    selectFirstAvailable(startSelect);
+}
+
+if ([...endSelect.options].some(o => o.value === previousEnd && !o.disabled)) {
+    endSelect.value = previousEnd;
+} else {
+    selectFirstAvailable(endSelect);
+}
+    // after all options are processed
+
+    // ensure end is always aligned AFTER start is finalized
+    setDefaultEndTime();
+}
+
+//kodu fragments kas dod iespeju kad lietotajs izveleas sakuma laiku. tad automatiski beigu laiks ir +30 min
+document.addEventListener("DOMContentLoaded", () => {
+
+    const startSelect =
+        document.getElementById("start_laiks");
+
+    const endSelect =
+        document.getElementById("beigu_laiks");
+
+    if(!startSelect || !endSelect) return;
+
+    startSelect.addEventListener("change", () => {
+
+        const startValue = startSelect.value;
+
+        const [h,m] =
+            startValue.split(":").map(Number);
+
+        let date = new Date();
+
+        date.setHours(h);
+        date.setMinutes(m + 30);
+
+        const newH =
+            String(date.getHours()).padStart(2,"0");
+
+        const newM =
+            String(date.getMinutes()).padStart(2,"0");
+
+        const newEnd = `${newH}:${newM}`;
+
+        const exists =
+            [...endSelect.options]
+            .some(o => o.value === newEnd);
+
+        if(exists){
+            endSelect.value = newEnd;
+        }
+        else{
+            setDefaultEndTime();
         }
 
-        opt.disabled = disabled;
+        updateSlots();
+    });
+});
+
+//koda fragments kas atjauno laiku izveles intervalus, kad tiek nomainits datums
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const startDate =
+        document.getElementById("start_date");
+
+    const endDate =
+        document.getElementById("end_date");
+
+    if(!startDate) return;
+
+    startDate.addEventListener("change", () => {
+
+        if(endDate){
+
+            if(endDate.value < startDate.value){
+                endDate.value = startDate.value;
+            }
+
+            endDate.value = startDate.value;
+        }
+
+        loadBookedTimes().then(() => {
+
+            updateSlots();
+
+        });
 
     });
 
-}
+});
 
 //koda fragments lai aizvertu ciet rezerves logu
 

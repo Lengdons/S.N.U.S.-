@@ -1,9 +1,10 @@
 <?php
-class zurnals {
-    private $conn;
+require_once 'modelis.php';
 
-    public function __construct($db){
-        $this->conn = $db->conn;
+class zurnals extends modelis {
+
+    public function getTips(){
+        return "Žurnāls";
     }
 
     public function add($t){
